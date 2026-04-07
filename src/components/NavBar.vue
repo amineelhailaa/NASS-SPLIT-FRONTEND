@@ -5,15 +5,15 @@ import logoRaw from '@/assets/logo.svg?raw'
 <template>
   <header class="fixed top-0 z-50 w-full px-6 py-4">
     <nav
-      class="mx-auto flex items-center justify-between rounded-full bg-white/80 px-6 shadow-sm backdrop-blur-md border border-white/20"
+      class="mx-auto flex items-center justify-between rounded-full bg-white/80 pr-6 pl-2 shadow-sm backdrop-blur-md border border-white/20"
     >
       <div  class="flex justify-center items-center gap-2">
         <div class="w-16 h-16 overflow-hidden shrink-0" v-html="logoRaw" />
-        <span class=" text-2xl font">NASS SPLIT</span>
+        <span class=" text-2xl font-bold opacity-80">NASS SPLIT</span>
       </div>
 
       <div class="hidden md:flex items-center gap-8">
-        <router-link to="/" class="text-sm font-bold text-cerulean-600 transition-colors"
+        <router-link to="/" class="text-sm font-extrabold  text-cerulean-600 transition-colors"
           >Home</router-link
         >
         <router-link

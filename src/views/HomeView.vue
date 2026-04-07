@@ -45,7 +45,7 @@ import AppFooter from '@/components/AppFooter.vue'
 
     <!-- Benefits Section -->
     <section class="bg-white py-36 px-16 flex flex-col gap-6">
-      <div class="flex flex-col gap-6 text-center mb-20">
+      <div class="flex flex-col gap-6 text-center pb-20">
         <h2 class="text-4xl font-extrabold text-cerulean-800 md:text-5xl">
           Goodbye awkwardness, hello transparency
         </h2>
@@ -83,7 +83,7 @@ import AppFooter from '@/components/AppFooter.vue'
 
     <!-- How it Works -->
     <section class="py-36 px-16">
-      <div class="flex flex-col gap-6 text-center mb-20">
+      <div class="flex flex-col gap-6 text-center pb-20">
         <h2 class="text-4xl font-extrabold text-cerulean-800 md:text-5xl">How it works?</h2>
         <p class="text-lg text-cerulean-800/60">Manage your group expenses in 3 ultra-simple steps.</p>
       </div>
@@ -136,8 +136,8 @@ import AppFooter from '@/components/AppFooter.vue'
     </section>
 
     <!-- Features Grid -->
-    <section class="bg-cerulean-800 py-36 px-16 text-white">
-      <div class="flex flex-col gap-4 mb-20">
+    <section class="bg-cerulean-800 px-16 py-20 text-white">
+      <div class="flex flex-col gap-4 pb-10">
         <h2 class="text-4xl font-extrabold md:text-5xl">Everything you need</h2>
         <p class="text-lg text-white/70">More than just a split, a complete management platform.</p>
       </div>
