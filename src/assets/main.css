@@ -1,52 +1,25 @@
 @import './base.css';
+@import "tailwindcss";
 
+@theme {
+  --color-cerulean-50: #eef4f7;
+  --color-cerulean-100: #dceaef;
+  --color-cerulean-200: #bad5de;
+  --color-cerulean-300: #97bfce;
+  --color-cerulean-500: #5295ad;
+  --color-cerulean-600: #41778b;
+  --color-cerulean-700: #315968;
+  --color-cerulean-800: #213c45;
+  --color-cerulean-900: #101e23;
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-#app {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-  font-weight: normal;
-}
-
-a,
-.green {
-  text-decoration: none;
-  color: hsla(160, 100%, 37%, 1);
-  transition: 0.4s;
-  padding: 3px;
-}
-
-@media (hover: hover) {
-  a:hover {
-    background-color: hsla(160, 100%, 37%, 0.2);
-  }
-}
-
-@media (min-width: 1024px) {
-  body {
-    display: flex;
-    place-items: center;
-  }
-
-  #app {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    padding: 0 2rem;
-  }
+  --color-brand-background: #eef4f7;
+  --color-brand-surface: #dceaef;
+  --color-brand-surface-contrast: #ffffff;
+  --color-brand-border: #bad5de;
+  --color-brand-primary: #41778b;
+  --color-brand-primary-hover: #315968;
+  --color-brand-accent: #5295ad;
+  --color-brand-text: #101e23;
+  --color-brand-text-secondary: #213c45;
+  --color-brand-disabled: #97bfce;
 }
