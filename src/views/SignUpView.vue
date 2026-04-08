@@ -1,10 +1,34 @@
 <script setup>
 import { ref } from 'vue'
+import { useForm, useField } from 'vee-validate'
+import * as yup from 'yup'
+import { useRouter } from 'vue-router'
+import { useAuthStore } from '@/stores/auth.js'
+import InputError from '@/components/inputError.vue'
 import logoRaw from '@/assets/logo.svg?raw'
 
-const name = ref('')
-const email = ref('')
-const password = ref('')
+const router = useRouter()
+const auth = useAuthStore()
+
+const schema = yup.object({
+  name: yup.string().required('Full name is required').min(2, 'Name is too short'),
+  email: yup.string().required('Email is required').email('Invalid email address'),
+  password: yup
+    .string()
+    .required('Password is required')
+    .min(8, 'Minimum 8 characters'),
+  password_confirmation: yup
+    .string()
+    .required('Please confirm your password')
+    .oneOf([yup.ref('password')], 'Passwords do not match'),
+})
+
+const { handleSubmit, setErrors, isSubmitting } = useForm({ validationSchema: schema })
+const { value: name, errorMessage: nameError } = useField('name')
+const { value: email, errorMessage: emailError } = useField('email')
+const { value: password, errorMessage: passwordError } = useField('password')
+const { value: passwordConfirmation, errorMessage: passwordConfirmationError } = useField('password_confirmation')
+
 const showPassword = ref(false)
 const avatarPreview = ref(null)
 const fileInput = ref(null)
@@ -37,9 +61,22 @@ function triggerUpload() {
   fileInput.value.click()
 }
 
-function handleSignUp() {
-  console.log('Sign up', name.value, email.value, password.value)
-}
+const handleSignUp = handleSubmit(async (values) => {
+  try {
+    await auth.register(values)
+    router.push('/')
+  } catch (err) {
+    if (err.response?.status === 422) {
+      const laravelErrors = {}
+      for (const [field, messages] of Object.entries(err.response.data.errors ?? {})) {
+        laravelErrors[field] = messages[0]
+      }
+      setErrors(laravelErrors)
+    } else if (err.response?.status === 429) {
+      setErrors({ email: 'Too many attempts. Please wait before retrying.' })
+    }
+  }
+})
 </script>
 
 <template>
@@ -160,7 +197,7 @@ function handleSignUp() {
           </div>
 
           <!-- Name -->
-          <div class="flex flex-col gap-2">
+          <div class="flex flex-col gap-1.5">
             <label class="text-sm font-bold text-cerulean-800">Full Name</label>
             <div class="relative">
               <span class="material-symbols-outlined absolute left-5 top-1/2 -translate-y-1/2 text-cerulean-500 text-xl pointer-events-none">badge</span>
@@ -168,14 +205,15 @@ function handleSignUp() {
                 type="text"
                 placeholder="Amine El Hailaa"
                 v-model="name"
-                required
                 class="w-full bg-cerulean-100 text-cerulean-800 placeholder:text-cerulean-800/30 rounded-full pl-12 pr-6 py-4 outline-none focus:bg-white focus:ring-2 focus:ring-cerulean-500/30 transition"
+                :class="{ 'ring-2 ring-red-400/50 bg-red-50': nameError }"
               />
             </div>
+            <InputError :message="nameError" />
           </div>
 
           <!-- Email -->
-          <div class="flex flex-col gap-2">
+          <div class="flex flex-col gap-1.5">
             <label class="text-sm font-bold text-cerulean-800">Email Address</label>
             <div class="relative">
               <span class="material-symbols-outlined absolute left-5 top-1/2 -translate-y-1/2 text-cerulean-500 text-xl pointer-events-none">mail</span>
@@ -183,14 +221,15 @@ function handleSignUp() {
                 type="email"
                 placeholder="your@email.com"
                 v-model="email"
-                required
                 class="w-full bg-cerulean-100 text-cerulean-800 placeholder:text-cerulean-800/30 rounded-full pl-12 pr-6 py-4 outline-none focus:bg-white focus:ring-2 focus:ring-cerulean-500/30 transition"
+                :class="{ 'ring-2 ring-red-400/50 bg-red-50': emailError }"
               />
             </div>
+            <InputError :message="emailError" />
           </div>
 
           <!-- Password -->
-          <div class="flex flex-col gap-2">
+          <div class="flex flex-col gap-1.5">
             <label class="text-sm font-bold text-cerulean-800">Password</label>
             <div class="relative">
               <span class="material-symbols-outlined absolute left-5 top-1/2 -translate-y-1/2 text-cerulean-500 text-xl pointer-events-none">lock</span>
@@ -198,8 +237,8 @@ function handleSignUp() {
                 :type="showPassword ? 'text' : 'password'"
                 placeholder="••••••••"
                 v-model="password"
-                required
                 class="w-full bg-cerulean-100 text-cerulean-800 placeholder:text-cerulean-800/30 rounded-full pl-12 pr-12 py-4 outline-none focus:bg-white focus:ring-2 focus:ring-cerulean-500/30 transition"
+                :class="{ 'ring-2 ring-red-400/50 bg-red-50': passwordError }"
               />
               <button
                 type="button"
@@ -212,16 +251,37 @@ function handleSignUp() {
                 </span>
               </button>
             </div>
+            <InputError :message="passwordError" />
+          </div>
+
+          <!-- Confirm Password -->
+          <div class="flex flex-col gap-1.5">
+            <label class="text-sm font-bold text-cerulean-800">Confirm Password</label>
+            <div class="relative">
+              <span class="material-symbols-outlined absolute left-5 top-1/2 -translate-y-1/2 text-cerulean-500 text-xl pointer-events-none">lock_reset</span>
+              <input
+                :type="showPassword ? 'text' : 'password'"
+                placeholder="••••••••"
+                v-model="passwordConfirmation"
+                class="w-full bg-cerulean-100 text-cerulean-800 placeholder:text-cerulean-800/30 rounded-full pl-12 pr-6 py-4 outline-none focus:bg-white focus:ring-2 focus:ring-cerulean-500/30 transition"
+                :class="{ 'ring-2 ring-red-400/50 bg-red-50': passwordConfirmationError }"
+              />
+            </div>
+            <InputError :message="passwordConfirmationError" />
           </div>
 
           <!-- Submit -->
           <button
             type="submit"
-            class="w-full flex items-center justify-center gap-2 rounded-full py-4 text-base font-bold text-white shadow-lg hover:scale-[1.02] active:scale-95 transition-all cursor-pointer mt-2"
+            :disabled="isSubmitting"
+            class="w-full flex items-center justify-center gap-2 rounded-full py-4 text-base font-bold text-white shadow-lg hover:scale-[1.02] active:scale-95 transition-all cursor-pointer mt-2 disabled:opacity-60 disabled:cursor-not-allowed disabled:scale-100"
             style="background-color: #41778b"
           >
-            Create Account
-            <span class="material-symbols-outlined text-xl">arrow_forward</span>
+            <span v-if="isSubmitting" class="material-symbols-outlined text-xl animate-spin">progress_activity</span>
+            <template v-else>
+              Create Account
+              <span class="material-symbols-outlined text-xl">arrow_forward</span>
+            </template>
           </button>
         </form>
 

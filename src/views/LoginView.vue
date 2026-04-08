@@ -1,9 +1,24 @@
 <script setup>
 import { ref } from 'vue'
+import { useForm, useField } from 'vee-validate'
+import * as yup from 'yup'
+import { useRouter } from 'vue-router'
+import { useAuthStore } from '@/stores/auth.js'
+import InputError from '@/components/inputError.vue'
 import logoRaw from '@/assets/logo.svg?raw'
 
-const email = ref('')
-const password = ref('')
+const router = useRouter()
+const auth = useAuthStore()
+
+const schema = yup.object({
+  email: yup.string().required('Email is required').email('Invalid email address'),
+  password: yup.string().required('Password is required').min(8, 'Minimum 8 characters'),
+})
+
+const { handleSubmit, setErrors, isSubmitting } = useForm({ validationSchema: schema })
+const { value: email, errorMessage: emailError } = useField('email')
+const { value: password, errorMessage: passwordError } = useField('password')
+
 const showPassword = ref(false)
 
 const features = [
@@ -24,9 +39,22 @@ const features = [
   },
 ]
 
-const handleLogin = () => {
-  console.log('Login attempt', email.value, password.value)
-}
+const handleLogin = handleSubmit(async (values) => {
+  try {
+    await auth.login(values)
+    await router.push('/')
+  } catch (err) {
+    if (err.response?.status === 422) {
+      const laravelErrors = {}
+      for (const [field, messages] of Object.entries(err.response.data.errors ?? {})) {  //obj return array [[key,value],[]]
+        laravelErrors[field] = messages[0] //0 for laravel error 0 (could be more for the same )
+      }
+      setErrors(laravelErrors)
+    } else if (err.response?.status === 429) {
+      setErrors({ email: 'Too many attempts. Please wait before retrying.' })
+    }
+  }
+})
 </script>
 
 <template>
@@ -110,7 +138,7 @@ const handleLogin = () => {
         <form @submit.prevent="handleLogin" class="flex flex-col gap-5">
 
           <!-- Email -->
-          <div class="flex flex-col gap-2">
+          <div class="flex flex-col gap-1.5">
             <label class="text-sm font-bold text-cerulean-800">Email Address</label>
             <div class="relative">
               <span class="material-symbols-outlined absolute left-5 top-1/2 -translate-y-1/2 text-cerulean-500 text-xl pointer-events-none">mail</span>
@@ -118,14 +146,15 @@ const handleLogin = () => {
                 type="email"
                 placeholder="your@email.com"
                 v-model="email"
-                required
                 class="w-full bg-cerulean-100 text-cerulean-800 placeholder:text-cerulean-800/30 rounded-full pl-12 pr-6 py-4 outline-none focus:bg-white focus:ring-2 focus:ring-cerulean-500/30 transition"
+                :class="{ 'ring-2 ring-red-400/50 bg-red-50': emailError }"
               />
             </div>
+            <InputError :message="emailError" />
           </div>
 
           <!-- Password -->
-          <div class="flex flex-col gap-2">
+          <div class="flex flex-col gap-1.5">
             <div class="flex items-center justify-between">
               <label class="text-sm font-bold text-cerulean-800">Password</label>
               <a href="#" class="text-sm text-cerulean-500 font-semibold hover:text-cerulean-700 transition-colors">Forgot?</a>
@@ -136,8 +165,8 @@ const handleLogin = () => {
                 :type="showPassword ? 'text' : 'password'"
                 placeholder="••••••••"
                 v-model="password"
-                required
                 class="w-full bg-cerulean-100 text-cerulean-800 placeholder:text-cerulean-800/30 rounded-full pl-12 pr-12 py-4 outline-none focus:bg-white focus:ring-2 focus:ring-cerulean-500/30 transition"
+                :class="{ 'ring-2 ring-red-400/50 bg-red-50': passwordError }"
               />
               <button
                 type="button"
@@ -150,16 +179,21 @@ const handleLogin = () => {
                 </span>
               </button>
             </div>
+            <InputError :message="passwordError" />
           </div>
 
           <!-- Submit -->
           <button
             type="submit"
-            class="w-full flex items-center justify-center gap-2 rounded-full py-4 text-base font-bold text-white shadow-lg hover:scale-[1.02] active:scale-95 transition-all cursor-pointer mt-2"
+            :disabled="isSubmitting"
+            class="w-full flex items-center justify-center gap-2 rounded-full py-4 text-base font-bold text-white shadow-lg hover:scale-[1.02] active:scale-95 transition-all cursor-pointer mt-2 disabled:opacity-60 disabled:cursor-not-allowed disabled:scale-100"
             style="background-color: #41778b"
           >
-            Log In
-            <span class="material-symbols-outlined text-xl">arrow_forward</span>
+            <span v-if="isSubmitting" class="material-symbols-outlined text-xl animate-spin">progress_activity</span>
+            <template v-else>
+              Log In
+              <span class="material-symbols-outlined text-xl">arrow_forward</span>
+            </template>
           </button>
         </form>
 
