@@ -36,3 +36,7 @@ npm run dev
 ```sh
 npm run build
 ```
+
+## Comments
+
+- **2026-04-08** — Avatar upload in `SignUpView.vue`: the visible "Upload photo" button calls `fileInput.value.click()` to programmatically trigger the hidden `<input type="file">`. On file select, `URL.createObjectURL(file)` generates a temporary blob URL stored in `avatarPreview`, which the preview `<img>` binds to via `v-if`.
