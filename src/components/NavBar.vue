@@ -1,5 +1,8 @@
-<script setup lang="ts">
+<script setup>
 import logoRaw from '@/assets/logo.svg?raw'
+import { useAuthStore } from '@/stores/auth'
+
+const auth = useAuthStore()
 </script>
 
 <template>
@@ -13,9 +16,12 @@ import logoRaw from '@/assets/logo.svg?raw'
       </div>
 
       <div class="hidden md:flex items-center gap-8">
-        <router-link to="/" class="text-sm font-extrabold  text-cerulean-600 transition-colors"
-          >Home</router-link
-        >
+        <router-link to="/" class="text-sm font-extrabold text-cerulean-600 transition-colors">Home</router-link>
+        <router-link
+          v-if="auth.isAuthenticated"
+          to="/groups"
+          class="text-sm font-semibold text-cerulean-800 hover:text-cerulean-600 transition-colors"
+        >Groups</router-link>
         <router-link
           to="/contact"
           class="text-sm font-semibold text-cerulean-800 hover:text-cerulean-600 transition-colors"
