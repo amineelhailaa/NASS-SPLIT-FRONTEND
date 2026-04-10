@@ -5,7 +5,10 @@ const props = defineProps({
   name: String,
   category: String,
   memberCount: Number,
+  url: String,
 })
+
+
 
 const categoryStyle = computed(() => {
   const map = {
@@ -25,7 +28,15 @@ const categoryStyle = computed(() => {
     class="bg-brand-surfaceContrast rounded-2xl p-5 flex flex-col group hover:shadow-[0_8px_32px_rgba(65,119,139,0.14)] transition-all duration-300 shadow-[0_2px_12px_rgba(65,119,139,0.07)]"
   >
     <!-- Cover -->
-    <div class="aspect-video w-full rounded-xl mb-5 overflow-hidden relative" :class="categoryStyle.bg">
+    <div class="aspect-video w-full rounded-xl overflow-hidden relative" :class="categoryStyle.bg">
+      <!-- Avatar image (covers the whole card header) -->
+      <img
+        v-if="url"
+        :src="url"
+        :alt="name"
+        class="absolute inset-0 w-full h-full object-cover"
+      />
+      <!-- Fallback icon -->
       <div class="absolute inset-0 flex items-center justify-center">
         <span class="material-symbols-outlined text-white/30 text-[72px]">{{ categoryStyle.icon }}</span>
       </div>
@@ -39,9 +50,9 @@ const categoryStyle = computed(() => {
     </div>
 
     <!-- Info -->
-    <div class="flex-grow pb-4">
-      <h3 class="text-brand-text text-xl font-bold mb-1">{{ name }}</h3>
-      <p class="text-brand-primary font-medium text-sm flex items-center gap-1">
+    <div class="flex-grow pt-4 pb-4">
+      <h3 class="text-brand-text text-xl font-bold">{{ name }}</h3>
+      <p class="text-brand-primary font-medium text-sm flex items-center gap-1 pt-1">
         <span class="material-symbols-outlined text-[17px]">group</span>
         {{ memberCount }} Members
       </p>
@@ -49,7 +60,7 @@ const categoryStyle = computed(() => {
 
     <!-- CTA -->
     <button
-      class="w-full bg-gradient-to-br from-brand-primary to-brand-accent text-white py-3 rounded-full font-bold hover:opacity-90 transition-opacity flex items-center justify-center gap-2 text-sm"
+      class="w-full bg-brand-primary text-white py-3 rounded-full font-bold hover:bg-brand-primaryHover transition-colors flex items-center justify-center gap-2 text-sm"
     >
       Enter Group
       <span class="material-symbols-outlined text-[18px]">arrow_forward</span>

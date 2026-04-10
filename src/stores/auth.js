@@ -22,14 +22,14 @@ export const useAuthStore = defineStore('auth', () => {
     await getCsrf()
     await api.post('/login', credentials)
     const { data } = await api.get('/api/user')
-    setUser(data)
+    setUser(data.data)
   }
 
   async function register(payload) {
     await getCsrf()
     await api.post('/register', payload)
     const { data } = await api.get('/api/user')
-    setUser(data)
+    setUser(data.data)
   }
 
   async function logout() {

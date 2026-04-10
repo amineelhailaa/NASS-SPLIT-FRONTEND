@@ -40,3 +40,4 @@ npm run build
 ## Comments
 
 - **2026-04-08** — Avatar upload in `SignUpView.vue`: the visible "Upload photo" button calls `fileInput.value.click()` to programmatically trigger the hidden `<input type="file">`. On file select, `URL.createObjectURL(file)` generates a temporary blob URL stored in `avatarPreview`, which the preview `<img>` binds to via `v-if`.
+- **2026-04-10** — Auth best practice for Vue SPA with Sanctum: persist user to `localStorage` on login, hydrate `ref` from it on store init (zero requests on reload), keep router guard synchronous, and handle session expiry globally via an axios 401 interceptor that clears localStorage and redirects to login.

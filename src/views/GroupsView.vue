@@ -3,6 +3,7 @@ import { ref, onMounted, watch } from 'vue'
 import NavBar from '@/components/NavBar.vue'
 import AppFooter from '@/components/AppFooter.vue'
 import GroupCard from '@/components/GroupCard.vue'
+import NewGroup from '@/components/NewGroup.vue'
 import { useAuthStore } from '@/stores/auth'
 import api from '@/lib/axios'
 
@@ -16,12 +17,13 @@ const groups = ref([])
 const pagination = ref(null)
 const loading = ref(false)
 const dropdownOpen = ref(false)
+const showModal = ref(false)
 let searchTimeout
 
 async function fetchGroups() {
   loading.value = true
   try {
-    const response = await api.get('/api/groups', {
+    const response = await api.get('/api/v1/groups', {
       params: {
         search: search.value,
         sort_by: sortBy.value,
@@ -29,8 +31,9 @@ async function fetchGroups() {
         page: page.value,
       },
     })
-    groups.value = response.data.data
-    pagination.value = response.data.meta
+    console.log(response)
+    groups.value = response.data.data.data
+    pagination.value = response.data.data
   } catch (error) {
     console.error('Failed to fetch groups:', error)
   } finally {
@@ -70,6 +73,12 @@ function goToPage(n) {
   page.value = n
   fetchGroups()
 }
+
+function onGroupCreated() {
+  showModal.value = false
+  page.value = 1
+  fetchGroups()
+}
 </script>
 
 <template>
@@ -87,6 +96,7 @@ function goToPage(n) {
           </p>
         </div>
         <button
+          @click="showModal = true"
           class="bg-gradient-to-br from-brand-primary to-brand-accent text-white px-6 py-3 rounded-full font-bold flex items-center gap-2 shadow-[0_4px_20px_rgba(65,119,139,0.25)] hover:opacity-90 transition-opacity"
         >
           <span class="material-symbols-outlined">add_circle</span>
@@ -168,6 +178,7 @@ function goToPage(n) {
           :name="group.name"
           :category="group.category"
           :member-count="group.members_count"
+          :url="group.avatar?.url"
         />
       </div>
 
@@ -242,5 +253,25 @@ function goToPage(n) {
     </main>
 
     <AppFooter />
+
+    <!-- New Group Modal -->
+    <Teleport to="body">
+      <div
+        v-if="showModal"
+        class="fixed inset-0 z-50 flex items-center justify-center px-4"
+        style="background: rgba(22,29,31,0.5); backdrop-filter: blur(4px)"
+        @click.self="showModal = false"
+      >
+        <div class="bg-brand-surface rounded-3xl w-full max-w-lg p-8 relative" style="box-shadow: 0 8px 40px rgba(22,100,122,0.14)">
+          <button
+            @click="showModal = false"
+            class="absolute top-5 right-5 text-brand-textSecondary hover:text-brand-text transition-colors cursor-pointer"
+          >
+            <span class="material-symbols-outlined">close</span>
+          </button>
+          <NewGroup @created="onGroupCreated" />
+        </div>
+      </div>
+    </Teleport>
   </div>
 </template>

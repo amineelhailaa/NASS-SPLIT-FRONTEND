@@ -23,3 +23,20 @@
   --color-brand-text-secondary: #213c45;
   --color-brand-disabled: #97bfce;
 }
+
+
+@layer base {
+  *, *::before, *::after {
+    box-sizing: border-box;
+  }
+
+  * {
+    margin: 0;
+    padding: 0;
+  }
+
+  html {
+    font-family: sans-serif;
+    color: #333;
+  }
+}

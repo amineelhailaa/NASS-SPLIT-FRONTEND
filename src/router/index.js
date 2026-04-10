@@ -7,6 +7,8 @@ import ContactView from '../views/ContactView.vue'
 import SignUpView from '../views/SignUpView.vue'
 import LoginView from '../views/LoginView.vue'
 import GroupsView from '../views/GroupsView.vue'
+import GroupDetailView from '../views/GroupDetailView.vue'
+import NotFoundView from '../views/NotFoundView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -48,6 +50,17 @@ const router = createRouter({
       name: 'groups',
       component: GroupsView,
       meta: { requiresAuth: true },
+    },
+    {
+      path: '/groups/:id',
+      name: 'group-detail',
+      component: GroupDetailView,
+      meta: { requiresAuth: true },
+    },
+    {
+      path: '/:pathMatch(.*)*',
+      name: 'not-found',
+      component: NotFoundView,
     },
   ],
 })
