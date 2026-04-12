@@ -69,7 +69,13 @@ function triggerUpload() {
 
 const handleSignUp = handleSubmit(async (values) => {
   try {
-    await auth.register(values)
+    const payload = new FormData()
+    payload.append('name', values.name)
+    payload.append('email', values.email)
+    payload.append('password', values.password)
+    payload.append('password_confirmation', values.password_confirmation)
+    if (avatarFile.value) payload.append('avatar', avatarFile.value)
+    await auth.register(payload)
     router.push('/')
   } catch (err) {
     if (err.response?.status === 422) {

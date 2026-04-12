@@ -27,7 +27,9 @@ export const useAuthStore = defineStore('auth', () => {
 
   async function register(payload) {
     await getCsrf()
-    await api.post('/register', payload)
+    await api.post('/register', payload, {
+      headers: { 'Content-Type': 'multipart/form-data' },
+    })
     const { data } = await api.get('/api/user')
     setUser(data.data)
   }

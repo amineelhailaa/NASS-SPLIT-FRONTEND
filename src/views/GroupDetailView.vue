@@ -53,7 +53,7 @@ onMounted(async () => {
       api.get(`/api/v1/groups/${groupId}/balance`),
     ])
     group.value = groupRes.data.data
-    console.log(group.value,"amiiine");
+    console.log(groupRes);
     stats.value = statsRes.data.data
     owes.value = owesRes.data.data
     expenses.value = expensesRes.data.data.data
