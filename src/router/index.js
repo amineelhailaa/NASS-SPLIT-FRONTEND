@@ -55,7 +55,7 @@ const router = createRouter({
       path: '/groups/:id',
       name: 'group-detail',
       component: GroupDetailView,
-      meta: { requiresAuth: true },
+      meta: { requiresAuth: true, hideNavbar: true },
     },
     {
       path: '/:pathMatch(.*)*',
