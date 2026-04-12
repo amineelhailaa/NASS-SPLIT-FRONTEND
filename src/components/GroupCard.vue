@@ -1,12 +1,17 @@
 <script setup>
 import { computed } from 'vue'
+import { useRouter } from 'vue-router'
 
 const props = defineProps({
+  id: Number,
   name: String,
   category: String,
   memberCount: Number,
   url: String,
+  role: String,
 })
+
+const router = useRouter()
 
 
 
@@ -25,7 +30,7 @@ const categoryStyle = computed(() => {
 
 <template>
   <div
-    class="bg-brand-surfaceContrast rounded-2xl p-5 flex flex-col group hover:shadow-[0_8px_32px_rgba(65,119,139,0.14)] transition-all duration-300 shadow-[0_2px_12px_rgba(65,119,139,0.07)]"
+    class="bg-white rounded-2xl p-5 flex flex-col group hover:shadow-[0_8px_32px_rgba(65,119,139,0.14)] transition-all duration-300 shadow-[0_2px_12px_rgba(65,119,139,0.07)]"
   >
     <!-- Cover -->
     <div class="aspect-video w-full rounded-xl overflow-hidden relative" :class="categoryStyle.bg">
@@ -40,12 +45,20 @@ const categoryStyle = computed(() => {
       <div class="absolute inset-0 flex items-center justify-center">
         <span class="material-symbols-outlined text-white/30 text-[72px]">{{ categoryStyle.icon }}</span>
       </div>
-      <div class="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent" />
+      <div class="absolute inset-0 bg-linear-to-t from-black/30 to-transparent" />
       <!-- Category badge -->
       <span
         class="absolute top-3 right-3 bg-white/90 backdrop-blur-sm px-3 py-1 rounded-full text-xs font-bold text-brand-textSecondary z-10"
       >
         {{ category }}
+      </span>
+      <!-- Owner crown badge -->
+      <span
+        v-if="role === 'owner'"
+        class="absolute top-3 left-3 bg-amber-400/90 backdrop-blur-sm w-7 h-7 rounded-full flex items-center justify-center z-10"
+        title="You own this group"
+      >
+        <span class="material-symbols-outlined text-white text-[16px]">crown</span>
       </span>
     </div>
 
@@ -60,7 +73,8 @@ const categoryStyle = computed(() => {
 
     <!-- CTA -->
     <button
-      class="w-full bg-brand-primary text-white py-3 rounded-full font-bold hover:bg-brand-primaryHover transition-colors flex items-center justify-center gap-2 text-sm"
+      class="cursor-pointer w-full bg-brand-primary text-white py-3 rounded-full font-bold hover:bg-brand-primaryHover transition-colors flex items-center justify-center gap-2 text-sm"
+      @click="router.push({ name: 'group-detail', params: { id }, state: { role } })"
     >
       Enter Group
       <span class="material-symbols-outlined text-[18px]">arrow_forward</span>

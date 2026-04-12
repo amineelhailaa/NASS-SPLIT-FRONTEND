@@ -175,10 +175,12 @@ function onGroupCreated() {
         <GroupCard
           v-for="group in groups"
           :key="group.id"
+          :id="group.id"
           :name="group.name"
           :category="group.category"
           :member-count="group.members_count"
           :url="group.avatar?.url"
+          :role="group.pivot?.role"
         />
       </div>
 
@@ -232,7 +234,7 @@ function onGroupCreated() {
       </div>
 
       <!-- Balance Banner -->
-      <section class="pt-16 bg-gradient-to-br from-brand-primary to-brand-accent rounded-2xl p-8 md:p-12 relative overflow-hidden shadow-[0_8px_40px_rgba(65,119,139,0.3)]">
+      <section class="pt-16 bg-cerulean-500 rounded-2xl p-8 md:p-12 relative overflow-hidden shadow-[0_8px_40px_rgba(65,119,139,0.3)]">
         <div class="absolute top-0 right-0 -mr-16 -mt-16 size-72 bg-white/10 rounded-full blur-3xl" />
         <div class="absolute bottom-0 left-0 -ml-16 -mb-16 size-56 bg-black/10 rounded-full blur-3xl" />
         <div class="relative z-10 flex flex-col md:flex-row items-start md:items-center justify-between gap-8">
