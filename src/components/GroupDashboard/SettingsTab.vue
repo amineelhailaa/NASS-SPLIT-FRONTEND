@@ -76,7 +76,7 @@ async function deleteGroup() {
 </script>
 
 <template>
-  <div class="flex flex-col gap-8 max-w-xl">
+  <div class="flex flex-col gap-8">
     <h2 class="text-brand-text font-bold text-xl">Group Settings</h2>
 
     <!-- Success / Error -->
