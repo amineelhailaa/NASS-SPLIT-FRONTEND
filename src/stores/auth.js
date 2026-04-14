@@ -13,6 +13,10 @@ export const useAuthStore = defineStore('auth', () => {
     else localStorage.removeItem('user')
   }
 
+  function clearUser() {
+    setUser(null)
+  }
+
   async function getCsrf() {
     await api.get('/sanctum/csrf-cookie')
   }
@@ -27,17 +31,36 @@ export const useAuthStore = defineStore('auth', () => {
 
   async function register(payload) {
     await getCsrf()
-    await api.post('/register', payload, {
-      headers: { 'Content-Type': 'multipart/form-data' },
-    })
+    await api.post('/register', payload)
     const { data } = await api.get('/api/user')
     setUser(data.data)
   }
 
-  async function logout() {
-    await api.post('/logout')
-    setUser(null)
+  async function restoreSession() {
+    if (!user.value) return
+
+    try {
+      const { data } = await api.get('/api/user', { skipAuthRedirect: true })
+      setUser(data.data)
+    } catch (error) {
+      if (error.response?.status === 401) {
+        clearUser()
+        return
+      }
+
+      throw error
+    }
   }
 
-  return { user, isAuthenticated, login, register, logout }
+  async function logout() {
+    try {
+      await api.post('/logout')
+    } catch (error) {
+      if (error.response?.status !== 401) throw error
+    }
+
+    clearUser()
+  }
+
+  return { user, isAuthenticated, login, register, restoreSession, logout, clearUser }
 })
