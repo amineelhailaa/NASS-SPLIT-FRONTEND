@@ -34,6 +34,13 @@ function formatDate(dateStr) {
   })
 }
 
+function formatDateShort(dateStr) {
+  return new Date(dateStr).toLocaleDateString('en-US', {
+    month: 'short',
+    day: 'numeric',
+  })
+}
+
 function formatCurrency(val) {
   return `$${Number(val).toFixed(2)}`
 }
@@ -49,7 +56,7 @@ onMounted(() => fetchPayments())
 
     <!-- Loading -->
     <div v-if="loading" class="flex flex-col gap-3">
-      <div v-for="n in 4" :key="n" class="animate-pulse bg-brand-surface rounded-2xl h-20" />
+      <div v-for="n in 4" :key="n" class="animate-pulse bg-brand-surface rounded-2xl h-24" />
     </div>
 
     <!-- Empty -->
@@ -64,34 +71,73 @@ onMounted(() => fetchPayments())
       <div
         v-for="payment in payments"
         :key="payment.id"
-        class="bg-white rounded-2xl p-5 shadow-[0_2px_12px_rgba(22,100,122,0.06)] flex items-center gap-4"
+        class="bg-white rounded-2xl p-4 sm:p-5 shadow-[0_2px_12px_rgba(22,100,122,0.06)] flex flex-col gap-3"
       >
-        <!-- Icon -->
-        <div class="w-12 h-12 rounded-full bg-emerald-50 flex items-center justify-center shrink-0">
-          <span class="material-symbols-outlined text-emerald-600 text-[22px]">payments</span>
+        <!-- Transfer row -->
+        <div class="flex items-center gap-2 sm:gap-3">
+
+          <!-- Debtor (who paid) -->
+          <div class="flex items-center gap-2 sm:gap-2.5 flex-1 min-w-0">
+            <div class="w-9 h-9 sm:w-11 sm:h-11 rounded-full bg-red-50 shrink-0 overflow-hidden flex items-center justify-center">
+              <img
+                v-if="payment.debtor?.user?.avatar?.url"
+                :src="payment.debtor.user.avatar.url"
+                :alt="payment.debtor.user.name"
+                class="w-full h-full object-cover"
+              />
+              <span v-else class="material-symbols-outlined text-red-400 text-[17px] sm:text-[19px]">person</span>
+            </div>
+            <div class="min-w-0">
+              <p class="text-brand-text font-semibold text-xs sm:text-sm truncate leading-tight">
+                {{ payment.debtor?.user?.name ?? 'Unknown' }}
+              </p>
+              <p class="text-brand-textSecondary text-[10px] sm:text-xs leading-tight">paid</p>
+            </div>
+          </div>
+
+          <!-- Arrow -->
+          <div class="shrink-0 flex items-center justify-center">
+            <span class="material-symbols-outlined text-brand-disabled text-[18px] sm:text-[20px]">arrow_forward</span>
+          </div>
+
+          <!-- Creditor (who received) -->
+          <div class="flex items-center gap-2 sm:gap-2.5 flex-1 min-w-0 justify-end">
+            <div class="min-w-0 text-right">
+              <p class="text-brand-text font-semibold text-xs sm:text-sm truncate leading-tight">
+                {{ payment.creditor?.user?.name ?? 'Unknown' }}
+              </p>
+              <p class="text-brand-textSecondary text-[10px] sm:text-xs leading-tight">received</p>
+            </div>
+            <div class="w-9 h-9 sm:w-11 sm:h-11 rounded-full bg-emerald-50 shrink-0 overflow-hidden flex items-center justify-center">
+              <img
+                v-if="payment.creditor?.user?.avatar?.url"
+                :src="payment.creditor.user.avatar.url"
+                :alt="payment.creditor.user.name"
+                class="w-full h-full object-cover"
+              />
+              <span v-else class="material-symbols-outlined text-emerald-500 text-[17px] sm:text-[19px]">person</span>
+            </div>
+          </div>
         </div>
 
-        <!-- Info -->
-        <div class="flex-1 min-w-0">
-          <p class="text-brand-text font-semibold text-sm truncate">
-            {{ payment.debtor?.user?.name ?? 'Unknown' }}
-            <span class="text-brand-textSecondary font-normal">paid</span>
-            {{ payment.creditor?.user?.name ?? 'Unknown' }}
-          </p>
-          <p class="text-brand-textSecondary text-xs">{{ formatDate(payment.created_at) }}</p>
+        <!-- Footer: date + status + amount -->
+        <div class="flex items-center justify-between pt-0.5">
+          <div class="flex items-center gap-1.5 sm:gap-2">
+            <span class="material-symbols-outlined text-brand-disabled text-[13px]">schedule</span>
+            <span class="text-brand-textSecondary text-[10px] sm:hidden">{{ formatDateShort(payment.created_at) }}</span>
+            <span class="text-brand-textSecondary text-xs hidden sm:block">{{ formatDate(payment.created_at) }}</span>
+            <span
+              v-if="payment.status"
+              class="text-[10px] sm:text-xs font-semibold px-2 py-0.5 rounded-full"
+              :class="payment.status === 'confirmed' ? 'bg-emerald-50 text-emerald-600' : 'bg-amber-50 text-amber-600'"
+            >
+              {{ payment.status }}
+            </span>
+          </div>
+          <span class="text-emerald-700 font-extrabold text-sm sm:text-base shrink-0">
+            {{ formatCurrency(payment.amount) }}
+          </span>
         </div>
-
-        <!-- Status -->
-        <span
-          v-if="payment.status"
-          class="text-xs font-semibold px-3 py-1 rounded-full shrink-0"
-          :class="payment.status === 'confirmed' ? 'bg-emerald-50 text-emerald-600' : 'bg-amber-50 text-amber-600'"
-        >
-          {{ payment.status }}
-        </span>
-
-        <!-- Amount -->
-        <span class="text-emerald-700 font-extrabold text-base shrink-0">{{ formatCurrency(payment.amount) }}</span>
       </div>
 
       <!-- Pagination -->
