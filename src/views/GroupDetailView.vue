@@ -1,5 +1,5 @@
 <script setup>
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed, onMounted, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import DashboardTab from '@/components/GroupDashboard/DashboardTab.vue'
 import ExpensesTab from '@/components/GroupDashboard/ExpensesTab.vue'
@@ -8,11 +8,16 @@ import SettleTab from '@/components/GroupDashboard/SettleTab.vue'
 import ChatTab from '@/components/GroupDashboard/ChatTab.vue'
 import MembersTab from '@/components/GroupDashboard/MembersTab.vue'
 import SettingsTab from '@/components/GroupDashboard/SettingsTab.vue'
+import InvitationsTab from '@/components/GroupDashboard/InvitationsTab.vue'
+import AddExpenseForm from '@/components/GroupDashboard/AddExpenseForm.vue'
+import NotificationBell from '@/components/NotificationBell.vue'
 import api from '@/lib/axios'
 
 const route = useRoute()
 const router = useRouter()
 const groupId = route.params.id
+
+const showExpenseForm = ref(false)
 
 const group = ref(null)
 const stats = ref(null)
@@ -21,11 +26,13 @@ const expenses = ref([])
 const balance = ref(null)
 const loading = ref(true)
 const error = ref(null)
-const activeTab = ref('dashboard')
+const activeTab = ref(route.query.tab || 'dashboard')
 
-const isOwner = computed(() =>
-  group.value?.pivot?.role === 'owner' || history.state?.role === 'owner'
-)
+watch(() => route.query.tab, (tab) => {
+  if (tab) activeTab.value = tab
+})
+
+const isOwner = computed(() => group.value?.pivot?.role === 'owner')
 
 const tabs = computed(() => [
   { key: 'dashboard', label: 'Dashboard', icon: 'dashboard', component: DashboardTab },
@@ -35,13 +42,21 @@ const tabs = computed(() => [
   { key: 'chat', label: 'Chat', icon: 'chat', component: ChatTab },
   { key: 'members', label: 'Members', icon: 'group', component: MembersTab },
   ...(isOwner.value
-    ? [{ key: 'settings', label: 'Settings', icon: 'settings', component: SettingsTab }]
+    ? [
+        { key: 'invitations', label: 'Invitations', icon: 'mark_email_unread', component: InvitationsTab },
+        { key: 'settings', label: 'Settings', icon: 'settings', component: SettingsTab },
+      ]
     : []),
 ])
 
 const currentComponent = computed(() =>
   tabs.value.find((t) => t.key === activeTab.value)?.component
 )
+
+async function fetchGroup() {
+  const res = await api.get(`/api/v1/groups/${groupId}`)
+  group.value = res.data.data
+}
 
 onMounted(async () => {
   try {
@@ -53,7 +68,6 @@ onMounted(async () => {
       api.get(`/api/v1/groups/${groupId}/balance`),
     ])
     group.value = groupRes.data.data
-    console.log(groupRes);
     stats.value = statsRes.data.data
     owes.value = owesRes.data.data
     expenses.value = expensesRes.data.data.data
@@ -67,7 +81,7 @@ onMounted(async () => {
 </script>
 
 <template>
-  <div class="min-h-screen bg-brand-background flex" style="font-family: 'Plus Jakarta Sans', sans-serif">
+  <div class="h-screen bg-brand-background flex overflow-hidden" style="font-family: 'Plus Jakarta Sans', sans-serif">
     <!-- Sidebar -->
     <aside
       class="group/sb fixed inset-y-0 left-0 z-50 flex flex-col w-16 hover:w-56 overflow-hidden transition-[width] duration-200 ease-out bg-white shadow-[4px_0_16px_rgba(22,100,122,0.06)]"
@@ -143,6 +157,11 @@ onMounted(async () => {
         </button>
       </nav>
 
+      <!-- Notifications -->
+      <div class="px-2 pb-1">
+        <NotificationBell />
+      </div>
+
       <!-- Leave Group (non-owners only) -->
       <button
         v-if="!isOwner"
@@ -158,8 +177,13 @@ onMounted(async () => {
     </aside>
 
     <!-- Main -->
-    <div class="flex-1 pl-20">
-      <main class="px-8 md:px-12 py-8">
+    <div class="flex-1 pl-16 sm:pl-20 flex flex-col min-h-0">
+      <div
+        class="flex-1 min-h-0"
+        :class="activeTab === 'chat' && !loading && !error
+          ? 'overflow-hidden'
+          : 'overflow-y-auto px-4 sm:px-8 md:px-12 py-4 sm:py-8'"
+      >
         <!-- Loading -->
         <div v-if="loading" class="flex flex-col gap-6">
           <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
@@ -187,8 +211,48 @@ onMounted(async () => {
           :expenses="expenses"
           :balance="balance"
           :group-id="groupId"
+          :is-owner="isOwner"
+          @ownership-transferred="fetchGroup"
         />
-      </main>
+      </div>
     </div>
+
+    <!-- Floating Add Expense Button -->
+    <button
+      v-if="!loading && !error"
+      @click="showExpenseForm = true"
+      class="fixed bottom-8 right-8 z-40 w-14 h-14 rounded-full flex items-center justify-center text-white cursor-pointer shadow-[0_4px_20px_rgba(22,100,122,0.25)] hover:scale-105 active:scale-95 transition-transform"
+      style="background-color: #41778b"
+    >
+      <span class="material-symbols-outlined text-[28px]">add</span>
+    </button>
+
+    <!-- Expense Form Modal -->
+    <Teleport to="body">
+      <Transition name="modal">
+        <div
+          v-if="showExpenseForm"
+          class="fixed inset-0 z-100 flex items-start justify-center"
+          @click.self="showExpenseForm = false"
+        >
+          <!-- Backdrop -->
+          <div class="absolute inset-0 bg-cerulean-900/30 backdrop-blur-sm" @click="showExpenseForm = false" />
+
+          <!-- Panel -->
+          <div
+            class="relative z-10 w-full max-w-lg bg-brand-background rounded-2xl shadow-[0_8px_40px_rgba(22,100,122,0.12)] overflow-y-auto my-8 mx-4"
+            style="max-height: calc(100vh - 4rem)"
+          >
+            <div class="px-6 py-6">
+              <AddExpenseForm
+                :group-id="groupId"
+                @created="showExpenseForm = false"
+                @cancel="showExpenseForm = false"
+              />
+            </div>
+          </div>
+        </div>
+      </Transition>
+    </Teleport>
   </div>
 </template>
