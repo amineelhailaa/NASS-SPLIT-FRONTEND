@@ -85,7 +85,7 @@ function onGroupCreated() {
   <div class="flex flex-col min-h-screen bg-brand-background" style="font-family: 'Plus Jakarta Sans', sans-serif">
     <NavBar />
 
-    <main class="flex-grow pt-32 pb-20 px-6 md:px-12">
+    <main class="grow pt-32 pb-20 px-6 md:px-12">
 
       <!-- Page Header -->
       <section class="flex flex-col md:flex-row justify-between items-start md:items-end gap-4 pb-10">
@@ -181,6 +181,7 @@ function onGroupCreated() {
           :member-count="group.members_count"
           :url="group.avatar?.url"
           :role="group.pivot?.role"
+          :status="group.pivot?.status"
         />
       </div>
 
