@@ -1,16 +1,22 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import api from '@/lib/axios'
+import Swal from 'sweetalert2'
 
 const props = defineProps({
   groupId: [Number, String],
   group: Object,
+  isOwner: Boolean,
 })
+
+const emit = defineEmits(['ownership-transferred'])
 
 const members = ref([])
 const loading = ref(true)
 const currentPage = ref(1)
 const lastPage = ref(1)
+const kicking = ref(null)
+const transferring = ref(null)
 
 async function fetchMembers(page = 1) {
   loading.value = true
@@ -23,6 +29,67 @@ async function fetchMembers(page = 1) {
     members.value = []
   } finally {
     loading.value = false
+  }
+}
+
+async function kickMember(member) {
+  const { isConfirmed } = await Swal.fire({
+    title: `Kick ${member.user?.name}?`,
+    text: 'This member will be removed from the group.',
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonText: 'Kick',
+    cancelButtonText: 'Cancel',
+    confirmButtonColor: '#ef4444',
+    cancelButtonColor: '#e5e7eb',
+  })
+  if (!isConfirmed) return
+
+  kicking.value = member.id
+  try {
+    await api.patch(`/api/v1/groups/${props.groupId}/members/${member.id}/kick`)
+    members.value = members.value.filter((m) => m.id !== member.id)
+  } catch (err) {
+    Swal.fire({
+      title: 'Cannot kick member',
+      text: err.response?.data?.message ?? 'Something went wrong.',
+      icon: 'error',
+      confirmButtonColor: '#16647a',
+    })
+  } finally {
+    kicking.value = null
+  }
+}
+
+async function transferOwnership(member) {
+  const { isConfirmed } = await Swal.fire({
+    title: 'Transfer Ownership?',
+    html: `<p class="text-sm text-gray-500">You are about to make <strong>${member.user?.name}</strong> the new owner.<br/>You will become a regular member and lose owner privileges.</p>`,
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonText: 'Yes, transfer',
+    cancelButtonText: 'Cancel',
+    confirmButtonColor: '#16647a',
+    cancelButtonColor: '#e5e7eb',
+  })
+  if (!isConfirmed) return
+
+  transferring.value = member.id
+  try {
+    await api.patch(`/api/v1/groups/${props.groupId}/transfer-ownership`, {
+      membership_id: member.id,
+    })
+    await fetchMembers(currentPage.value)
+    emit('ownership-transferred')
+  } catch (err) {
+    Swal.fire({
+      title: 'Transfer failed',
+      text: err.response?.data?.message ?? 'Something went wrong.',
+      icon: 'error',
+      confirmButtonColor: '#16647a',
+    })
+  } finally {
+    transferring.value = null
   }
 }
 
@@ -78,6 +145,38 @@ onMounted(() => fetchMembers())
         >
           {{ member.role }}
         </span>
+
+        <!-- Owner actions (owner only, not for other owners) -->
+        <div v-if="isOwner && member.role !== 'owner'" class="flex items-center gap-1 shrink-0">
+          <!-- Transfer ownership -->
+          <button
+            @click="transferOwnership(member)"
+            :disabled="transferring === member.id || kicking === member.id"
+            class="w-9 h-9 rounded-full flex items-center justify-center transition-all hover:bg-cerulean-50 disabled:opacity-40 disabled:cursor-not-allowed text-brand-primary hover:text-brand-primaryHover"
+            title="Transfer ownership"
+          >
+            <span
+              v-if="transferring === member.id"
+              class="material-symbols-outlined text-[18px] animate-spin"
+            >progress_activity</span>
+            <span v-else class="material-symbols-outlined text-[18px]">workspace_premium</span>
+          </button>
+
+          <!-- Kick -->
+          <button
+            @click="kickMember(member)"
+            :disabled="kicking === member.id || transferring === member.id"
+            class="w-9 h-9 rounded-full flex items-center justify-center transition-all hover:bg-red-50 disabled:opacity-40 disabled:cursor-not-allowed"
+            :class="kicking === member.id ? 'text-brand-disabled' : 'text-red-400 hover:text-red-500'"
+            title="Remove member"
+          >
+            <span
+              v-if="kicking === member.id"
+              class="material-symbols-outlined text-[18px] animate-spin"
+            >progress_activity</span>
+            <span v-else class="material-symbols-outlined text-[18px]">person_remove</span>
+          </button>
+        </div>
       </div>
 
       <!-- Pagination -->
