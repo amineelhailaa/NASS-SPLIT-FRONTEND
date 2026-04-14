@@ -11,6 +11,25 @@ const expenses = ref([])
 const loading = ref(true)
 const currentPage = ref(1)
 const lastPage = ref(1)
+const hoveredSplitId = ref(null)
+
+const currentUser = JSON.parse(localStorage.getItem('user') || '{}')
+const downloading = ref(false)
+
+async function downloadExpenses() {
+  downloading.value = true
+  try {
+    const url = `${import.meta.env.VITE_API_URL}/api/v1/groups/${props.groupId}/expenses?export=1`
+    const a = document.createElement('a')
+    a.href = url
+    a.download = 'expenses.xlsx'
+    document.body.appendChild(a)
+    a.click()
+    document.body.removeChild(a)
+  } finally {
+    setTimeout(() => { downloading.value = false }, 1000)
+  }
+}
 
 async function fetchExpenses(page = 1) {
   loading.value = true
@@ -36,8 +55,20 @@ function formatDate(dateStr) {
   })
 }
 
+function formatDateShort(dateStr) {
+  return new Date(dateStr).toLocaleDateString('en-US', {
+    month: 'short',
+    day: 'numeric',
+  })
+}
+
 function formatCurrency(val) {
   return `$${Number(val).toFixed(2)}`
+}
+
+function myShare(expense) {
+  const split = expense.splits?.find((s) => s.debtor?.user?.id === currentUser.id)
+  return split ? Number(split.amount).toFixed(2) : null
 }
 
 onMounted(() => fetchExpenses())
@@ -47,6 +78,15 @@ onMounted(() => fetchExpenses())
   <div class="flex flex-col gap-6">
     <div class="flex items-center justify-between">
       <h2 class="text-brand-text font-bold text-xl">Expenses</h2>
+      <button
+        @click="downloadExpenses"
+        :disabled="downloading"
+        class="flex items-center gap-1.5 px-4 py-2 rounded-full text-sm font-semibold transition-colors"
+        :class="downloading ? 'text-brand-disabled bg-brand-surface cursor-not-allowed' : 'text-brand-primary bg-cerulean-50 hover:bg-cerulean-100'"
+      >
+        <span class="material-symbols-outlined text-[17px]">{{ downloading ? 'hourglass_empty' : 'download' }}</span>
+        <span class="hidden sm:inline">{{ downloading ? 'Downloading…' : 'Export' }}</span>
+      </button>
     </div>
 
     <!-- Loading -->
@@ -65,33 +105,112 @@ onMounted(() => fetchExpenses())
       <div
         v-for="expense in expenses"
         :key="expense.id"
-        class="bg-white rounded-2xl p-5 shadow-[0_2px_12px_rgba(22,100,122,0.06)] flex items-center gap-4"
+        class="bg-white rounded-2xl p-4 sm:p-5 shadow-[0_2px_12px_rgba(22,100,122,0.06)] flex items-center gap-3 sm:gap-4"
       >
-        <!-- Icon -->
-        <div class="w-12 h-12 rounded-full bg-cerulean-50 flex items-center justify-center shrink-0">
-          <span class="material-symbols-outlined text-brand-primary text-[22px]">receipt</span>
+        <!-- Payer avatar / fallback icon -->
+        <div
+          class="w-10 h-10 sm:w-12 sm:h-12 rounded-full shrink-0 overflow-hidden flex items-center justify-center"
+          :class="expense.payer?.user?.avatar?.url ? '' : 'bg-cerulean-50'"
+        >
+          <img
+            v-if="expense.payer?.user?.avatar?.url"
+            :src="expense.payer.user.avatar.url"
+            :alt="expense.payer.user.name"
+            class="w-full h-full object-cover"
+          />
+          <span v-else class="material-symbols-outlined text-brand-primary text-[20px] sm:text-[22px]">receipt</span>
         </div>
 
         <!-- Info -->
-        <div class="flex-1 min-w-0">
+        <div class="flex-1 min-w-0 flex flex-col gap-0.5">
           <p class="text-brand-text font-semibold text-sm truncate">{{ expense.title }}</p>
-          <p class="text-brand-textSecondary text-xs">
-            {{ formatDate(expense.date) }}
-            <span v-if="expense.payer?.user?.name"> · Paid by {{ expense.payer.user.name }}</span>
+
+          <!-- Mobile meta -->
+          <p class="text-brand-textSecondary text-xs truncate sm:hidden">
+            {{ formatDateShort(expense.date) }}
+            <span v-if="expense.payer?.user?.name"> · {{ expense.payer.user.name }}</span>
           </p>
-          <p v-if="expense.category?.name" class="text-brand-textSecondary text-xs">
-            {{ expense.category.name }}
-          </p>
+
+          <!-- Desktop meta -->
+          <div class="hidden sm:flex items-center gap-2 flex-wrap">
+            <span class="text-brand-textSecondary text-xs">{{ formatDate(expense.date) }}</span>
+            <span v-if="expense.payer?.user?.name" class="text-brand-disabled text-xs">·</span>
+            <span v-if="expense.payer?.user?.name" class="text-brand-textSecondary text-xs">
+              Paid by {{ expense.payer.user.name }}
+            </span>
+          </div>
+
+          <!-- Category + your share (desktop only) -->
+          <div class="hidden sm:flex items-center gap-2 mt-0.5">
+            <span
+              v-if="expense.category?.name"
+              class="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-cerulean-50 text-brand-primary"
+            >
+              {{ expense.category.name }}
+            </span>
+            <span
+              v-if="myShare(expense)"
+              class="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-brand-surface text-brand-textSecondary"
+            >
+              Your share: ${{ myShare(expense) }}
+            </span>
+          </div>
         </div>
 
-        <!-- Splits count -->
-        <div v-if="expense.splits?.length" class="flex items-center gap-1 shrink-0">
-          <span class="material-symbols-outlined text-brand-textSecondary text-[16px]">group</span>
-          <span class="text-brand-textSecondary text-xs font-medium">{{ expense.splits.length }}</span>
-        </div>
+        <!-- Right side: participants + amount -->
+        <div class="flex items-center gap-2 shrink-0">
 
-        <!-- Amount -->
-        <span class="text-cerulean-700 font-extrabold text-base shrink-0">{{ formatCurrency(expense.amount) }}</span>
+          <!-- Participant count with hover tooltip (desktop only) -->
+          <div
+            v-if="expense.splits?.length"
+            class="hidden sm:block relative"
+            @mouseenter="hoveredSplitId = expense.id"
+            @mouseleave="hoveredSplitId = null"
+          >
+            <button
+              class="flex items-center gap-1 px-2 py-1 rounded-full hover:bg-cerulean-50 transition-colors cursor-default"
+            >
+              <span class="material-symbols-outlined text-brand-textSecondary text-[15px]">group</span>
+              <span class="text-brand-textSecondary text-xs font-medium">{{ expense.splits.length }}</span>
+            </button>
+
+            <!-- Tooltip -->
+            <div
+              v-if="hoveredSplitId === expense.id"
+              class="absolute right-0 top-full mt-1.5 w-56 bg-white rounded-2xl shadow-[0_8px_24px_rgba(22,100,122,0.13)] p-3 z-50 flex flex-col gap-2"
+            >
+              <p class="text-brand-textSecondary text-[10px] font-semibold uppercase tracking-wide">
+                Split between
+              </p>
+              <div
+                v-for="split in expense.splits"
+                :key="split.id"
+                class="flex items-center gap-2.5"
+              >
+                <div class="w-6 h-6 rounded-full bg-cerulean-50 shrink-0 overflow-hidden flex items-center justify-center">
+                  <img
+                    v-if="split.debtor?.user?.avatar?.url"
+                    :src="split.debtor.user.avatar.url"
+                    :alt="split.debtor.user.name"
+                    class="w-full h-full object-cover"
+                  />
+                  <span v-else class="material-symbols-outlined text-[11px] text-brand-primary">person</span>
+                </div>
+                <span class="text-brand-text text-xs font-medium flex-1 truncate">
+                  {{ split.debtor?.user?.name }}
+                </span>
+                <span class="text-cerulean-700 text-xs font-bold shrink-0">
+                  ${{ Number(split.amount).toFixed(2) }}
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Amount -->
+          <span class="text-cerulean-700 font-extrabold text-sm sm:text-base">
+            {{ formatCurrency(expense.amount) }}
+          </span>
+        </div>
       </div>
 
       <!-- Pagination -->
