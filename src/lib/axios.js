@@ -1,5 +1,8 @@
 import axios from 'axios'
+import { getActivePinia } from 'pinia'
 import router from '@/router'
+import echo from '@/lib/echo'
+import { useAuthStore } from '@/stores/auth.js'
 
 const api = axios.create({
   baseURL: import.meta.env.VITE_API_URL,
@@ -7,16 +10,38 @@ const api = axios.create({
   withXSRFToken: true,
   headers: {
     Accept: 'application/json',
-    'Content-Type': 'application/json',
   },
 })
+
+api.interceptors.request.use((config) => {
+  const socketId = echo.socketId()
+  if (socketId) config.headers['X-Socket-ID'] = socketId
+  return config
+})
+
+function clearAuthState() {
+  const pinia = getActivePinia()
+
+  if (pinia) {
+    useAuthStore(pinia).clearUser()
+    return
+  }
+
+  localStorage.removeItem('user')
+}
 
 api.interceptors.response.use(
   (response) => response,
   (error) => {
     if (error.response?.status === 401) {
-      localStorage.removeItem('user')
-      router.push({ name: 'login' })
+      clearAuthState()
+
+      if (!error.config?.skipAuthRedirect && router.currentRoute.value.name !== 'login') {
+        router.replace({
+          name: 'login',
+          query: { redirect: router.currentRoute.value.fullPath },
+        })
+      }
     }
     return Promise.reject(error)
   },
