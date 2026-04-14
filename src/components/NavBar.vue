@@ -3,6 +3,7 @@ import { ref, onMounted, onUnmounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import logoRaw from '@/assets/logo.svg?raw'
 import { useAuthStore } from '@/stores/auth'
+import NotificationBell from '@/components/NotificationBell.vue'
 
 const auth = useAuthStore()
 const route = useRoute()
@@ -84,11 +85,7 @@ async function handleLogout() {
       <!-- Right side — authenticated -->
       <div v-else class="flex items-center gap-2">
         <!-- Notification bell -->
-        <button
-          class="w-10 h-10 rounded-full flex items-center justify-center text-cerulean-700 hover:bg-cerulean-50 transition-colors cursor-pointer"
-        >
-          <span class="material-symbols-outlined text-[22px]">notifications</span>
-        </button>
+        <NotificationBell variant="navbar" />
 
         <!-- Avatar + dropdown -->
         <div class="relative" ref="dropdownRef">
