@@ -9,7 +9,10 @@ const props = defineProps({
   memberCount: Number,
   url: String,
   role: String,
+  status: String,
 })
+
+const isInactive = computed(() => props.status && props.status !== 'active')
 
 const router = useRouter()
 
@@ -30,7 +33,10 @@ const categoryStyle = computed(() => {
 
 <template>
   <div
-    class="bg-white rounded-2xl p-5 flex flex-col group hover:shadow-[0_8px_32px_rgba(65,119,139,0.14)] transition-all duration-300 shadow-[0_2px_12px_rgba(65,119,139,0.07)]"
+    class="bg-white rounded-2xl p-5 flex flex-col group transition-all duration-300"
+    :class="isInactive
+      ? 'opacity-50 grayscale pointer-events-none shadow-[0_2px_12px_rgba(65,119,139,0.04)]'
+      : 'hover:shadow-[0_8px_32px_rgba(65,119,139,0.14)] shadow-[0_2px_12px_rgba(65,119,139,0.07)]'"
   >
     <!-- Cover -->
     <div class="aspect-video w-full rounded-xl overflow-hidden relative" :class="categoryStyle.bg">
@@ -51,6 +57,13 @@ const categoryStyle = computed(() => {
         class="absolute top-3 right-3 bg-white/90 backdrop-blur-sm px-3 py-1 rounded-full text-xs font-bold text-brand-textSecondary z-10"
       >
         {{ category }}
+      </span>
+      <!-- Inactive badge -->
+      <span
+        v-if="isInactive"
+        class="absolute bottom-3 left-3 bg-black/50 backdrop-blur-sm px-3 py-1 rounded-full text-[11px] font-bold text-white z-10 capitalize"
+      >
+        {{ status }}
       </span>
       <!-- Owner crown badge -->
       <span
@@ -74,7 +87,7 @@ const categoryStyle = computed(() => {
     <!-- CTA -->
     <button
       class="cursor-pointer w-full bg-brand-primary text-white py-3 rounded-full font-bold hover:bg-brand-primaryHover transition-colors flex items-center justify-center gap-2 text-sm"
-      @click="router.push({ name: 'group-detail', params: { id }, state: { role } })"
+      @click="router.push({ name: 'group-detail', params: { id } })"
     >
       Enter Group
       <span class="material-symbols-outlined text-[18px]">arrow_forward</span>
