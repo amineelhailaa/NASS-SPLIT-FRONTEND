@@ -31,6 +31,7 @@ const {value: passwordConfirmation, errorMessage: passwordConfirmationError} = u
 
 const showPassword = ref(false)
 const avatarPreview = ref(null)
+const avatarError = ref(null)
 const fileInput = ref(null)
 const avatarFile = ref(null)
 
@@ -56,11 +57,23 @@ const features = [
   },
 ]
 
+const MAX_AVATAR_SIZE = 2 * 1024 * 1024 // 2 MB — matches PHP upload_max_filesize
+
 function onFileChange(e) {
   const file = e.target.files[0]
   if (!file) return
+
+  if (file.size > MAX_AVATAR_SIZE) {
+    avatarError.value = 'Photo must be under 2 MB.'
+    avatarPreview.value = null
+    avatarFile.value = null
+    e.target.value = ''
+    return
+  }
+
+  avatarError.value = null
   avatarPreview.value = URL.createObjectURL(file)
-  avatarFile.value = file;
+  avatarFile.value = file
 }
 
 function triggerUpload() {
@@ -78,6 +91,7 @@ const handleSignUp = handleSubmit(async (values) => {
     await auth.register(payload)
     router.push('/')
   } catch (err) {
+    console.log('REGISTER ERROR:', err.response?.status, JSON.stringify(err.response?.data, null, 2))
     if (err.response?.status === 422) {
       const laravelErrors = {}
       for (const [field, messages] of Object.entries(err.response.data.errors ?? {})) {
@@ -196,7 +210,7 @@ const handleSignUp = handleSubmit(async (values) => {
                   <span class="material-symbols-outlined text-base">upload</span>
                   Upload photo
                 </button>
-                <p class="text-xs text-cerulean-800/40">JPG, PNG or GIF · Max 2MB</p>
+                <p class="text-xs text-cerulean-800/40">JPG, PNG or GIF · Max 2 MB</p>
               </div>
               <input
                   ref="fileInput"
@@ -206,6 +220,7 @@ const handleSignUp = handleSubmit(async (values) => {
                   @change="onFileChange"
               />
             </div>
+            <p v-if="avatarError" class="text-xs text-red-500 font-medium mt-1">{{ avatarError }}</p>
           </div>
 
           <!-- Name -->
