@@ -6,6 +6,7 @@ import { useRouter } from 'vue-router'
 import { useAuthStore } from '@/stores/auth.js'
 import InputError from '@/components/inputError.vue'
 import logoRaw from '@/assets/logo.svg?raw'
+import api from "@/lib/axios.js";
 
 const router = useRouter()
 const auth = useAuthStore()
@@ -55,6 +56,21 @@ const handleLogin = handleSubmit(async (values) => {
     }
   }
 })
+
+
+//for google
+
+const googleLogin = async () => {
+  const {data} = await api.get('/api/auth/google/redirect')
+  window.location.href= data.data.url
+}
+
+const githubLogin = async () => {
+  const {data} = await api.get('/api/auth/github/redirect')
+  window.location.href= data.data.url
+}
+
+
 </script>
 
 <template>
@@ -206,7 +222,7 @@ const handleLogin = handleSubmit(async (values) => {
 
         <!-- Social auth -->
         <div class="flex gap-3">
-          <button
+          <button @click="googleLogin()"
             class="flex-1 flex items-center justify-center gap-2 bg-white rounded-full py-3.5 text-sm font-semibold text-cerulean-800 hover:shadow-md transition-all cursor-pointer"
             style="box-shadow: 0 2px 12px rgba(22, 100, 122, 0.08)"
           >
@@ -218,7 +234,7 @@ const handleLogin = handleSubmit(async (values) => {
             </svg>
             Google
           </button>
-          <button
+          <button @click="githubLogin()"
             class="flex-1 flex items-center justify-center gap-2 bg-white rounded-full py-3.5 text-sm font-semibold text-cerulean-800 hover:shadow-md transition-all cursor-pointer"
             style="box-shadow: 0 2px 12px rgba(22, 100, 122, 0.08)"
           >
