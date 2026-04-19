@@ -97,7 +97,7 @@ function onGroupCreated() {
         </div>
         <button
           @click="showModal = true"
-          class="bg-gradient-to-br from-brand-primary to-brand-accent text-white px-6 py-3 rounded-full font-bold flex items-center gap-2 shadow-[0_4px_20px_rgba(65,119,139,0.25)] hover:opacity-90 transition-opacity"
+          class="bg-cerulean-500 from-brand-primary to-brand-accent text-white px-6 py-3 rounded-full font-bold flex items-center gap-2 shadow-[0_4px_20px_rgba(65,119,139,0.25)] hover:opacity-90 transition-opacity"
         >
           <span class="material-symbols-outlined">add_circle</span>
           Create New Group
