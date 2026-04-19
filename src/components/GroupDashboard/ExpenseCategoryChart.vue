@@ -12,7 +12,7 @@ const props = defineProps({
 
 const chartData = computed(() => {
   return {
-    labels: props.categoriesData.map(data => data.category.name),
+    labels: props.categoriesData.map(data => data.category?.name || 'Unknown'),
     datasets: [
       {
         label: 'Expenses by Category',
@@ -41,6 +41,12 @@ const chartData = computed(() => {
         r: {
           grid: {
             color: textColorSecondary
+          },
+          pointLabels: {
+            color: textColor
+          },
+          angleLines:{
+            color: textColorSecondary
           }
         }
       }
@@ -50,8 +56,8 @@ const chartOptions = setChartOptions();
 
 </script>
   <template>
-    <div class="card flex justify-center">
-      <Chart type="radar" :data="chartData" :options="chartOptions" class="w-full md:w-[30rem]"/>
+    <div class="card flex bg-white rounded-2xl shadow-lg justify-center">
+      <Chart type="doughnut" :data="chartData" :options="chartOptions" class="w-full md:w-120" />
     </div>
   </template>
 
