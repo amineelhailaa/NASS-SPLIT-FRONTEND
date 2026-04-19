@@ -11,6 +11,7 @@ import GroupDetailView from '../views/GroupDetailView.vue'
 import NotFoundView from '../views/NotFoundView.vue'
 import JoinView from '../views/JoinView.vue'
 import JoinByCodeView from '../views/JoinByCodeView.vue'
+import ProfileView from '../views/ProfileView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -70,6 +71,12 @@ const router = createRouter({
       name: 'join-by-code',
       component: JoinByCodeView,
       meta: { requiresAuth: true, hideNavbar: true },
+    },
+    {
+      path: '/profile',
+      name: 'profile',
+      component: ProfileView,
+      meta: { requiresAuth: true },
     },
     {
       path: '/:pathMatch(.*)*',
