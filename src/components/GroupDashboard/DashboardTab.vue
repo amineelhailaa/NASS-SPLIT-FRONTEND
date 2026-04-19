@@ -3,6 +3,7 @@ import StatCard from './StatCard.vue'
 import ExpenseTrendChart from './ExpenseTrendChart.vue'
 import RecentActivity from './RecentActivity.vue'
 import SpendingByCategory from './SpendingByCategory.vue'
+import ExpenseCategoryChart from "@/components/GroupDashboard/ExpenseCategoryChart.vue";
 
 const props = defineProps({
   stats: Object,
@@ -12,7 +13,7 @@ const props = defineProps({
   group: Object,
   groupId: [Number, String],
 })
-
+console.log(props.stats)
 function formatCurrency(val) {
   if (val == null) return '—'
   const num = Number(val)
@@ -66,7 +67,7 @@ function formatCurrency(val) {
 
     <!-- Category Breakdown + Recent Activity -->
     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-      <SpendingByCategory :categories="stats?.spending_by_category ?? []" />
+      <ExpenseCategoryChart :categoriesData="stats?.spending_by_category ?? []" />
       <RecentActivity :expenses="expenses ?? []" :group-id="groupId" />
     </div>
   </div>
