@@ -2,6 +2,7 @@
 import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import api from '@/lib/axios'
+import Swal from 'sweetalert2'
 
 const props = defineProps({
   groupId: [Number, String],
@@ -45,15 +46,33 @@ async function updateGroup() {
 }
 
 async function toggleSettle() {
+  const next = !settleEnabled.value
+  const result = await Swal.fire({
+    title: `${next ? 'Enable' : 'Disable'} settle rule?`,
+    text: next
+      ? 'Members will be able to mark debts as settled.'
+      : 'Settling will be turned off for this group.',
+    icon: 'question',
+    showCancelButton: true,
+    confirmButtonText: 'Yes, confirm',
+    cancelButtonText: 'Cancel',
+    confirmButtonColor: '#41778b',
+    cancelButtonColor: '#6b7280',
+    customClass: {
+      popup: '!rounded-2xl',
+      confirmButton: '!rounded-full !font-bold',
+      cancelButton: '!rounded-full !font-bold',
+    },
+  })
+  if (!result.isConfirmed) return
   savingSettings.value = true
   success.value = null
   error.value = null
   try {
-    settleEnabled.value = !settleEnabled.value
+    settleEnabled.value = next
     await api.patch(`/api/v1/groups/${props.groupId}/settings`, {
       settle: settleEnabled.value,
     })
-    success.value = `Settle rule ${settleEnabled.value ? 'enabled' : 'disabled'}`
   } catch {
     settleEnabled.value = !settleEnabled.value
     error.value = 'Failed to update setting'
@@ -63,10 +82,38 @@ async function toggleSettle() {
 }
 
 async function deleteGroup() {
-  if (!confirm('Are you sure you want to delete this group? This cannot be undone.')) return
+  const result = await Swal.fire({
+    title: 'Delete group?',
+    text: 'This will permanently delete the group and all its data. This cannot be undone.',
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonText: 'Yes, delete it',
+    cancelButtonText: 'Cancel',
+    confirmButtonColor: '#e53e3e',
+    cancelButtonColor: '#41778b',
+    borderRadius: '1rem',
+    customClass: {
+      popup: '!rounded-2xl',
+      confirmButton: '!rounded-full !font-bold',
+      cancelButton: '!rounded-full !font-bold',
+    },
+  })
+  if (!result.isConfirmed) return
   deleting.value = true
   try {
     await api.delete(`/api/v1/groups/${props.groupId}`)
+    await Swal.fire({
+      title: 'Deleted!',
+      text: 'The group has been deleted.',
+      icon: 'success',
+      confirmButtonColor: '#41778b',
+      customClass: {
+        popup: '!rounded-2xl',
+        confirmButton: '!rounded-full !font-bold',
+      },
+      timer: 1500,
+      showConfirmButton: false,
+    })
     router.push({ name: 'groups' })
   } catch {
     error.value = 'Failed to delete group'
