@@ -12,6 +12,7 @@ import InvitationsTab from '@/components/GroupDashboard/InvitationsTab.vue'
 import AddExpenseForm from '@/components/GroupDashboard/AddExpenseForm.vue'
 import NotificationBell from '@/components/NotificationBell.vue'
 import api from '@/lib/axios'
+import Swal from 'sweetalert2'
 
 const route = useRoute()
 const router = useRouter()
@@ -52,6 +53,30 @@ const tabs = computed(() => [
 const currentComponent = computed(() =>
   tabs.value.find((t) => t.key === activeTab.value)?.component
 )
+
+async function leaveGroup() {
+  const { isConfirmed } = await Swal.fire({
+    title: 'Leave Group?',
+    text: 'You will lose access to this group.',
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonText: 'Yes, leave',
+    cancelButtonText: 'Cancel',
+    confirmButtonColor: '#ef4444',
+  })
+  if (!isConfirmed) return
+  try {
+    await api.patch(`/api/v1/groups/${groupId}/leave`)
+    await router.push({ name: 'groups' })
+  } catch (err) {
+    Swal.fire({
+      title: 'Cannot Leave',
+      text: err.response?.data?.message ?? 'Something went wrong.',
+      icon: 'error',
+      confirmButtonColor: '#16647a',
+    })
+  }
+}
 
 async function fetchGroup() {
   const res = await api.get(`/api/v1/groups/${groupId}`)
@@ -165,6 +190,7 @@ onMounted(async () => {
       <!-- Leave Group (non-owners only) -->
       <button
         v-if="!isOwner"
+        @click="leaveGroup"
         class="flex items-center gap-3 h-10 px-5 py-4 text-red-500 hover:text-red-600 transition-colors"
       >
         <span class="material-symbols-outlined text-[20px] shrink-0">logout</span>
