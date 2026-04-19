@@ -21,14 +21,9 @@ const contextMenuOpen = ref(false)
 const currentUser = JSON.parse(localStorage.getItem('user') || '{}')
 
 const lastActiveText = computed(() => {
-  const dateStr = props.group?.conversation?.updated_at
-  if (!dateStr) return null
-  const diff = Math.floor((Date.now() - new Date(dateStr)) / 1000)
-  if (diff < 60) return 'Active just now'
-  if (diff < 3600) return `Active ${Math.floor(diff / 60)}m ago`
-  if (diff < 86400) return `Active ${Math.floor(diff / 3600)}h ago`
-  if (diff < 172800) return 'Active yesterday'
-  return `Active ${new Date(dateStr).toLocaleDateString('en-US', {month: 'short', day: 'numeric'})}`
+ let lastmessage =  messages.value[messages.value.length-1];
+ console.log(lastmessage)
+ return lastmessage? formatDateTime(lastmessage.created_at) : null ;
 })
 
 async function loadChat() {
