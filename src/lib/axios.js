@@ -17,16 +17,14 @@ api.interceptors.request.use((config) => {
   const socketId = echo.socketId()
   if (socketId) config.headers['X-Socket-ID'] = socketId
   return config
-})
+}) // for toOthers to work in the back end
 
 function clearAuthState() {
   const pinia = getActivePinia()
-
   if (pinia) {
     useAuthStore(pinia).clearUser()
     return
   }
-
   localStorage.removeItem('user')
 }
 
