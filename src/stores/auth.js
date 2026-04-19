@@ -37,8 +37,6 @@ export const useAuthStore = defineStore('auth', () => {
   }
 
   async function restoreSession() {
-    if (!user.value) return
-
     try {
       const { data } = await api.get('/api/user', { skipAuthRedirect: true })
       setUser(data.data)
