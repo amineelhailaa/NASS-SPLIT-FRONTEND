@@ -31,7 +31,9 @@ function clearAuthState() {
 api.interceptors.response.use(
   (response) => response,
   (error) => {
-    if (error.response?.status === 401) {
+    const status = error.response?.status
+
+    if (status === 401) {
       clearAuthState()
 
       if (!error.config?.skipAuthRedirect && router.currentRoute.value.name !== 'login') {
@@ -41,6 +43,16 @@ api.interceptors.response.use(
         })
       }
     }
+
+    if (status === 403) {
+      const message = error.response?.data?.message ?? ''
+      if (/ban/i.test(message) && router.currentRoute.value.name !== 'login') {
+        clearAuthState()
+        api.post('/logout').catch(() => {})
+        router.replace({ name: 'login' })
+      }
+    }
+
     return Promise.reject(error)
   },
 )
