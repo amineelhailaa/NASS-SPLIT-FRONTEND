@@ -1,6 +1,6 @@
 <script setup>
-import {computed, ref} from 'vue'
-import Chart  from "primevue/chart";
+import { computed, ref } from 'vue'
+import Chart from 'primevue/chart'
 const props = defineProps({
   daily: {
     type: Array,
@@ -10,7 +10,8 @@ const props = defineProps({
 
 
 
-const isMobile = ref(window.innerWidth< 640);
+const isMobile = ref(window.innerWidth < 640)
+const hasData = computed(() => props.daily.some((d) => Number(d.total) > 0))
 
 
 
@@ -118,7 +119,14 @@ const chartOptions = computed(() => ({
       <h3 class="m-0 text-[1.35rem] font-bold leading-[1.2] text-[#161d1f]">Expense timeline</h3>
     </div>
     <div class="h-105 w-full">
-      <Chart type="line" :data="chartData" :options="chartOptions" class="h-full w-full" />
+      <div
+        v-if="!hasData"
+        class="h-full flex flex-col items-center justify-center gap-3 text-brand-textSecondary"
+      >
+        <span class="material-symbols-outlined text-[36px] text-brand-disabled">show_chart</span>
+        <p class="text-[13px] font-medium">Not enough data yet</p>
+      </div>
+      <Chart v-else type="line" :data="chartData" :options="chartOptions" class="h-full w-full" />
     </div>
   </div>
 </template>
