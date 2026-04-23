@@ -130,8 +130,8 @@ onMounted(async () => {
         <div class="flex items-center gap-3 h-12 px-5">
           <div class="w-8 h-8 rounded-lg bg-cerulean-100 shrink-0 overflow-hidden">
             <img
-              v-if="group?.avatar?.url"
-              :src="group.avatar.url"
+              v-if="group?.avatar?.url ?? group?.avatar"
+              :src="group.avatar?.url ?? group.avatar"
               :alt="group?.name"
               class="w-full h-full object-cover"
             />
@@ -245,7 +245,7 @@ onMounted(async () => {
 
     <!-- Floating Add Expense Button -->
     <button
-      v-if="!loading && !error"
+      v-if="!loading && !error && activeTab !== 'chat'"
       @click="showExpenseForm = true"
       class="fixed bottom-8 right-8 z-40 w-14 h-14 rounded-full flex items-center justify-center text-white cursor-pointer shadow-[0_4px_20px_rgba(22,100,122,0.25)] hover:scale-105 active:scale-95 transition-transform"
       style="background-color: #41778b"
@@ -258,7 +258,7 @@ onMounted(async () => {
       <Transition name="modal">
         <div
           v-if="showExpenseForm"
-          class="fixed inset-0 z-100 flex items-start justify-center"
+          class="fixed inset-0 z-100 flex items-end sm:items-start justify-center"
           @click.self="showExpenseForm = false"
         >
           <!-- Backdrop -->
@@ -266,8 +266,8 @@ onMounted(async () => {
 
           <!-- Panel -->
           <div
-            class="relative z-10 w-full max-w-lg bg-brand-background rounded-2xl shadow-[0_8px_40px_rgba(22,100,122,0.12)] overflow-y-auto my-8 mx-4"
-            style="max-height: calc(100vh - 4rem)"
+            class="relative z-10 w-full sm:max-w-lg bg-brand-background rounded-t-3xl sm:rounded-2xl shadow-[0_8px_40px_rgba(22,100,122,0.12)] overflow-y-auto sm:my-8 sm:mx-4"
+            style="max-height: 92dvh"
           >
             <div class="px-6 py-6">
               <AddExpenseForm

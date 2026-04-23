@@ -21,7 +21,7 @@ const showModal = ref(false)
 let searchTimeout
 
 async function fetchGroups() {
-  loading.value = true
+  const timer = setTimeout(() => { loading.value = true }, 300)
   try {
     const response = await api.get('/api/v1/groups', {
       params: {
@@ -31,12 +31,12 @@ async function fetchGroups() {
         page: page.value,
       },
     })
-    console.log(response)
     groups.value = response.data.data.data
     pagination.value = response.data.data
   } catch (error) {
     console.error('Failed to fetch groups:', error)
   } finally {
+    clearTimeout(timer)
     loading.value = false
   }
 }
