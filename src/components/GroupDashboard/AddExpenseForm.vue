@@ -257,13 +257,17 @@ function formatCurrency(val) {
 
 <template>
   <div class="flex flex-col gap-6" style="font-family: 'Plus Jakarta Sans', sans-serif">
+    <!-- Mobile drag handle -->
+    <div class="sm:hidden flex justify-center -mt-2 -mb-2">
+      <div class="w-10 h-1 rounded-full bg-cerulean-200" />
+    </div>
     <!-- Header -->
     <div class="flex items-center justify-between">
       <h2 class="text-xl font-extrabold text-cerulean-800">Add Expense</h2>
       <button
         type="button"
         @click="emit('cancel')"
-        class="w-10 h-10 rounded-full bg-cerulean-50 flex items-center justify-center text-brand-textSecondary hover:text-brand-text hover:bg-cerulean-100 transition-colors cursor-pointer"
+        class="w-10 h-10 rounded-full bg-cerulean-50 flex items-center justify-center text-brand-textSecondary hover:text-brand-text hover:bg-white transition-colors cursor-pointer"
       >
         <span class="material-symbols-outlined text-xl">close</span>
       </button>
@@ -296,7 +300,7 @@ function formatCurrency(val) {
               v-model="title"
               type="text"
               placeholder="e.g. Dinner, Gas, Groceries..."
-              class="w-full bg-cerulean-100 text-cerulean-800 placeholder:text-cerulean-800/30 rounded-full pl-12 pr-6 py-4 outline-none focus:bg-white focus:ring-2 focus:ring-cerulean-500/30 transition"
+              class="w-full bg-white text-cerulean-800 placeholder:text-cerulean-800/30 rounded-full pl-12 pr-6 py-4 outline-none focus:bg-white focus:ring-2 focus:ring-cerulean-500/30 transition"
               :class="{ 'ring-2 ring-red-400/50 bg-red-50': titleError }"
             />
           </div>
@@ -315,7 +319,7 @@ function formatCurrency(val) {
                 step="0.01"
                 min="1"
                 placeholder="0.00"
-                class="w-full bg-cerulean-100 text-cerulean-800 placeholder:text-cerulean-800/30 rounded-full pl-12 pr-6 py-4 outline-none focus:bg-white focus:ring-2 focus:ring-cerulean-500/30 transition"
+                class="w-full bg-white text-cerulean-800 placeholder:text-cerulean-800/30 rounded-full pl-12 pr-6 py-4 outline-none focus:bg-white focus:ring-2 focus:ring-cerulean-500/30 transition"
                 :class="{ 'ring-2 ring-red-400/50 bg-red-50': amountError }"
               />
             </div>
@@ -329,7 +333,7 @@ function formatCurrency(val) {
               <input
                 v-model="date"
                 type="date"
-                class="w-full bg-cerulean-100 text-cerulean-800 rounded-full pl-12 pr-6 py-4 outline-none focus:bg-white focus:ring-2 focus:ring-cerulean-500/30 transition"
+                class="w-full bg-white text-cerulean-800 rounded-full pl-12 pr-6 py-4 outline-none focus:bg-white focus:ring-2 focus:ring-cerulean-500/30 transition"
                 :class="{ 'ring-2 ring-red-400/50 bg-red-50': dateError }"
               />
             </div>
@@ -347,7 +351,7 @@ function formatCurrency(val) {
               <span class="material-symbols-outlined absolute left-5 top-1/2 -translate-y-1/2 text-cerulean-500 text-xl pointer-events-none">category</span>
               <select
                 v-model="category_id"
-                class="w-full bg-cerulean-100 text-cerulean-800 rounded-full pl-12 pr-6 py-4 outline-none focus:bg-white focus:ring-2 focus:ring-cerulean-500/30 transition appearance-none cursor-pointer"
+                class="w-full bg-white text-cerulean-800 rounded-full pl-12 pr-6 py-4 outline-none focus:bg-white focus:ring-2 focus:ring-cerulean-500/30 transition appearance-none cursor-pointer"
               >
                 <option :value="null">No category</option>
                 <option v-for="cat in categories" :key="cat.id" :value="cat.id">{{ cat.name }}</option>
@@ -363,7 +367,7 @@ function formatCurrency(val) {
               <button
                 type="button"
                 @click="payerDropdownOpen = !payerDropdownOpen"
-                class="w-full bg-cerulean-100 text-cerulean-800 rounded-full pl-4 pr-6 py-3 outline-none focus:bg-white focus:ring-2 focus:ring-cerulean-500/30 transition flex items-center gap-3 cursor-pointer text-left"
+                class="w-full bg-white text-cerulean-800 rounded-full pl-4 pr-6 py-3 outline-none focus:bg-white focus:ring-2 focus:ring-cerulean-500/30 transition flex items-center gap-3 cursor-pointer text-left"
                 :class="{ 'ring-2 ring-red-400/50 bg-red-50': payerError }"
               >
                 <template v-if="selectedPayer">
@@ -421,7 +425,7 @@ function formatCurrency(val) {
             class="flex-1 flex items-center justify-center gap-1.5 sm:gap-2 py-2.5 sm:py-3 rounded-full text-xs sm:text-sm font-bold transition-colors cursor-pointer"
             :class="splitStrategy === s.key
               ? 'bg-brand-primary text-white shadow-[0_2px_12px_rgba(22,100,122,0.15)]'
-              : 'bg-cerulean-50 text-brand-textSecondary hover:bg-cerulean-100'"
+              : 'bg-cerulean-50 text-brand-textSecondary hover:bg-white'"
           >
             <span class="material-symbols-outlined text-lg">{{ s.icon }}</span>
             {{ s.label }}
@@ -492,27 +496,25 @@ function formatCurrency(val) {
             class="rounded-2xl px-4 py-3 flex items-center justify-between gap-3 transition-colors"
             :class="p.checked ? 'bg-white shadow-[0_2px_12px_rgba(22,100,122,0.06)]' : 'bg-cerulean-50/50'"
           >
-            <div class=" flex flex-row gap-2">
-
-            <button
-              type="button"
-              @click="toggleParticipant(idx)"
-              class="w-7 h-7 rounded-lg shrink-0 flex items-center justify-center transition-colors cursor-pointer"
-              :class="p.checked ? 'bg-brand-primary text-white' : 'bg-cerulean-100 text-transparent hover:bg-cerulean-200'"
-            >
-              <span class="material-symbols-outlined text-[18px]">check</span>
-            </button>
+            <div class="flex flex-row gap-2 flex-1 min-w-0 items-center">
+              <button
+                type="button"
+                @click="toggleParticipant(idx)"
+                class="w-7 h-7 rounded-lg shrink-0 flex items-center justify-center transition-colors cursor-pointer"
+                :class="p.checked ? 'bg-brand-primary text-white' : 'bg-white text-transparent hover:bg-cerulean-200'"
+              >
+                <span class="material-symbols-outlined text-[18px]">check</span>
+              </button>
               <div class="w-9 h-9 rounded-full bg-cerulean-50 shrink-0 overflow-hidden flex items-center justify-center">
                 <img v-if="p.user?.avatar?.url" :src="p.user.avatar.url" :alt="p.user?.name" class="w-full h-full object-cover" />
                 <span v-else class="material-symbols-outlined text-brand-primary text-[18px]">person</span>
               </div>
-
-              <span class="text-sm font-semibold truncate" :class="p.checked ? 'text-brand-text' : 'text-brand-disabled'">
-              {{ p.user?.name }}
-            </span>
+              <span class="text-sm font-semibold truncate flex-1 min-w-0" :class="p.checked ? 'text-brand-text' : 'text-brand-disabled'">
+                {{ p.user?.name }}
+              </span>
             </div>
 
-            <div class="ml-auto shrink-0 text-right">
+            <div class="shrink-0 text-right">
               <span
                 v-if="splitStrategy === 'equal'"
                 class="text-sm font-extrabold tabular-nums"
@@ -530,11 +532,11 @@ function formatCurrency(val) {
                   min="0"
                   placeholder="0.00"
                   :disabled="!p.checked"
-                  class="w-24 bg-cerulean-100 text-cerulean-800 text-sm font-semibold text-right rounded-full px-3 py-2 outline-none focus:bg-white focus:ring-2 focus:ring-cerulean-500/30 transition tabular-nums disabled:opacity-40 disabled:cursor-not-allowed"
+                  class="w-20 bg-white text-cerulean-800 text-sm font-semibold text-right rounded-full px-3 py-2 outline-none focus:bg-white focus:ring-2 focus:ring-cerulean-500/30 transition tabular-nums disabled:opacity-40 disabled:cursor-not-allowed"
                 />
               </div>
 
-              <div v-else-if="splitStrategy === 'percentage'" class="flex items-center gap-2 sm:gap-3 w-28 sm:w-5">
+              <div v-else-if="splitStrategy === 'percentage'" class="flex items-center gap-2">
                 <input
                   v-model.number="p.percentage"
                   type="range"
@@ -542,9 +544,9 @@ function formatCurrency(val) {
                   max="100"
                   step="1"
                   :disabled="!p.checked"
-                  class="percentage-slider flex-1 cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed"
+                  class="percentage-slider w-20 cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed"
                 />
-                <span class="text-sm font-extrabold tabular-nums w-12 text-right" :class="p.checked ? 'text-cerulean-700' : 'text-brand-disabled'">
+                <span class="text-sm font-extrabold tabular-nums w-10 text-right" :class="p.checked ? 'text-cerulean-700' : 'text-brand-disabled'">
                   {{ p.checked ? p.percentage : 0 }}%
                 </span>
               </div>
@@ -563,7 +565,7 @@ function formatCurrency(val) {
         <button
           type="button"
           @click="emit('cancel')"
-          class="flex-1 flex items-center justify-center gap-2 rounded-full py-4 text-sm font-bold text-cerulean-600 bg-cerulean-50 hover:bg-cerulean-100 transition-colors cursor-pointer"
+          class="flex-1 flex items-center justify-center gap-2 rounded-full py-4 text-sm font-bold text-cerulean-600 bg-cerulean-50 hover:bg-white transition-colors cursor-pointer"
         >
           Cancel
         </button>
