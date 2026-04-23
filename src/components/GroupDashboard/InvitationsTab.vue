@@ -1,6 +1,10 @@
 <script setup>
 import { ref, onMounted } from 'vue'
+import { useClipboard } from '@vueuse/core'
+import Swal from 'sweetalert2'
 import api from '@/lib/axios'
+
+const { copy, copied: linkCopied } = useClipboard({ legacy: true })
 
 const props = defineProps({
   groupId: [Number, String],
@@ -8,21 +12,23 @@ const props = defineProps({
 
 const invitations = ref([])
 const loading = ref(true)
+const loadError = ref(false)
 const emailInput = ref('')
 const emailError = ref('')
 const sending = ref(false)
 const sendSuccess = ref(false)
 const inviteLink = ref('')
-const linkCopied = ref(false)
 const cancellingId = ref(null)
 
 async function fetchInvitations() {
   loading.value = true
+  loadError.value = false
   try {
     const res = await api.get(`/api/v1/groups/${props.groupId}/invitations/pending`)
     invitations.value = res.data.data ?? []
   } catch {
     invitations.value = []
+    loadError.value = true
   } finally {
     loading.value = false
   }
@@ -60,22 +66,29 @@ async function sendInvite() {
 }
 
 async function cancelInvitation(invitation) {
+  const result = await Swal.fire({
+    title: 'Cancel this invitation?',
+    text: `The invite sent to ${invitation.email} will be revoked.`,
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonText: 'Cancel invitation',
+    cancelButtonText: 'Keep it',
+    confirmButtonColor: '#ef4444',
+    cancelButtonColor: '#41778b',
+  })
+  if (!result.isConfirmed) return
+
   cancellingId.value = invitation.id
   try {
     await api.patch(`/api/v1/groups/${props.groupId}/invitations/${invitation.id}/cancel`)
     invitations.value = invitations.value.filter((i) => i.id !== invitation.id)
-  } catch {
-    // silent
   } finally {
     cancellingId.value = null
   }
 }
 
 async function copyLink() {
-  if (!inviteLink.value) return
-  await navigator.clipboard.writeText(inviteLink.value)
-  linkCopied.value = true
-  setTimeout(() => (linkCopied.value = false), 2000)
+  if (inviteLink.value) await copy(inviteLink.value)
 }
 
 function formatExpiry(dateStr) {
@@ -87,8 +100,7 @@ function formatExpiry(dateStr) {
 }
 
 onMounted(() => {
-  fetchInvitations()
-  fetchInviteLink()
+  Promise.all([fetchInvitations(), fetchInviteLink()])
 })
 </script>
 
@@ -116,8 +128,7 @@ onMounted(() => {
           type="button"
           @click="sendInvite"
           :disabled="sending"
-          class="shrink-0 h-12 px-5 rounded-full text-white text-sm font-bold flex items-center gap-2 transition-all active:scale-95 disabled:opacity-60 disabled:cursor-not-allowed"
-          style="background-color: #41778b"
+          class="shrink-0 h-12 px-5 rounded-full bg-brand-primary text-white text-sm font-bold flex items-center gap-2 transition-all active:scale-95 disabled:opacity-60 disabled:cursor-not-allowed"
         >
           <span v-if="sending" class="material-symbols-outlined text-lg animate-spin">progress_activity</span>
           <template v-else>
@@ -132,7 +143,7 @@ onMounted(() => {
         <span class="material-symbols-outlined text-[14px]">error</span>
         {{ emailError }}
       </p>
-      <p v-if="sendSuccess" class="text-xs font-semibold text-emerald-600 flex items-center gap-1">
+      <p v-if="sendSuccess" class="text-xs font-semibold text-brand-primary flex items-center gap-1">
         <span class="material-symbols-outlined text-[14px]">check_circle</span>
         Invitation sent successfully
       </p>
@@ -148,7 +159,7 @@ onMounted(() => {
         <span class="text-sm font-semibold text-cerulean-700 flex-1 text-left">
           {{ linkCopied ? 'Link copied!' : 'Copy invite link' }}
         </span>
-        <span v-if="linkCopied" class="material-symbols-outlined text-emerald-500 text-[18px]">check</span>
+        <span v-if="linkCopied" class="material-symbols-outlined text-brand-primary text-[18px]">check</span>
         <span v-else class="material-symbols-outlined text-cerulean-400 text-[18px]">content_copy</span>
       </button>
     </div>
@@ -163,6 +174,17 @@ onMounted(() => {
       <!-- Loading -->
       <div v-if="loading" class="flex flex-col gap-2">
         <div v-for="n in 3" :key="n" class="animate-pulse bg-brand-surface rounded-2xl h-16" />
+      </div>
+
+      <!-- Error -->
+      <div v-else-if="loadError" class="flex flex-col items-center justify-center py-16 gap-3">
+        <span class="material-symbols-outlined text-[48px] text-red-400">error</span>
+        <p class="text-red-500 font-semibold text-sm">Failed to load invitations</p>
+        <button
+          type="button"
+          @click="fetchInvitations"
+          class="text-brand-primary text-xs font-bold hover:underline"
+        >Try again</button>
       </div>
 
       <!-- Empty -->
@@ -190,7 +212,7 @@ onMounted(() => {
           </div>
 
           <!-- Status badge -->
-          <span class="text-xs font-semibold px-3 py-1 rounded-full bg-amber-50 text-amber-600 shrink-0">
+          <span class="text-xs font-semibold px-3 py-1 rounded-full border-2 border-brand-primary text-brand-primary shrink-0">
             pending
           </span>
 

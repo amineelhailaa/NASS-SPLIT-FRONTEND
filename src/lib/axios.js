@@ -1,5 +1,6 @@
 import axios from 'axios'
 import { getActivePinia } from 'pinia'
+import Swal from 'sweetalert2'
 import router from '@/router'
 import echo from '@/lib/echo'
 import { useAuthStore } from '@/stores/auth.js'
@@ -50,6 +51,13 @@ api.interceptors.response.use(
         clearAuthState()
         api.post('/logout').catch(() => {})
         router.replace({ name: 'login' })
+        Swal.fire({
+          icon: 'error',
+          title: 'Account banned',
+          text: message || 'Your account has been banned. Please contact support.',
+          confirmButtonColor: '#41778b',
+          confirmButtonText: 'OK',
+        })
       }
     }
 
