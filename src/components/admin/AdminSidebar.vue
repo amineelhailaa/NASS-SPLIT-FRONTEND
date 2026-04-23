@@ -20,6 +20,7 @@ const menu = [
   { key: 'categories', label: 'Categories', icon: 'category' },
   { key: 'groups', label: 'Groups', icon: 'groups' },
   { key: 'users', label: 'Users', icon: 'person' },
+  { key: 'contacts', label: 'Messages', icon: 'mail' },
 ]
 
 function selectTab(key) {

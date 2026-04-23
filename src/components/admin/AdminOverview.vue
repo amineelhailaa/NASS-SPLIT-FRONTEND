@@ -12,7 +12,7 @@ const categoryUse = ref([])
 const loading = ref(false)
 
 async function loadStats() {
-  loading.value = true
+  loading.value= true
   try {
     const groupsResponse = await api.get('/api/v1/groups')
     const categoriesResponse = await api.get('/api/v1/categories')
