@@ -16,7 +16,19 @@ const sending = ref(false)
 const newMessage = ref('')
 const messagesContainer = ref(null)
 const error = ref(null)
-const contextMenuOpen = ref(false)
+const showEmojiPicker = ref(false)
+
+const EMOJIS = [
+  '😀','😂','😍','🥹','😎','🤔','😭','😅','🤣','😊',
+  '😬','🥶','🫡','😤','💀','🙈','😴','🤯','🥳','😇',
+  '👍','👎','👀','🙏','💪','🤝','👏','🫶','❤️','🔥',
+  '🎉','💯','✅','⚡','🚀','💡','😱','🤮','💔','🫠',
+]
+
+function insertEmoji(emoji) {
+  newMessage.value += emoji
+  showEmojiPicker.value = false
+}
 
 const currentUser = JSON.parse(localStorage.getItem('user') || '{}')
 
@@ -82,9 +94,11 @@ async function deleteMessage(messageId) {
 }
 
 function scrollToBottom() {
-  if (messagesContainer.value) {
-    messagesContainer.value.scrollTop = messagesContainer.value.scrollHeight
-  }
+  requestAnimationFrame(() => {
+    if (messagesContainer.value) {
+      messagesContainer.value.scrollTop = messagesContainer.value.scrollHeight
+    }
+  })
 }
 
 function formatDateTime(dateStr) {
@@ -136,42 +150,6 @@ onUnmounted(() => {
           </div>
         </div>
 
-        <!-- Actions -->
-        <div class="flex items-center gap-1">
-          <button class="w-9 h-9 rounded-full flex items-center justify-center text-brand-textSecondary hover:bg-cerulean-100 hover:text-brand-primary transition-all active:scale-95">
-            <span class="material-symbols-outlined text-[20px]">search</span>
-          </button>
-          <button
-            @click="loadChat"
-            class="w-9 h-9 rounded-full flex items-center justify-center text-brand-textSecondary hover:bg-cerulean-100 hover:text-brand-primary transition-all active:scale-95"
-          >
-            <span class="material-symbols-outlined text-[18px]">refresh</span>
-          </button>
-
-          <!-- Context menu -->
-          <div class="relative">
-            <button
-              @click="contextMenuOpen = !contextMenuOpen"
-              class="w-9 h-9 rounded-full flex items-center justify-center text-brand-textSecondary hover:bg-cerulean-100 hover:text-brand-primary transition-all active:scale-95"
-            >
-              <span class="material-symbols-outlined text-[20px]">more_vert</span>
-            </button>
-            <div
-              v-if="contextMenuOpen"
-              class="absolute right-0 top-11 w-52 bg-brand-surface rounded-2xl shadow-[0_8px_24px_rgba(22,100,122,0.13)] py-2 z-[100] flex flex-col"
-            >
-              <button class="flex items-center gap-3 px-4 py-2.5 text-sm text-brand-text hover:bg-brand-surfaceContrast transition-colors text-left w-full">
-                <span class="material-symbols-outlined text-[17px] text-brand-textSecondary">search</span>
-                Search messages
-              </button>
-              <button class="flex items-center gap-3 px-4 py-2.5 text-sm text-brand-text hover:bg-brand-surfaceContrast transition-colors text-left w-full">
-                <span class="material-symbols-outlined text-[17px] text-brand-textSecondary">notifications</span>
-                Mute notifications
-              </button>
-            </div>
-            <div v-if="contextMenuOpen" @click="contextMenuOpen = false" class="fixed inset-0 z-[99]"/>
-          </div>
-        </div>
       </header>
 
       <!-- Chat body -->
@@ -222,7 +200,7 @@ onUnmounted(() => {
               :class="isOwnMessage(message) ? 'flex-row-reverse' : ''"
             >
               <div
-                class="mt-0.5 w-8 h-8 rounded-full shrink-0 overflow-hidden flex items-center justify-center"
+                class="mt-0.5 w-12 h-12 rounded-full shrink-0 overflow-hidden flex items-center justify-center"
                 :class="isOwnMessage(message) ? 'bg-brand-primary' : 'bg-cerulean-100'"
               >
                 <img
@@ -233,17 +211,17 @@ onUnmounted(() => {
                 />
                 <span
                   v-else
-                  class="material-symbols-outlined text-[14px]"
+                  class="material-symbols-outlined text-[22px]"
                   :class="isOwnMessage(message) ? 'text-white' : 'text-brand-primary'"
                 >person</span>
               </div>
 
-              <div class="max-w-[62%] flex flex-col gap-1" :class="isOwnMessage(message) ? 'items-end' : ''">
-                <span v-if="!isOwnMessage(message)" class="text-brand-textSecondary text-[11px] font-semibold px-2">
+              <div class="max-w-[75%] flex flex-col gap-1.5" :class="isOwnMessage(message) ? 'items-end' : ''">
+                <span v-if="!isOwnMessage(message)" class="text-brand-textSecondary text-sm font-semibold px-2">
                   {{ message.user?.name }}
                 </span>
                 <div
-                  class="px-3.5 py-2 rounded-xl text-sm leading-relaxed"
+                  class="px-5 py-3 rounded-2xl text-base leading-relaxed"
                   :class="isOwnMessage(message)
                     ? 'bg-brand-primary text-white shadow-[0_2px_8px_rgba(22,100,122,0.15)]'
                     : 'bg-white text-brand-text shadow-[0_1px_4px_rgba(22,100,122,0.08)]'"
@@ -251,7 +229,7 @@ onUnmounted(() => {
                   {{ message.message }}
                 </div>
                 <div class="flex items-center gap-1.5 px-2" :class="isOwnMessage(message) ? 'flex-row-reverse' : ''">
-                  <span class="text-brand-disabled text-[10px]">{{ formatDateTime(message.created_at) }}</span>
+                  <span class="text-brand-disabled text-xs">{{ formatDateTime(message.created_at) }}</span>
                   <button
                     v-if="isOwnMessage(message)"
                     @click="deleteMessage(message.id)"
@@ -265,10 +243,28 @@ onUnmounted(() => {
           </div>
 
           <!-- Composer -->
-          <div class="px-4 py-3 bg-cerulean-50 rounded-b-2xl flex items-center gap-3">
-            <button class="w-8 h-8 rounded-full bg-white text-brand-primary flex items-center justify-center shrink-0 transition-all hover:bg-cerulean-100 active:scale-95 shadow-[0_1px_3px_rgba(22,100,122,0.08)]">
-              <span class="material-symbols-outlined text-[16px]">sentiment_satisfied</span>
-            </button>
+          <div class="px-4 py-3 bg-cerulean-50 rounded-b-2xl flex items-center gap-3" @click="showEmojiPicker = false">
+            <!-- Emoji picker -->
+            <div class="relative shrink-0" @click.stop>
+              <button
+                @click="showEmojiPicker = !showEmojiPicker"
+                class="w-8 h-8 rounded-full bg-white text-brand-primary flex items-center justify-center transition-all hover:bg-cerulean-100 active:scale-95 shadow-[0_1px_3px_rgba(22,100,122,0.08)]"
+              >
+                <span class="material-symbols-outlined text-[16px]">sentiment_satisfied</span>
+              </button>
+              <div
+                v-if="showEmojiPicker"
+                class="absolute bottom-10 left-0 bg-white rounded-2xl shadow-[0_8px_32px_rgba(22,100,122,0.12)] p-3 grid grid-cols-8 gap-1 w-64 z-20"
+              >
+                <button
+                  v-for="emoji in EMOJIS"
+                  :key="emoji"
+                  type="button"
+                  @click="insertEmoji(emoji)"
+                  class="w-7 h-7 flex items-center justify-center rounded-lg hover:bg-cerulean-50 text-lg transition-colors cursor-pointer"
+                >{{ emoji }}</button>
+              </div>
+            </div>
             <input
               v-model="newMessage"
               @keyup.enter="sendMessage"
