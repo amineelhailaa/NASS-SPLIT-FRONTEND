@@ -37,7 +37,7 @@ async function handleLogout() {
 }
 </script>
 
-<template>
+<template >
   <header class="fixed top-0 z-50 w-full px-6 py-4">
     <nav
       class="mx-auto flex items-center justify-between rounded-full bg-white/80 pr-4 pl-2 shadow-sm backdrop-blur-md border border-white/20"
