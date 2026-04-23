@@ -1,6 +1,4 @@
 <script setup>
-import { useRouter } from 'vue-router'
-
 const props = defineProps({
   expenses: {
     type: Array,
@@ -8,8 +6,6 @@ const props = defineProps({
   },
   groupId: [Number, String],
 })
-
-const router = useRouter()
 
 function formatDate(dateStr) {
   return new Date(dateStr).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })
@@ -46,13 +42,13 @@ function formatDate(dateStr) {
         <span class="text-cerulean-700 font-extrabold text-sm shrink-0">${{ Number(expense.amount).toFixed(2) }}</span>
       </div>
 
-      <button
+      <router-link
         v-if="expenses.length >= 4"
-        @click="router.push({ name: 'group-detail', params: { id: groupId } })"
+        :to="{ name: 'group-detail', params: { id: groupId }, query: { tab: 'expenses' } }"
         class="w-full text-center text-cerulean-700 text-sm font-bold py-3 rounded-full bg-cerulean-50 hover:bg-cerulean-100 transition-colors mt-3"
       >
         View more
-      </button>
+      </router-link>
     </div>
   </div>
 </template>
