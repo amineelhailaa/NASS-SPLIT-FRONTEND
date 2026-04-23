@@ -173,7 +173,7 @@ const githubLogin = async () => {
           <div class="flex flex-col gap-1.5">
             <div class="flex items-center justify-between">
               <label class="text-sm font-bold text-cerulean-800">Password</label>
-              <a href="#" class="text-sm text-cerulean-500 font-semibold hover:text-cerulean-700 transition-colors">Forgot?</a>
+              <router-link to="/forgot-password" class="text-sm text-cerulean-500 font-semibold hover:text-cerulean-700 transition-colors">Forgot?</router-link>
             </div>
             <div class="relative">
               <span class="material-symbols-outlined absolute left-5 top-1/2 -translate-y-1/2 text-cerulean-500 text-xl pointer-events-none">lock</span>
