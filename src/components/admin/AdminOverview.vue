@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted, computed } from 'vue'
+import { ref, onMounted } from 'vue'
 import api from '@/lib/axios'
 import ExpenseTrendChart from '@/components/GroupDashboard/ExpenseTrendChart.vue'
 import ExpenseCategoryChart from '@/components/GroupDashboard/ExpenseCategoryChart.vue'
@@ -72,7 +72,7 @@ onMounted(loadStats)
     <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4.5">
       <!-- Total Groups -->
       <div
-        class="bg-white rounded-3xl px-6 py-5.5 flex flex-col gap-4.5 min-h-[170px]"
+        class="bg-white rounded-3xl px-6 py-5.5 flex flex-col gap-4.5 min-h-42.5"
         style="box-shadow: 0 1px 2px rgba(22, 100, 122, 0.06), 0 2px 8px rgba(22, 100, 122, 0.04)"
       >
         <div class="flex items-start justify-between">
@@ -104,7 +104,7 @@ onMounted(loadStats)
 
       <!-- Total Categories -->
       <div
-        class="bg-white rounded-3xl px-6 py-5.5 flex flex-col gap-4.5 min-h-[170px]"
+        class="bg-white rounded-3xl px-6 py-5.5 flex flex-col gap-4.5 min-h-42.5"
         style="box-shadow: 0 1px 2px rgba(22, 100, 122, 0.06), 0 2px 8px rgba(22, 100, 122, 0.04)"
       >
         <div class="flex items-start justify-between">
@@ -135,7 +135,7 @@ onMounted(loadStats)
 
       <!-- Total Expenses (30d) -->
       <div
-        class="bg-white rounded-3xl px-6 py-5.5 flex flex-col gap-4.5 min-h-[170px]"
+        class="bg-white rounded-3xl px-6 py-5.5 flex flex-col gap-4.5 min-h-42.5"
         style="box-shadow: 0 1px 2px rgba(22, 100, 122, 0.06), 0 2px 8px rgba(22, 100, 122, 0.04)"
       >
         <div class="flex items-start justify-between">
@@ -166,7 +166,7 @@ onMounted(loadStats)
 
       <!-- Admin Role -->
       <div
-        class="bg-white rounded-3xl px-6 py-5.5 flex flex-col gap-4.5 min-h-[170px]"
+        class="bg-white rounded-3xl px-6 py-5.5 flex flex-col gap-4.5 min-h-42.5"
         style="box-shadow: 0 1px 2px rgba(22, 100, 122, 0.06), 0 2px 8px rgba(22, 100, 122, 0.04)"
       >
         <div class="flex items-start justify-between">
