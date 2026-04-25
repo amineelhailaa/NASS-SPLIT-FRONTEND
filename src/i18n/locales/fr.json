@@ -247,10 +247,9 @@
     "sortAsc": "Croissant",
     "sortDesc": "Décroissant",
     "empty": "Aucun groupe trouvé.",
-    "balance": {
-      "title": "Solde sur tous les groupes",
-      "owed": "Vous êtes actuellement dû un total net de",
-      "viewReport": "Voir le rapport"
+    "banner": {
+      "title": "Partagez mieux, stressez moins.",
+      "subtitle": "Suivez les dépenses partagées dans tous vos groupes et sachez toujours qui doit quoi."
     }
   },
   "groupDetail": {

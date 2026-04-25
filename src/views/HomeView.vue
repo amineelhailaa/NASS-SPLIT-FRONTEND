@@ -1,5 +1,7 @@
 <script setup>
 import AppFooter from '@/components/AppFooter.vue'
+import { Vue3Lottie } from 'vue3-lottie'
+import FinanceAnimation from '@/assets/animation/Finance guru.json'
 </script>
 
 <template>
@@ -12,7 +14,7 @@ import AppFooter from '@/components/AppFooter.vue'
       class="relative flex min-h-[80vh] items-center justify-center pt-32 pb-40 px-12 overflow-hidden"
     >
       <div class="flex flex-col gap-8 text-center w-full justify-center items-center">
-        <img src="@/assets/logo.png" height="300" width="300" alt="logo" />
+        <Vue3Lottie :animationData="FinanceAnimation" :height="350" :width="350" />
         <div
           class="inline-flex w-fit self-center rounded-full bg-cerulean-500/10 px-4 py-1.5 text-sm font-bold text-cerulean-500"
         >
@@ -96,7 +98,7 @@ import AppFooter from '@/components/AppFooter.vue'
             {{ $t('home.howItWorks.step1.desc') }}
           </p>
           <div class="flex h-40 w-full items-center justify-center rounded-2xl bg-white shadow-sm">
-            <span class="material-symbols-outlined text-6xl text-cerulean-500">receipt_long</span>
+            <span class="material-symbols-outlined text-6xl! text-cerulean-500">receipt_long</span>
           </div>
         </div>
         <div class="flex flex-col items-center text-center gap-6">
@@ -110,7 +112,7 @@ import AppFooter from '@/components/AppFooter.vue'
             {{ $t('home.howItWorks.step2.desc') }}
           </p>
           <div class="flex h-40 w-full items-center justify-center rounded-2xl bg-white shadow-sm">
-            <span class="material-symbols-outlined text-6xl text-cerulean-500">call_split</span>
+            <span class="material-symbols-outlined text-6xl! text-cerulean-500">call_split</span>
           </div>
         </div>
         <div class="flex flex-col items-center text-center gap-6">
@@ -124,7 +126,7 @@ import AppFooter from '@/components/AppFooter.vue'
             {{ $t('home.howItWorks.step3.desc') }}
           </p>
           <div class="flex h-40 w-full items-center justify-center rounded-2xl bg-white shadow-sm">
-            <span class="material-symbols-outlined text-6xl text-cerulean-500">monitoring</span>
+            <span class="material-symbols-outlined text-6xl! text-cerulean-500">monitoring</span>
           </div>
         </div>
       </div>

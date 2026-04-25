@@ -364,10 +364,9 @@
     "sortAsc": "Ascending",
     "sortDesc": "Descending",
     "empty": "No groups found.",
-    "balance": {
-      "title": "Balance Across All Groups",
-      "owed": "You are currently owed a net total of",
-      "viewReport": "View Report"
+    "banner": {
+      "title": "Split smarter, stress less.",
+      "subtitle": "Track shared expenses across all your groups and always know who owes what."
     }
   },
   "groupDetail": {
