@@ -1,52 +1,29 @@
 <script setup>
-// Vue core: ref = reactive variable, computed = derived value that auto-updates,
-// onMounted = runs after component appears on screen, onBeforeUnmount = runs before it's removed
 import { ref, computed, onMounted, onBeforeUnmount } from 'vue'
 import { useI18n } from 'vue-i18n'
 import Swal from 'sweetalert2'
-
-// vee-validate: form validation library
-// useForm  = sets up the whole form (schema + submit handler)
-// useField = binds a single input field to the form, gives us its value + error message
 import { useForm, useField } from 'vee-validate'
-
-// yup: schema builder — defines what each field must look like
 import * as yup from 'yup'
-
-// our pre-configured axios instance (handles auth headers, base URL, etc.)
 import api from '@/lib/axios'
-
-// small component that renders a red error message below an input
 import InputError from '@/components/inputError.vue'
 
-// ─── Props & Emits ────────────────────────────────────────────────────────────
-// Props = data passed IN from the parent component
-// groupId tells us which group we're adding the expense to
+// Props & Emits
 const props = defineProps({ groupId: [Number, String] })
-
-// Emits = events we fire OUT to the parent
-// 'created' → expense was saved successfully
-// 'cancel'  → user clicked Cancel
 const emit = defineEmits(['created', 'cancel'])
 
 const { t } = useI18n()
 
-// ─── Reactive State (ref) ─────────────────────────────────────────────────────
-// ref() makes a variable reactive — whenever it changes, Vue re-renders the parts of the template that use it
-// Access or change the value with .value in JS (in the template you use it directly without .value)
+// Reactive State
+const members = ref([])
+const categories = ref([])
+const loadingData = ref(true)
+const isSubmitting = ref(false)
+const splitStrategy = ref('equal')
+const submitError = ref('')
+const payerDropdownOpen = ref(false)
+const participants = ref([])
 
-const members = ref([])           // all group members fetched from the API
-const categories = ref([])        // expense categories fetched from the API
-const loadingData = ref(true)     // true while API calls are in flight → shows skeleton loader
-const isSubmitting = ref(false)   // true while the form POST is in flight → disables the submit button
-const splitStrategy = ref('equal') // which split mode is active: 'equal' | 'fixed' | 'percentage'
-const submitError = ref('')       // top-level error message shown in the red banner
-const payerDropdownOpen = ref(false) // controls whether the custom payer dropdown is visible
-const participants = ref([])      // array of participant objects built from members (each has checked, fixedAmount, percentage…)
-
-// ─── Validation Schema ────────────────────────────────────────────────────────
-// yup.object() describes the shape of the form data and what rules each field must follow.
-// vee-validate will run this automatically whenever a field changes or the form is submitted.
+// Validation Schema
 const schema = computed(() =>
   yup.object({
     title: yup.string().required(t('addExpense.errors.titleRequired')),
@@ -57,74 +34,52 @@ const schema = computed(() =>
   })
 )
 
-// ─── Form Setup ───────────────────────────────────────────────────────────────
-// useForm ties the schema to the form. handleSubmit wraps our submit logic with validation.
-// setErrors lets us push server-side (Laravel 422) errors back into the fields.
-// initialValues pre-fills the date field with today's date.
+// Form Setup
 const { handleSubmit, setErrors } = useForm({
   validationSchema: schema,
   initialValues: { date: new Date().toISOString().split('T')[0] },
 })
 
-// useField('fieldName') connects an individual input to the form.
-// value  = the reactive variable we bind to the input with v-model
-// errorMessage = the validation error string (undefined when valid)
 const { value: title, errorMessage: titleError } = useField('title')
 const { value: amount, errorMessage: amountError } = useField('amount')
 const { value: date, errorMessage: dateError } = useField('date')
 const { value: payer_id, errorMessage: payerError } = useField('payer_id')
-const { value: category_id } = useField('category_id') // no error display needed
+const { value: category_id } = useField('category_id')
 
-// ─── Payer Dropdown ───────────────────────────────────────────────────────────
-// payerRef is attached to the dropdown wrapper div via ref="payerRef".
-// handleClickOutside closes the dropdown when the user clicks anywhere outside it.
+// Payer Dropdown
 const payerRef = ref(null)
 function handleClickOutside(e) {
   if (payerRef.value && !payerRef.value.contains(e.target)) payerDropdownOpen.value = false
 }
 
-// ─── Computed Values ──────────────────────────────────────────────────────────
-// computed() = a value that is automatically recalculated whenever its dependencies change.
-// Think of it like a spreadsheet cell with a formula.
-
-// only members with status 'active' — used in the payer dropdown and when building participants
+// Computed Values
 const activeMembers = computed(() => members.value.filter((m) => m.status === 'active'))
-
-// the full member object for whoever is currently selected as payer (drives the dropdown display)
 const selectedPayer = computed(() => members.value.find((m) => m.id === payer_id.value) ?? null)
-
-// participants that have their checkbox ticked
 const selectedParticipants = computed(() => participants.value.filter((p) => p.checked))
 const selectedCount = computed(() => selectedParticipants.value.length)
 
-// equal split: total amount divided evenly among checked participants
 const equalShare = computed(() => {
   if (!amount.value || selectedCount.value === 0) return 0
   return parseFloat((amount.value / selectedCount.value).toFixed(2))
 })
 
-// fixed split: sum of all manually entered amounts
 const fixedTotal = computed(() =>
   selectedParticipants.value.reduce((sum, p) => sum + (parseFloat(p.fixedAmount) || 0), 0),
 )
-// how much of the total is still unallocated (negative = over-allocated)
 const fixedRemaining = computed(() =>
   parseFloat(((amount.value || 0) - fixedTotal.value).toFixed(2)),
 )
 
-// percentage split: sum of all percentage sliders
 const percentageTotal = computed(() =>
   selectedParticipants.value.reduce((sum, p) => sum + (parseFloat(p.percentage) || 0), 0),
 )
-// how many percentage points are still unallocated
 const percentageRemaining = computed(() => parseFloat((100 - percentageTotal.value).toFixed(1)))
 
-// is the current split configuration valid enough to allow submission?
 const splitValid = computed(() => {
   if (selectedCount.value === 0) return false
-  if (splitStrategy.value === 'fixed') return Math.abs(fixedRemaining.value) < 0.01       // allow tiny float rounding
+  if (splitStrategy.value === 'fixed') return Math.abs(fixedRemaining.value) < 0.01
   if (splitStrategy.value === 'percentage') return Math.abs(percentageRemaining.value) < 0.1
-  return true // equal split is always valid as long as someone is selected
+  return true
 })
 
 const strategies = computed(() => [
@@ -133,24 +88,19 @@ const strategies = computed(() => [
   { key: 'percentage', label: t('addExpense.strategies.percentage'), icon: 'percent' },
 ])
 
-// ─── Lifecycle: onMounted ─────────────────────────────────────────────────────
-// onMounted runs once, right after Vue inserts this component into the page.
-// We use it to: (1) attach the click-outside listener, (2) fetch members & categories from the API.
+// Lifecycle
 onMounted(async () => {
   document.addEventListener('click', handleClickOutside)
   loadingData.value = true
   try {
-    // Promise.all fires both requests at the same time instead of one after the other
     const [membersRes, categoriesRes] = await Promise.all([
       api.get(`/api/v1/groups/${props.groupId}/members`, { params: { per_page: 100 } }),
       api.get('/api/v1/categories', { params: { per_page: 100 } }),
     ])
 
-    // the API can return data nested one level differently depending on pagination — handle both shapes
     members.value = membersRes.data.data.data ?? membersRes.data.data
     categories.value = categoriesRes.data.data.data ?? categoriesRes.data.data
 
-    // build the participants list from active members — everyone starts checked in
     participants.value = activeMembers.value.map((m) => ({
       membership_id: m.id,
       checked: true,
@@ -161,19 +111,14 @@ onMounted(async () => {
   } catch {
     submitError.value = t('addExpense.errors.loadFailed')
   } finally {
-    loadingData.value = false // hide the skeleton loader regardless of success/failure
+    loadingData.value = false
   }
 })
 
-// onBeforeUnmount: clean up the global event listener when this component is removed from the page.
-// Without this, the listener would keep running even after the form is closed — a memory leak.
 onBeforeUnmount(() => document.removeEventListener('click', handleClickOutside))
 
-// ─── Form Submission ──────────────────────────────────────────────────────────
-// handleSubmit() wraps our async function — it first runs yup validation and only calls our
-// function if everything passes. If validation fails, errors appear next to the fields automatically.
+// Form Submission
 const onSubmit = handleSubmit(async () => {
-  // extra guards that yup can't express (cross-field business logic)
   if (selectedCount.value === 0) {
     submitError.value = t('addExpense.errors.noParticipant')
     return
@@ -190,7 +135,6 @@ const onSubmit = handleSubmit(async () => {
   submitError.value = ''
   isSubmitting.value = true
   try {
-    // build the participants array in the shape the API expects
     const participantsPayload = selectedParticipants.value.map((p) => {
       const entry = { membership_id: p.membership_id }
       if (splitStrategy.value === 'fixed') entry.amount = parseFloat(p.fixedAmount) || 0
@@ -223,8 +167,6 @@ const onSubmit = handleSubmit(async () => {
     emit('created')
   } catch (err) {
     if (err.response?.status === 422) {
-      // 422 = Laravel validation error — the response contains per-field messages
-      // we push them into vee-validate so they appear under the correct inputs
       const laravelErrors = {}
       for (const [field, messages] of Object.entries(err.response.data.errors ?? {})) {
         laravelErrors[field] = messages[0]
@@ -235,24 +177,20 @@ const onSubmit = handleSubmit(async () => {
       submitError.value = t('addExpense.errors.generic')
     }
   } finally {
-    isSubmitting.value = false // re-enable the submit button
+    isSubmitting.value = false
   }
 })
 
-// ─── Helper Functions ─────────────────────────────────────────────────────────
-
-// flips a participant's checked state when the user clicks their row checkbox
+// Helpers
 function toggleParticipant(idx) {
   participants.value[idx].checked = !participants.value[idx].checked
 }
 
-// called when user picks someone from the payer dropdown
 function selectPayer(member) {
-  payer_id.value = member.id  // updates the form field (triggers validation)
+  payer_id.value = member.id
   payerDropdownOpen.value = false
 }
 
-// formats a number as Moroccan dirham, e.g. 12.5 → "12.50 DH"
 function formatCurrency(val) {
   return `${Number(val).toFixed(2)} DH`
 }

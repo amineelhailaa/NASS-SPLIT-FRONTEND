@@ -29,10 +29,11 @@ const expenses = ref([])
 const balance = ref(null)
 const loading = ref(true)
 const error = ref(null)
-const activeTab = ref(route.query.tab || 'dashboard')
+const storageKey = `activeTab_group_${groupId}`
+const activeTab = ref(localStorage.getItem(storageKey) || 'dashboard')
 
-watch(() => route.query.tab, (tab) => {
-  if (tab) activeTab.value = tab
+watch(activeTab, (tab) => {
+  localStorage.setItem(storageKey, tab)
 })
 
 const isOwner = computed(() => group.value?.pivot?.role === 'owner')
