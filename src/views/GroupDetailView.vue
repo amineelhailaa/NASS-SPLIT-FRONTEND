@@ -30,7 +30,7 @@ const balance = ref(null)
 const loading = ref(true)
 const error = ref(null)
 const storageKey = `activeTab_group_${groupId}`
-const activeTab = ref(localStorage.getItem(storageKey) || 'dashboard')
+const activeTab = ref(route.query.tab || localStorage.getItem(storageKey) || 'dashboard')
 
 watch(activeTab, (tab) => {
   localStorage.setItem(storageKey, tab)
@@ -81,23 +81,16 @@ async function leaveGroup() {
   }
 }
 
-async function fetchGroup() {
-  const res = await api.get(`/api/v1/groups/${groupId}`)
-  group.value = res.data.data
-}
-
-onMounted(async () => {
+async function fetchData() {
   try {
-    const [groupRes, statsRes, owesRes, expensesRes, balanceRes] = await Promise.all([
+    const [groupRes, statsRes, expensesRes, balanceRes] = await Promise.all([
       api.get(`/api/v1/groups/${groupId}`),
       api.get(`/api/v1/groups/${groupId}/statistics`),
-      api.get(`/api/v1/groups/${groupId}/owes`),
       api.get(`/api/v1/groups/${groupId}/expenses`, { params: { per_page: 4 } }),
       api.get(`/api/v1/groups/${groupId}/balance`),
     ])
     group.value = groupRes.data.data
     stats.value = statsRes.data.data
-    owes.value = owesRes.data.data
     expenses.value = expensesRes.data.data.data
     balance.value = balanceRes.data.data
   } catch {
@@ -105,7 +98,9 @@ onMounted(async () => {
   } finally {
     loading.value = false
   }
-})
+}
+
+onMounted(fetchData)
 </script>
 
 <template>
@@ -154,16 +149,7 @@ onMounted(async () => {
 
       <!-- Tabs -->
       <nav class="flex flex-col gap-0.5 px-2 py-3 flex-1">
-        <!-- Home -->
-        <button
-          @click="router.push({ name: 'home' })"
-          class="flex items-center gap-3 h-10 px-3 rounded-lg transition-colors w-full text-brand-textSecondary hover:bg-cerulean-50/50 hover:text-brand-primary"
-        >
-          <span class="material-symbols-outlined text-[20px] shrink-0">home</span>
-          <span class="text-sm whitespace-nowrap overflow-hidden max-w-0 group-hover/sb:max-w-48 transition-[max-width] duration-200">
-            {{ t('groupDetail.home') }}
-          </span>
-        </button>
+
 
         <button
           v-for="tab in tabs"
@@ -236,12 +222,12 @@ onMounted(async () => {
           :is="currentComponent"
           :group="group"
           :stats="stats"
-          :owes="owes"
           :expenses="expenses"
           :balance="balance"
           :group-id="groupId"
           :is-owner="isOwner"
           @ownership-transferred="fetchGroup"
+          @settled="fetchData"
         />
       </div>
     </div>
@@ -275,7 +261,7 @@ onMounted(async () => {
             <div class="px-6 py-6">
               <AddExpenseForm
                 :group-id="groupId"
-                @created="showExpenseForm = false"
+                @created="showExpenseForm = false; fetchData()"
                 @cancel="showExpenseForm = false"
               />
             </div>

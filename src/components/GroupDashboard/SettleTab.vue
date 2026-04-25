@@ -1,21 +1,37 @@
 <script setup>
-import { ref } from 'vue'
+import {onMounted, ref} from 'vue'
 import { useI18n } from 'vue-i18n'
 import api from '@/lib/axios'
 import { Vue3Lottie } from 'vue3-lottie'
 import LoanAnimation from '@/assets/animation/Loan.json'
 
 const props = defineProps({
-  owes: { type: Array, default: () => [] },
   group: Object,
   groupId: [Number, String],
 })
+
+const emit = defineEmits(['settled'])
 
 const { t } = useI18n()
 
 const settling = ref(null)
 const settleError = ref(null)
 const settleSuccess = ref(null)
+const owes =ref([]);
+
+
+
+async function getOwes() {
+  try {
+    const res = await api.get(`/api/v1/groups/${props.groupId}/owes`)
+    owes.value = res.data.data
+    console.log(owes)
+  } catch {
+
+  }
+}
+
+
 
 async function settleDebt(owe) {
   settling.value = owe
@@ -28,6 +44,8 @@ async function settleDebt(owe) {
       amount: owe.amount,
     })
     settleSuccess.value = t('settle.recorded', { amount: formatCurrency(owe.amount) })
+    await getOwes()
+    emit('settled')
   } catch {
     settleError.value = t('settle.failed')
   } finally {
@@ -38,6 +56,11 @@ async function settleDebt(owe) {
 function formatCurrency(val) {
   return `${Number(val).toFixed(2)} DH`
 }
+
+
+onMounted(()=>{
+  getOwes();
+})
 </script>
 
 <template>

@@ -18,7 +18,7 @@ const lastPage = ref(1)
 async function fetchPayments(page = 1) {
   loading.value = true
   try {
-    const res = await api.get('/api/v1/payments', { params: { page } })
+    const res = await api.get(`/api/v1/payments/${props.groupId}`, { params: { page } })
     payments.value = res.data.data.data
     currentPage.value = res.data.data.current_page
     lastPage.value = res.data.data.last_page
