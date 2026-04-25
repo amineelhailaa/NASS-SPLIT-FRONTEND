@@ -1,6 +1,7 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
+import { useI18n } from 'vue-i18n'
 import api from '@/lib/axios'
 import Swal from 'sweetalert2'
 
@@ -10,6 +11,7 @@ const props = defineProps({
 })
 
 const router = useRouter()
+const { t } = useI18n()
 
 const name = ref('')
 const description = ref('')
@@ -37,9 +39,9 @@ async function updateGroup() {
       name: name.value,
       description: description.value,
     })
-    success.value = 'Group updated'
+    success.value = t('settings.saved')
   } catch {
-    error.value = 'Failed to update group'
+    error.value = t('settings.saveFailed')
   } finally {
     saving.value = false
   }
@@ -48,14 +50,14 @@ async function updateGroup() {
 async function toggleSettle() {
   const next = !settleEnabled.value
   const result = await Swal.fire({
-    title: `${next ? 'Enable' : 'Disable'} settle rule?`,
+    title: t('settings.dialogs.toggleSettle.title'),
     text: next
-      ? 'Members will be able to mark debts as settled.'
-      : 'Settling will be turned off for this group.',
+      ? t('settings.dialogs.toggleSettle.textEnable')
+      : t('settings.dialogs.toggleSettle.textDisable'),
     icon: 'question',
     showCancelButton: true,
-    confirmButtonText: 'Yes, confirm',
-    cancelButtonText: 'Cancel',
+    confirmButtonText: t('settings.dialogs.toggleSettle.confirm'),
+    cancelButtonText: t('settings.dialogs.toggleSettle.cancel'),
     confirmButtonColor: '#41778b',
     cancelButtonColor: '#6b7280',
     customClass: {
@@ -75,7 +77,7 @@ async function toggleSettle() {
     })
   } catch {
     settleEnabled.value = !settleEnabled.value
-    error.value = 'Failed to update setting'
+    error.value = t('settings.settingFailed')
   } finally {
     savingSettings.value = false
   }
@@ -83,12 +85,12 @@ async function toggleSettle() {
 
 async function deleteGroup() {
   const result = await Swal.fire({
-    title: 'Delete group?',
-    text: 'This will permanently delete the group and all its data. This cannot be undone.',
+    title: t('settings.dialogs.delete.title'),
+    text: t('settings.dialogs.delete.text'),
     icon: 'warning',
     showCancelButton: true,
-    confirmButtonText: 'Yes, delete it',
-    cancelButtonText: 'Cancel',
+    confirmButtonText: t('settings.dialogs.delete.confirm'),
+    cancelButtonText: t('settings.dialogs.delete.cancel'),
     confirmButtonColor: '#e53e3e',
     cancelButtonColor: '#41778b',
     borderRadius: '1rem',
@@ -103,8 +105,8 @@ async function deleteGroup() {
   try {
     await api.delete(`/api/v1/groups/${props.groupId}`)
     await Swal.fire({
-      title: 'Deleted!',
-      text: 'The group has been deleted.',
+      title: t('settings.dialogs.delete.successTitle'),
+      text: t('settings.dialogs.delete.successText'),
       icon: 'success',
       confirmButtonColor: '#41778b',
       customClass: {
@@ -116,7 +118,7 @@ async function deleteGroup() {
     })
     router.push({ name: 'groups' })
   } catch {
-    error.value = 'Failed to delete group'
+    error.value = t('settings.saveFailed')
     deleting.value = false
   }
 }
@@ -124,7 +126,7 @@ async function deleteGroup() {
 
 <template>
   <div class="flex flex-col gap-8">
-    <h2 class="text-brand-text font-bold text-xl">Group Settings</h2>
+    <h2 class="text-brand-text font-bold text-xl">{{ t('settings.title') }}</h2>
 
     <!-- Success / Error -->
     <div v-if="success" class="bg-emerald-50 text-emerald-700 px-4 py-3 rounded-xl text-sm font-semibold flex items-center gap-2">
@@ -138,10 +140,10 @@ async function deleteGroup() {
 
     <!-- Group info -->
     <div class="bg-white rounded-2xl p-6 shadow-[0_2px_12px_rgba(22,100,122,0.06)] flex flex-col gap-5">
-      <h3 class="text-brand-text font-bold text-base">General</h3>
+      <h3 class="text-brand-text font-bold text-base">{{ t('settings.general') }}</h3>
 
       <div class="flex flex-col gap-2">
-        <label class="text-brand-textSecondary text-sm font-semibold">Group Name</label>
+        <label class="text-brand-textSecondary text-sm font-semibold">{{ t('settings.name') }}</label>
         <input
           v-model="name"
           type="text"
@@ -150,7 +152,7 @@ async function deleteGroup() {
       </div>
 
       <div class="flex flex-col gap-2">
-        <label class="text-brand-textSecondary text-sm font-semibold">Description</label>
+        <label class="text-brand-textSecondary text-sm font-semibold">{{ t('settings.description') }}</label>
         <textarea
           v-model="description"
           rows="3"
@@ -163,18 +165,18 @@ async function deleteGroup() {
         :disabled="saving"
         class="self-start px-6 py-2.5 rounded-full bg-brand-primary text-white text-sm font-semibold hover:bg-brand-primaryHover transition-colors disabled:opacity-50"
       >
-        {{ saving ? 'Saving...' : 'Save Changes' }}
+        {{ saving ? t('settings.saving') : t('settings.save') }}
       </button>
     </div>
 
     <!-- Settle rule -->
     <div class="bg-white rounded-2xl p-6 shadow-[0_2px_12px_rgba(22,100,122,0.06)] flex flex-col gap-4">
-      <h3 class="text-brand-text font-bold text-base">Rules</h3>
+      <h3 class="text-brand-text font-bold text-base">{{ t('settings.rules') }}</h3>
 
       <div class="flex items-center justify-between">
         <div class="flex flex-col gap-1">
-          <span class="text-brand-text text-sm font-semibold">Settle before leaving</span>
-          <span class="text-brand-textSecondary text-xs">Members must settle debts before leaving or being kicked</span>
+          <span class="text-brand-text text-sm font-semibold">{{ t('settings.settleBeforeLeaving') }}</span>
+          <span class="text-brand-textSecondary text-xs">{{ t('settings.settleDesc') }}</span>
         </div>
         <button
           @click="toggleSettle"
@@ -192,14 +194,14 @@ async function deleteGroup() {
 
     <!-- Danger zone -->
     <div class="bg-white rounded-2xl p-6 shadow-[0_2px_12px_rgba(22,100,122,0.06)] flex flex-col gap-4">
-      <h3 class="text-red-600 font-bold text-base">Danger Zone</h3>
-      <p class="text-brand-textSecondary text-sm">Permanently delete this group and all its data.</p>
+      <h3 class="text-red-600 font-bold text-base">{{ t('settings.dangerZone') }}</h3>
+      <p class="text-brand-textSecondary text-sm">{{ t('settings.deleteDesc') }}</p>
       <button
         @click="deleteGroup"
         :disabled="deleting"
         class="self-start px-6 py-2.5 rounded-full bg-red-500 text-white text-sm font-semibold hover:bg-red-600 transition-colors disabled:opacity-50"
       >
-        {{ deleting ? 'Deleting...' : 'Delete Group' }}
+        {{ deleting ? t('settings.deleting') : t('settings.deleteButton') }}
       </button>
     </div>
   </div>

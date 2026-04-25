@@ -1,5 +1,6 @@
 <script setup>
 import { ref } from 'vue'
+import { useI18n } from 'vue-i18n'
 import api from '@/lib/axios'
 import { Vue3Lottie } from 'vue3-lottie'
 import LoanAnimation from '@/assets/animation/Loan.json'
@@ -9,6 +10,8 @@ const props = defineProps({
   group: Object,
   groupId: [Number, String],
 })
+
+const { t } = useI18n()
 
 const settling = ref(null)
 const settleError = ref(null)
@@ -24,24 +27,24 @@ async function settleDebt(owe) {
       debtor_id: owe.debtor_id,
       amount: owe.amount,
     })
-    settleSuccess.value = `Payment of $${Number(owe.amount).toFixed(2)} recorded`
+    settleSuccess.value = t('settle.recorded', { amount: formatCurrency(owe.amount) })
   } catch {
-    settleError.value = 'Failed to record payment'
+    settleError.value = t('settle.failed')
   } finally {
     settling.value = null
   }
 }
 
 function formatCurrency(val) {
-  return `$${Number(val).toFixed(2)}`
+  return `${Number(val).toFixed(2)} DH`
 }
 </script>
 
 <template>
   <div class="flex flex-col gap-6">
     <div class="flex items-center justify-between">
-      <h2 class="text-brand-text font-bold text-xl">Who Owes Who</h2>
-      <span class="text-brand-textSecondary text-sm font-medium">{{ owes.length }} settlement{{ owes.length !== 1 ? 's' : '' }}</span>
+      <h2 class="text-brand-text font-bold text-xl">{{ t('settle.title') }}</h2>
+      <span class="text-brand-textSecondary text-sm font-medium">{{ t('settle.count', owes.length) }}</span>
     </div>
 
     <!-- Success / Error banners -->
@@ -57,8 +60,8 @@ function formatCurrency(val) {
     <!-- Empty state -->
     <div v-if="!owes.length" class="flex flex-col items-center justify-center py-24 gap-4">
       <span class="material-symbols-outlined text-[56px] text-brand-disabled">handshake</span>
-      <p class="text-brand-textSecondary font-semibold text-lg">All settled up!</p>
-      <p class="text-brand-textSecondary text-sm">No outstanding debts in this group</p>
+      <p class="text-brand-textSecondary font-semibold text-lg">{{ t('settle.allSettled') }}</p>
+      <p class="text-brand-textSecondary text-sm">{{ t('settle.noDebts') }}</p>
     </div>
 
     <!-- Owes list -->
@@ -123,7 +126,7 @@ function formatCurrency(val) {
             class="material-symbols-outlined text-[16px] animate-spin"
           >progress_activity</span>
           <span v-else class="material-symbols-outlined text-[16px]">handshake</span>
-          {{ settling === owe ? 'Recording…' : 'Mark as Settled' }}
+          {{ settling === owe ? t('settle.recording') : t('settle.markSettled') }}
         </button>
       </div>
     </div>

@@ -30,6 +30,10 @@ const colors = [
   'bg-cerulean-200',
   'bg-cerulean-100',
 ]
+
+function formatCurrency(val) {
+  return `${Number(val).toFixed(2)} DH`
+}
 </script>
 
 <template>
@@ -65,7 +69,7 @@ const colors = [
           <span class="w-3 h-3 rounded-full shrink-0" :class="colors[i % colors.length]" />
           <span class="text-brand-text text-sm font-semibold flex-1">{{ item.name }}</span>
           <span class="text-brand-textSecondary text-xs font-medium">{{ item.percent.toFixed(0) }}%</span>
-          <span class="text-cerulean-700 text-sm font-extrabold">${{ item.amount.toFixed(2) }}</span>
+          <span class="text-cerulean-700 text-sm font-extrabold">{{ formatCurrency(item.amount) }}</span>
         </div>
       </div>
     </div>
