@@ -1,6 +1,9 @@
 <script setup>
 import { ref, onMounted, watch } from 'vue'
+import { useI18n } from 'vue-i18n'
 import api from '@/lib/axios'
+
+const { t } = useI18n()
 
 const groups = ref([])
 const loading = ref(false)
@@ -63,12 +66,12 @@ onMounted(loadGroups)
     <!-- Page head -->
     <div class="flex flex-col gap-2 pt-5">
       <span class="text-brand-primary font-semibold text-[12px] uppercase tracking-[0.14em]">
-        Admin · Ledger
+        {{ t('admin.groups.breadcrumb') }}
       </span>
       <h1 class="text-brand-text font-extrabold text-[38px] leading-[1.05] tracking-[-0.03em] m-0">
-        Groups
+        {{ t('admin.groups.title') }}
       </h1>
-      <p class="text-brand-textSecondary text-sm pt-1">All groups active across the platform.</p>
+      <p class="text-brand-textSecondary text-sm pt-1">{{ t('admin.groups.subtitle') }}</p>
     </div>
 
     <!-- Groups Table -->
@@ -79,10 +82,10 @@ onMounted(loadGroups)
       <div class="flex items-center justify-between gap-4 px-6 pt-5 pb-4 flex-wrap">
         <div class="flex flex-col gap-1">
           <p class="text-[11px] font-semibold uppercase tracking-[0.14em] text-brand-disabled">
-            Directory
+            {{ t('admin.groups.table.label') }}
           </p>
           <h3 class="text-[18px] font-bold text-brand-text tracking-[-0.02em] leading-tight">
-            All groups
+            {{ t('admin.groups.table.title') }}
           </h3>
         </div>
         <div class="flex items-center gap-3">
@@ -95,26 +98,26 @@ onMounted(loadGroups)
             <input
               v-model="search"
               type="text"
-              placeholder="Search groups..."
+              :placeholder="t('admin.groups.table.searchPlaceholder')"
               class="w-72 pl-10 pr-4 py-2 bg-brand-background rounded-full text-[13px] text-brand-text placeholder:text-brand-disabled outline-none focus:ring-2 focus:ring-brand-primary"
             />
           </div>
           <span
             class="px-2.5 py-0.5 rounded-full font-semibold text-[11.5px] bg-brand-background text-brand-textSecondary"
           >
-            {{ total }} total
+            {{ t('admin.groups.table.total', { total }) }}
           </span>
         </div>
       </div>
 
       <div v-if="loading" class="text-brand-textSecondary py-10 text-center text-sm">
-        Loading...
+        {{ t('admin.groups.table.loading') }}
       </div>
       <div
         v-else-if="groups.length === 0"
         class="text-brand-textSecondary py-10 text-center text-sm"
       >
-        No groups found.
+        {{ t('admin.groups.table.empty') }}
       </div>
 
       <div v-else class="overflow-x-auto">
@@ -127,42 +130,42 @@ onMounted(loadGroups)
               <th
                 class="px-6 py-2.5 font-semibold text-[10.5px] uppercase tracking-[0.14em] text-brand-disabled"
               >
-                ID
+                {{ t('admin.groups.table.colId') }}
               </th>
               <th
                 class="px-6 py-2.5 font-semibold text-[10.5px] uppercase tracking-[0.14em] text-brand-disabled"
               >
-                Group
+                {{ t('admin.groups.table.colGroup') }}
               </th>
               <th
                 class="px-6 py-2.5 font-semibold text-[10.5px] uppercase tracking-[0.14em] text-brand-disabled"
               >
-                Description
+                {{ t('admin.groups.table.colDescription') }}
               </th>
               <th
                 class="px-6 py-2.5 font-semibold text-[10.5px] uppercase tracking-[0.14em] text-brand-disabled"
               >
-                Members
+                {{ t('admin.groups.table.colMembers') }}
               </th>
               <th
                 class="px-6 py-2.5 font-semibold text-[10.5px] uppercase tracking-[0.14em] text-brand-disabled"
               >
-                Settle
+                {{ t('admin.groups.table.colSettle') }}
               </th>
               <th
                 class="px-6 py-2.5 font-semibold text-[10.5px] uppercase tracking-[0.14em] text-brand-disabled"
               >
-                Invite
+                {{ t('admin.groups.table.colInvite') }}
               </th>
               <th
                 class="px-6 py-2.5 font-semibold text-[10.5px] uppercase tracking-[0.14em] text-brand-disabled"
               >
-                Created
+                {{ t('admin.groups.table.colCreated') }}
               </th>
               <th
                 class="px-6 py-2.5 font-semibold text-[10.5px] uppercase tracking-[0.14em] text-brand-disabled"
               >
-                Updated
+                {{ t('admin.groups.table.colUpdated') }}
               </th>
             </tr>
           </thead>
@@ -221,7 +224,7 @@ onMounted(loadGroups)
                       class="w-1.5 h-1.5 rounded-full"
                       :class="group.settle ? 'bg-brand-primary' : 'bg-brand-disabled'"
                     ></span>
-                    {{ group.settle ? 'On' : 'Off' }}
+                    {{ group.settle ? t('admin.groups.table.settleOn') : t('admin.groups.table.settleOff') }}
                   </span>
                 </td>
                 <td class="px-6 py-3.5 text-brand-textSecondary font-mono text-[12px]">
@@ -242,7 +245,7 @@ onMounted(loadGroups)
                     v-if="!group.users?.length"
                     class="text-brand-disabled text-[12.5px]"
                   >
-                    No members in this group.
+                    {{ t('admin.groups.table.noMembers') }}
                   </div>
                   <div v-else class="flex flex-wrap gap-4">
                     <div
@@ -281,7 +284,7 @@ onMounted(loadGroups)
         v-if="lastPage > 1"
         class="flex items-center justify-between px-6 py-4 bg-brand-background gap-3 flex-wrap"
       >
-        <span class="text-[12px] text-brand-textSecondary">Page {{ page }} of {{ lastPage }}</span>
+        <span class="text-[12px] text-brand-textSecondary">{{ t('admin.groups.table.pageOf', { page, last: lastPage }) }}</span>
         <div class="flex items-center gap-1.5">
           <button
             type="button"

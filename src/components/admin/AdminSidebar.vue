@@ -1,5 +1,7 @@
 <script setup>
+import { computed } from 'vue'
 import { useRouter } from 'vue-router'
+import { useI18n } from 'vue-i18n'
 import { useAuthStore } from '@/stores/auth'
 import logo from '@/assets/logo.svg'
 
@@ -12,16 +14,17 @@ defineProps({
 
 const emit = defineEmits(['change-tab'])
 
+const { t } = useI18n()
 const auth = useAuthStore()
 const router = useRouter()
 
-const menu = [
-  { key: 'overview', label: 'Overview', icon: 'dashboard' },
-  { key: 'categories', label: 'Categories', icon: 'category' },
-  { key: 'groups', label: 'Groups', icon: 'groups' },
-  { key: 'users', label: 'Users', icon: 'person' },
-  { key: 'contacts', label: 'Messages', icon: 'mail' },
-]
+const menu = computed(() => [
+  { key: 'overview', label: t('admin.sidebar.overview'), icon: 'dashboard' },
+  { key: 'categories', label: t('admin.sidebar.categories'), icon: 'category' },
+  { key: 'groups', label: t('admin.sidebar.groups'), icon: 'groups' },
+  { key: 'users', label: t('admin.sidebar.users'), icon: 'person' },
+  { key: 'contacts', label: t('admin.sidebar.messages'), icon: 'mail' },
+])
 
 function selectTab(key) {
   emit('change-tab', key)
@@ -57,7 +60,7 @@ async function handleLogout() {
         <span
           class="text-brand-disabled text-[11px] font-medium uppercase tracking-[0.08em] -mt-0.5"
         >
-          Ledger Admin
+          {{ t('admin.sidebar.ledgerAdmin') }}
         </span>
       </div>
     </div>
@@ -67,7 +70,7 @@ async function handleLogout() {
       <div
         class="text-brand-disabled text-[10.5px] font-semibold uppercase tracking-[0.14em] pt-2.5 px-3.5 pb-1.5"
       >
-        Workspace
+        {{ t('admin.sidebar.workspace') }}
       </div>
       <button
         v-for="item in menu"
@@ -130,7 +133,7 @@ async function handleLogout() {
         style="box-shadow: 0 1px 2px rgba(22, 100, 122, 0.06), 0 2px 8px rgba(22, 100, 122, 0.04)"
       >
         <span class="material-symbols-outlined text-[16px]">logout</span>
-        Logout
+        {{ t('admin.sidebar.logout') }}
       </button>
     </div>
   </aside>

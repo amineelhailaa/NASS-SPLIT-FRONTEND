@@ -1,5 +1,6 @@
 <script setup>
 import { ref, onMounted, watch } from 'vue'
+import { useI18n } from 'vue-i18n'
 import api from '@/lib/axios'
 import Swal from 'sweetalert2'
 
@@ -9,6 +10,8 @@ const search = ref('')
 const page = ref(1)
 const lastPage = ref(1)
 const total = ref(0)
+
+const { t } = useI18n()
 
 const flash = ref(null)
 let flashTimer = null
@@ -52,12 +55,12 @@ watch(search, () => {
 
 async function banUser(id) {
   const { isConfirmed } = await Swal.fire({
-    title: 'Ban this user?',
-    text: 'They will lose access to the platform.',
+    title: t('admin.users.dialogs.ban.title'),
+    text: t('admin.users.dialogs.ban.text'),
     icon: 'warning',
     showCancelButton: true,
-    confirmButtonText: 'Ban',
-    cancelButtonText: 'Cancel',
+    confirmButtonText: t('admin.users.dialogs.ban.confirm'),
+    cancelButtonText: t('admin.users.dialogs.ban.cancel'),
     confirmButtonColor: '#ef4444',
     cancelButtonColor: '#16647a',
   })
@@ -65,7 +68,7 @@ async function banUser(id) {
   try {
     await api.patch(`/api/v1/users/${id}/ban`)
     await loadUsers()
-    showFlash('User banned.')
+    showFlash(t('admin.users.flash.banned'))
   } catch (error) {
     console.error('Failed to ban user', error)
   }
@@ -73,12 +76,12 @@ async function banUser(id) {
 
 async function unbanUser(id) {
   const { isConfirmed } = await Swal.fire({
-    title: 'Unban this user?',
-    text: 'They will regain access to the platform.',
+    title: t('admin.users.dialogs.unban.title'),
+    text: t('admin.users.dialogs.unban.text'),
     icon: 'question',
     showCancelButton: true,
-    confirmButtonText: 'Unban',
-    cancelButtonText: 'Cancel',
+    confirmButtonText: t('admin.users.dialogs.unban.confirm'),
+    cancelButtonText: t('admin.users.dialogs.unban.cancel'),
     confirmButtonColor: '#16647a',
     cancelButtonColor: '#97bfce',
   })
@@ -86,7 +89,7 @@ async function unbanUser(id) {
   try {
     await api.patch(`/api/v1/users/${id}/unban`)
     await loadUsers()
-    showFlash('User unbanned.')
+    showFlash(t('admin.users.flash.unbanned'))
   } catch (error) {
     console.error('Failed to unban user', error)
   }
@@ -111,15 +114,15 @@ onMounted(loadUsers)
       <span
         class="text-brand-primary font-semibold text-[12px] uppercase tracking-[0.14em]"
       >
-        Admin · People
+        {{ t('admin.users.breadcrumb') }}
       </span>
       <h1
         class="text-brand-text font-extrabold text-[38px] leading-[1.05] tracking-[-0.03em] m-0"
       >
-        Users
+        {{ t('admin.users.title') }}
       </h1>
       <p class="text-brand-textSecondary text-sm pt-1">
-        All users registered on the platform.
+        {{ t('admin.users.subtitle') }}
       </p>
     </div>
 
@@ -152,12 +155,12 @@ onMounted(loadUsers)
           <p
             class="text-[11px] font-semibold uppercase tracking-[0.14em] text-brand-disabled"
           >
-            Directory
+            {{ t('admin.users.table.label') }}
           </p>
           <h3
             class="text-[18px] font-bold text-brand-text tracking-[-0.02em] leading-tight"
           >
-            All users
+            {{ t('admin.users.table.title') }}
           </h3>
         </div>
         <div class="flex items-center gap-3">
@@ -170,26 +173,26 @@ onMounted(loadUsers)
             <input
               v-model="search"
               type="text"
-              placeholder="Search users..."
+              :placeholder="t('admin.users.table.searchPlaceholder')"
               class="w-72 pl-10 pr-4 py-2 bg-brand-background rounded-full text-[13px] text-brand-text placeholder:text-brand-disabled outline-none focus:ring-2 focus:ring-brand-primary"
             />
           </div>
           <span
             class="px-2.5 py-0.5 rounded-full font-semibold text-[11.5px] bg-brand-background text-brand-textSecondary"
           >
-            {{ total }} total
+            {{ t('admin.users.table.total', { total }) }}
           </span>
         </div>
       </div>
 
       <div v-if="loading" class="text-brand-textSecondary py-10 text-center text-sm">
-        Loading...
+        {{ t('admin.users.table.loading') }}
       </div>
       <div
         v-else-if="users.length === 0"
         class="text-brand-textSecondary py-10 text-center text-sm"
       >
-        No users found.
+        {{ t('admin.users.table.empty') }}
       </div>
 
       <div v-else class="overflow-x-auto">
@@ -199,37 +202,37 @@ onMounted(loadUsers)
               <th
                 class="px-6 py-2.5 font-semibold text-[10.5px] uppercase tracking-[0.14em] text-brand-disabled"
               >
-                ID
+                {{ t('admin.users.table.colId') }}
               </th>
               <th
                 class="px-6 py-2.5 font-semibold text-[10.5px] uppercase tracking-[0.14em] text-brand-disabled"
               >
-                User
+                {{ t('admin.users.table.colUser') }}
               </th>
               <th
                 class="px-6 py-2.5 font-semibold text-[10.5px] uppercase tracking-[0.14em] text-brand-disabled"
               >
-                Email
+                {{ t('admin.users.table.colEmail') }}
               </th>
               <th
                 class="px-6 py-2.5 font-semibold text-[10.5px] uppercase tracking-[0.14em] text-brand-disabled"
               >
-                Role
+                {{ t('admin.users.table.colRole') }}
               </th>
               <th
                 class="px-6 py-2.5 font-semibold text-[10.5px] uppercase tracking-[0.14em] text-brand-disabled"
               >
-                Status
+                {{ t('admin.users.table.colStatus') }}
               </th>
               <th
                 class="px-6 py-2.5 font-semibold text-[10.5px] uppercase tracking-[0.14em] text-brand-disabled"
               >
-                Joined
+                {{ t('admin.users.table.colJoined') }}
               </th>
               <th
                 class="px-6 py-2.5 font-semibold text-[10.5px] uppercase tracking-[0.14em] text-brand-disabled text-right"
               >
-                Actions
+                {{ t('admin.users.table.colActions') }}
               </th>
             </tr>
           </thead>
@@ -282,7 +285,7 @@ onMounted(loadUsers)
                     class="w-1.5 h-1.5 rounded-full"
                     :class="user.ban ? 'bg-red-500' : 'bg-brand-primary'"
                   ></span>
-                  {{ user.ban ? 'Banned' : 'Active' }}
+                  {{ user.ban ? t('admin.users.table.banned') : t('admin.users.table.active') }}
                 </span>
               </td>
               <td class="px-6 py-3.5 text-brand-textSecondary">
@@ -297,7 +300,7 @@ onMounted(loadUsers)
                     class="flex items-center gap-1.5 px-3 py-1.5 rounded-full font-semibold text-[11.5px] bg-brand-background hover:bg-red-50 text-brand-textSecondary hover:text-red-600 transition-colors"
                   >
                     <span class="material-symbols-outlined text-[15px]">block</span>
-                    Ban
+                    {{ t('admin.users.table.ban') }}
                   </button>
                   <button
                     v-else
@@ -308,7 +311,7 @@ onMounted(loadUsers)
                     <span class="material-symbols-outlined text-[15px]">
                       check_circle
                     </span>
-                    Unban
+                    {{ t('admin.users.table.unban') }}
                   </button>
                 </div>
               </td>
@@ -323,7 +326,7 @@ onMounted(loadUsers)
         class="flex items-center justify-between px-6 py-4 bg-brand-background gap-3 flex-wrap"
       >
         <span class="text-[12px] text-brand-textSecondary">
-          Page {{ page }} of {{ lastPage }}
+          {{ t('admin.users.table.pageOf', { page, last: lastPage }) }}
         </span>
         <div class="flex items-center gap-1.5">
           <button

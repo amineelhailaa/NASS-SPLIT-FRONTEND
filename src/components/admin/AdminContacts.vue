@@ -1,7 +1,16 @@
 <script setup>
-import { ref, onMounted, watch } from 'vue'
+import { ref, computed, onMounted, watch } from 'vue'
+import { useI18n } from 'vue-i18n'
 import api from '@/lib/axios'
 import Swal from 'sweetalert2'
+
+const { t } = useI18n()
+
+const filterOptions = computed(() => [
+  { key: 'all', label: t('admin.contacts.filter.all') },
+  { key: 'pending', label: t('admin.contacts.filter.pending') },
+  { key: 'treated', label: t('admin.contacts.filter.treated') },
+])
 
 const messages = ref([])
 const meta     = ref({})
@@ -36,12 +45,12 @@ async function toggleStatus(msg) {
 
 async function destroy(msg) {
   const result = await Swal.fire({
-    title: 'Delete this message?',
-    text: 'This action cannot be undone.',
+    title: t('admin.contacts.dialogs.delete.title'),
+    text: t('admin.contacts.dialogs.delete.text'),
     icon: 'warning',
     showCancelButton: true,
-    confirmButtonText: 'Delete',
-    cancelButtonText: 'Cancel',
+    confirmButtonText: t('admin.contacts.dialogs.delete.confirm'),
+    cancelButtonText: t('admin.contacts.dialogs.delete.cancel'),
     confirmButtonColor: '#ef4444',
     cancelButtonColor: '#41778b',
   })
@@ -62,15 +71,15 @@ function fmt(val) {
 
     <!-- Page head -->
     <div class="flex flex-col gap-2 pt-5">
-      <span class="text-brand-primary font-semibold text-[12px] uppercase tracking-[0.14em]">Admin · Inbox</span>
-      <h1 class="text-brand-text font-extrabold text-[38px] leading-[1.05] tracking-[-0.03em] m-0">Contact Messages</h1>
-      <p class="text-brand-textSecondary text-sm pt-1">Messages submitted through the contact form.</p>
+      <span class="text-brand-primary font-semibold text-[12px] uppercase tracking-[0.14em]">{{ t('admin.contacts.breadcrumb') }}</span>
+      <h1 class="text-brand-text font-extrabold text-[38px] leading-[1.05] tracking-[-0.03em] m-0">{{ t('admin.contacts.title') }}</h1>
+      <p class="text-brand-textSecondary text-sm pt-1">{{ t('admin.contacts.subtitle') }}</p>
     </div>
 
     <!-- Filter pills -->
     <div class="flex items-center gap-2">
       <button
-        v-for="opt in [{ key: 'all', label: 'All' }, { key: 'pending', label: 'Pending' }, { key: 'treated', label: 'Treated' }]"
+        v-for="opt in filterOptions"
         :key="opt.key"
         type="button"
         @click="filter = opt.key"
@@ -87,18 +96,18 @@ function fmt(val) {
 
       <div v-if="loading" class="flex items-center justify-center py-20 gap-2 text-brand-disabled text-sm">
         <span class="material-symbols-outlined animate-spin text-xl">progress_activity</span>
-        Loading…
+        {{ t('admin.contacts.loading') }}
       </div>
 
       <div v-else-if="messages.length === 0" class="flex flex-col items-center justify-center py-20 gap-3">
         <span class="material-symbols-outlined text-4xl text-brand-disabled">inbox</span>
-        <p class="text-brand-textSecondary text-sm">No messages found.</p>
+        <p class="text-brand-textSecondary text-sm">{{ t('admin.contacts.empty') }}</p>
       </div>
 
       <template v-else>
         <!-- Header -->
         <div class="px-6 py-3 grid grid-cols-[1fr_1.5fr_2fr_110px_56px] gap-4 text-[11px] font-semibold uppercase tracking-[0.1em] text-brand-disabled">
-          <span>Name</span><span>Email</span><span>Subject</span><span>Date</span><span>Status</span>
+          <span>{{ t('admin.contacts.table.colName') }}</span><span>{{ t('admin.contacts.table.colEmail') }}</span><span>{{ t('admin.contacts.table.colSubject') }}</span><span>{{ t('admin.contacts.table.colDate') }}</span><span>{{ t('admin.contacts.table.colStatus') }}</span>
         </div>
 
         <!-- Rows -->
@@ -116,7 +125,7 @@ function fmt(val) {
           <!-- Status icon — click to toggle, stop row click -->
           <div class="flex items-center" @click.stop="toggleStatus(msg)">
             <div
-              :title="msg.status === 'pending' ? 'Mark as treated' : 'Mark as pending'"
+              :title="msg.status === 'pending' ? t('admin.contacts.status.markTreatedTitle') : t('admin.contacts.status.markPendingTitle')"
               class="w-7 h-7 rounded-full flex items-center justify-center transition-all cursor-pointer hover:scale-110"
               :class="msg.status === 'treated' ? 'bg-brand-primary' : 'border-2 border-brand-primary bg-white'"
             >
@@ -131,7 +140,7 @@ function fmt(val) {
 
     <!-- Pagination -->
     <div v-if="meta.last_page > 1" class="flex items-center justify-between">
-      <span class="text-[12.5px] text-brand-disabled">Page {{ meta.current_page }} of {{ meta.last_page }}</span>
+      <span class="text-[12.5px] text-brand-disabled">{{ t('admin.contacts.pageOf', { current: meta.current_page, last: meta.last_page }) }}</span>
       <div class="flex items-center gap-2">
         <button type="button" :disabled="page <= 1" @click="page--"
           class="w-9 h-9 rounded-xl flex items-center justify-center bg-white text-brand-textSecondary hover:text-brand-primary disabled:opacity-40 disabled:cursor-not-allowed"
@@ -159,7 +168,7 @@ function fmt(val) {
       <div class="flex items-center justify-between px-6 py-4 bg-brand-background">
         <div class="flex items-center gap-2">
           <span class="material-symbols-outlined text-brand-primary text-[19px]">mail</span>
-          <span class="text-[12px] font-semibold uppercase tracking-[0.12em] text-brand-primary">Inbox message</span>
+          <span class="text-[12px] font-semibold uppercase tracking-[0.12em] text-brand-primary">{{ t('admin.contacts.popup.inboxMessage') }}</span>
         </div>
         <button type="button" @click="popup = null"
           class="w-8 h-8 rounded-full flex items-center justify-center text-brand-textSecondary hover:text-brand-primary hover:bg-white transition-colors">
@@ -189,7 +198,7 @@ function fmt(val) {
             :class="popup.status === 'treated' ? 'bg-brand-primary text-white' : 'border-2 border-brand-primary text-brand-primary'"
           >
             <div class="w-1.5 h-1.5 rounded-full" :class="popup.status === 'treated' ? 'bg-white' : 'bg-brand-primary'"></div>
-            {{ popup.status === 'treated' ? 'Treated' : 'Pending' }}
+            {{ popup.status === 'treated' ? t('admin.contacts.status.treated') : t('admin.contacts.status.pending') }}
           </div>
         </div>
       </div>
@@ -217,12 +226,12 @@ function fmt(val) {
               {{ popup.status === 'pending' ? 'check' : 'schedule' }}
             </span>
           </div>
-          {{ popup.status === 'pending' ? 'Mark as Treated' : 'Mark as Pending' }}
+          {{ popup.status === 'pending' ? t('admin.contacts.status.markAsTreated') : t('admin.contacts.status.markAsPending') }}
         </button>
         <button type="button" @click="destroy(popup)"
           class="flex items-center gap-2 rounded-full px-5 py-2.5 text-[13px] font-bold text-red-500 bg-red-50 hover:bg-red-100 transition-colors">
           <span class="material-symbols-outlined text-[17px]">delete</span>
-          Delete
+          {{ t('admin.contacts.popup.delete') }}
         </button>
       </div>
     </div>

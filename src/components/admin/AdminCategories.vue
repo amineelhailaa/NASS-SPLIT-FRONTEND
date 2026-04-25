@@ -1,5 +1,6 @@
 <script setup>
 import { ref, onMounted } from 'vue'
+import { useI18n } from 'vue-i18n'
 import api from '@/lib/axios'
 import Swal from 'sweetalert2'
 
@@ -14,6 +15,8 @@ const creating = ref(false)
 
 const editingId = ref(null)
 const editingName = ref('')
+
+const { t } = useI18n()
 
 const flash = ref(null)
 let flashTimer = null
@@ -51,7 +54,7 @@ async function createCategory() {
     await api.post('/api/v1/categories', { name: newName.value.trim() })
     newName.value = ''
     await loadCategories()
-    showFlash('Category created successfully.')
+    showFlash(t('admin.categories.flash.created'))
   } catch (error) {
     console.error('Failed to create category', error)
   } finally {
@@ -77,7 +80,7 @@ async function saveEdit() {
     })
     cancelEdit()
     await loadCategories()
-    showFlash('Category updated successfully.')
+    showFlash(t('admin.categories.flash.updated'))
   } catch (error) {
     console.error('Failed to update category', error)
   }
@@ -85,12 +88,12 @@ async function saveEdit() {
 
 async function deleteCategory(id) {
   const { isConfirmed } = await Swal.fire({
-    title: 'Delete category?',
-    text: 'This action cannot be undone.',
+    title: t('admin.categories.dialogs.delete.title'),
+    text: t('admin.categories.dialogs.delete.text'),
     icon: 'warning',
     showCancelButton: true,
-    confirmButtonText: 'Delete',
-    cancelButtonText: 'Cancel',
+    confirmButtonText: t('admin.categories.dialogs.delete.confirm'),
+    cancelButtonText: t('admin.categories.dialogs.delete.cancel'),
     confirmButtonColor: '#ef4444',
     cancelButtonColor: '#16647a',
   })
@@ -98,7 +101,7 @@ async function deleteCategory(id) {
   try {
     await api.delete(`/api/v1/categories/${id}`)
     await loadCategories()
-    showFlash('Category deleted.')
+    showFlash(t('admin.categories.flash.deleted'))
   } catch (error) {
     console.error('Failed to delete category', error)
   }
@@ -123,15 +126,15 @@ onMounted(loadCategories)
       <span
         class="text-brand-primary font-semibold text-[12px] uppercase tracking-[0.14em]"
       >
-        Admin · Catalog
+        {{ t('admin.categories.breadcrumb') }}
       </span>
       <h1
         class="text-brand-text font-extrabold text-[38px] leading-[1.05] tracking-[-0.03em] m-0"
       >
-        Categories
+        {{ t('admin.categories.title') }}
       </h1>
       <p class="text-brand-textSecondary text-sm pt-1">
-        Manage expense categories available across the platform.
+        {{ t('admin.categories.subtitle') }}
       </p>
     </div>
 
@@ -161,19 +164,19 @@ onMounted(loadCategories)
         <p
           class="text-[11px] font-semibold uppercase tracking-[0.14em] text-brand-disabled"
         >
-          New entry
+          {{ t('admin.categories.add.label') }}
         </p>
         <h3
           class="text-[18px] font-bold text-brand-text tracking-[-0.02em] leading-tight"
         >
-          Add category
+          {{ t('admin.categories.add.title') }}
         </h3>
       </div>
       <form @submit.prevent="createCategory" class="flex flex-col md:flex-row gap-3">
         <input
           v-model="newName"
           type="text"
-          placeholder="Category name"
+          :placeholder="t('admin.categories.add.placeholder')"
           class="flex-1 px-5 py-2.5 bg-brand-background rounded-full text-[13.5px] text-brand-text placeholder:text-brand-disabled outline-none focus:ring-2 focus:ring-brand-primary"
         />
         <button
@@ -182,7 +185,7 @@ onMounted(loadCategories)
           class="bg-brand-primary hover:bg-brand-primaryHover text-white px-6 py-2.5 rounded-full font-semibold text-[13px] flex items-center justify-center gap-2 transition-colors disabled:opacity-50"
         >
           <span class="material-symbols-outlined text-[18px]">add</span>
-          Add
+          {{ t('admin.categories.add.button') }}
         </button>
       </form>
     </div>
@@ -197,29 +200,29 @@ onMounted(loadCategories)
           <p
             class="text-[11px] font-semibold uppercase tracking-[0.14em] text-brand-disabled"
           >
-            Directory
+            {{ t('admin.categories.table.label') }}
           </p>
           <h3
             class="text-[18px] font-bold text-brand-text tracking-[-0.02em] leading-tight"
           >
-            All categories
+            {{ t('admin.categories.table.title') }}
           </h3>
         </div>
         <span
           class="px-2.5 py-0.5 rounded-full font-semibold text-[11.5px] bg-brand-background text-brand-textSecondary"
         >
-          {{ total }} total
+          {{ t('admin.categories.table.total', { total }) }}
         </span>
       </div>
 
       <div v-if="loading" class="text-brand-textSecondary py-10 text-center text-sm">
-        Loading...
+        {{ t('admin.categories.table.loading') }}
       </div>
       <div
         v-else-if="categories.length === 0"
         class="text-brand-textSecondary py-10 text-center text-sm"
       >
-        No categories yet.
+        {{ t('admin.categories.table.empty') }}
       </div>
 
       <div v-else class="overflow-x-auto">
@@ -229,27 +232,27 @@ onMounted(loadCategories)
               <th
                 class="px-6 py-2.5 font-semibold text-[10.5px] uppercase tracking-[0.14em] text-brand-disabled"
               >
-                ID
+                {{ t('admin.categories.table.colId') }}
               </th>
               <th
                 class="px-6 py-2.5 font-semibold text-[10.5px] uppercase tracking-[0.14em] text-brand-disabled"
               >
-                Name
+                {{ t('admin.categories.table.colName') }}
               </th>
               <th
                 class="px-6 py-2.5 font-semibold text-[10.5px] uppercase tracking-[0.14em] text-brand-disabled"
               >
-                Created
+                {{ t('admin.categories.table.colCreated') }}
               </th>
               <th
                 class="px-6 py-2.5 font-semibold text-[10.5px] uppercase tracking-[0.14em] text-brand-disabled"
               >
-                Updated
+                {{ t('admin.categories.table.colUpdated') }}
               </th>
               <th
                 class="px-6 py-2.5 font-semibold text-[10.5px] uppercase tracking-[0.14em] text-brand-disabled text-right"
               >
-                Actions
+                {{ t('admin.categories.table.colActions') }}
               </th>
             </tr>
           </thead>
@@ -285,14 +288,14 @@ onMounted(loadCategories)
                       @click="saveEdit"
                       class="bg-brand-primary hover:bg-brand-primaryHover text-white px-3 py-1.5 rounded-full font-semibold text-[11.5px] transition-colors"
                     >
-                      Save
+                      {{ t('admin.categories.table.save') }}
                     </button>
                     <button
                       type="button"
                       @click="cancelEdit"
                       class="bg-brand-background hover:bg-brand-surface text-brand-textSecondary px-3 py-1.5 rounded-full font-semibold text-[11.5px] transition-colors"
                     >
-                      Cancel
+                      {{ t('admin.categories.table.cancel') }}
                     </button>
                   </template>
                   <template v-else>
@@ -302,7 +305,7 @@ onMounted(loadCategories)
                       class="flex items-center gap-1.5 px-3 py-1.5 rounded-full font-semibold text-[11.5px] bg-brand-background hover:bg-brand-surface text-brand-textSecondary hover:text-brand-primary transition-colors"
                     >
                       <span class="material-symbols-outlined text-[15px]">edit</span>
-                      Edit
+                      {{ t('admin.categories.table.edit') }}
                     </button>
                     <button
                       type="button"
@@ -310,7 +313,7 @@ onMounted(loadCategories)
                       class="flex items-center gap-1.5 px-3 py-1.5 rounded-full font-semibold text-[11.5px] bg-brand-background hover:bg-red-50 text-brand-textSecondary hover:text-red-600 transition-colors"
                     >
                       <span class="material-symbols-outlined text-[15px]">delete</span>
-                      Delete
+                      {{ t('admin.categories.table.delete') }}
                     </button>
                   </template>
                 </div>
@@ -326,7 +329,7 @@ onMounted(loadCategories)
         class="flex items-center justify-between px-6 py-4 bg-brand-background gap-3 flex-wrap"
       >
         <span class="text-[12px] text-brand-textSecondary">
-          Page {{ page }} of {{ lastPage }}
+          {{ t('admin.categories.table.pageOf', { page, last: lastPage }) }}
         </span>
         <div class="flex items-center gap-1.5">
           <button

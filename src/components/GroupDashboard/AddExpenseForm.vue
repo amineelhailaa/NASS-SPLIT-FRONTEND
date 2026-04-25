@@ -2,6 +2,7 @@
 // Vue core: ref = reactive variable, computed = derived value that auto-updates,
 // onMounted = runs after component appears on screen, onBeforeUnmount = runs before it's removed
 import { ref, computed, onMounted, onBeforeUnmount } from 'vue'
+import { useI18n } from 'vue-i18n'
 import Swal from 'sweetalert2'
 
 // vee-validate: form validation library
@@ -28,6 +29,8 @@ const props = defineProps({ groupId: [Number, String] })
 // 'cancel'  → user clicked Cancel
 const emit = defineEmits(['created', 'cancel'])
 
+const { t } = useI18n()
+
 // ─── Reactive State (ref) ─────────────────────────────────────────────────────
 // ref() makes a variable reactive — whenever it changes, Vue re-renders the parts of the template that use it
 // Access or change the value with .value in JS (in the template you use it directly without .value)
@@ -44,13 +47,15 @@ const participants = ref([])      // array of participant objects built from mem
 // ─── Validation Schema ────────────────────────────────────────────────────────
 // yup.object() describes the shape of the form data and what rules each field must follow.
 // vee-validate will run this automatically whenever a field changes or the form is submitted.
-const schema = yup.object({
-  title: yup.string().required('Title is required'),
-  amount: yup.number().required('Amount is required').min(1, 'Amount must be at least 1').typeError('Amount must be a number'),
-  date: yup.date().max(new Date(), 'Date cannot be in the future').required(),
-  payer_id: yup.number().required('Payer is required').typeError('Please select a payer'),
-  category_id: yup.number().nullable(), // optional — can be null
-})
+const schema = computed(() =>
+  yup.object({
+    title: yup.string().required(t('addExpense.errors.titleRequired')),
+    amount: yup.number().required(t('addExpense.errors.amountRequired')).min(1, t('addExpense.errors.amountMin')).typeError(t('addExpense.errors.amountNumber')),
+    date: yup.date().max(new Date(), 'Date cannot be in the future').required(),
+    payer_id: yup.number().required(t('addExpense.errors.payerRequired')).typeError(t('addExpense.errors.payerSelect')),
+    category_id: yup.number().nullable(),
+  })
+)
 
 // ─── Form Setup ───────────────────────────────────────────────────────────────
 // useForm ties the schema to the form. handleSubmit wraps our submit logic with validation.
@@ -122,12 +127,11 @@ const splitValid = computed(() => {
   return true // equal split is always valid as long as someone is selected
 })
 
-// static list driving the split method toggle buttons
-const strategies = [
-  { key: 'equal', label: 'Equal', icon: 'drag_handle' },
-  { key: 'fixed', label: 'Fixed', icon: 'payments' },
-  { key: 'percentage', label: 'Percentage', icon: 'percent' },
-]
+const strategies = computed(() => [
+  { key: 'equal', label: t('addExpense.strategies.equal'), icon: 'drag_handle' },
+  { key: 'fixed', label: t('addExpense.strategies.fixed'), icon: 'payments' },
+  { key: 'percentage', label: t('addExpense.strategies.percentage'), icon: 'percent' },
+])
 
 // ─── Lifecycle: onMounted ─────────────────────────────────────────────────────
 // onMounted runs once, right after Vue inserts this component into the page.
@@ -155,7 +159,7 @@ onMounted(async () => {
       percentage: 0,
     }))
   } catch {
-    submitError.value = 'Failed to load form data'
+    submitError.value = t('addExpense.errors.loadFailed')
   } finally {
     loadingData.value = false // hide the skeleton loader regardless of success/failure
   }
@@ -171,16 +175,15 @@ onBeforeUnmount(() => document.removeEventListener('click', handleClickOutside))
 const onSubmit = handleSubmit(async () => {
   // extra guards that yup can't express (cross-field business logic)
   if (selectedCount.value === 0) {
-    submitError.value = 'Select at least one participant'
+    submitError.value = t('addExpense.errors.noParticipant')
     return
   }
-  // multiply by 100 and use integers to avoid floating-point comparison issues (e.g. 0.1 + 0.2 ≠ 0.3)
   if (splitStrategy.value === 'fixed' && Math.round(fixedTotal.value * 100) !== Math.round((amount.value || 0) * 100)) {
-    submitError.value = 'Fixed amounts must equal the total expense amount'
+    submitError.value = t('addExpense.errors.fixedTotal')
     return
   }
   if (splitStrategy.value === 'percentage' && Math.abs(percentageTotal.value - 100) > 0.1) {
-    submitError.value = 'Percentages must add up to 100%'
+    submitError.value = t('addExpense.errors.pctTotal')
     return
   }
 
@@ -206,8 +209,8 @@ const onSubmit = handleSubmit(async () => {
     })
 
     Swal.fire({
-      title: 'Expense added!',
-      text: 'The expense has been saved successfully.',
+      title: t('addExpense.successTitle'),
+      text: t('addExpense.successText'),
       icon: 'success',
       confirmButtonColor: '#41778b',
       customClass: {
@@ -229,7 +232,7 @@ const onSubmit = handleSubmit(async () => {
       setErrors(laravelErrors)
       if (err.response.data.message) submitError.value = err.response.data.message
     } else {
-      submitError.value = 'Something went wrong. Please try again.'
+      submitError.value = t('addExpense.errors.generic')
     }
   } finally {
     isSubmitting.value = false // re-enable the submit button
@@ -249,9 +252,9 @@ function selectPayer(member) {
   payerDropdownOpen.value = false
 }
 
-// formats a number as a dollar string, e.g. 12.5 → "$12.50"
+// formats a number as Moroccan dirham, e.g. 12.5 → "12.50 DH"
 function formatCurrency(val) {
-  return `$${Number(val).toFixed(2)}`
+  return `${Number(val).toFixed(2)} DH`
 }
 </script>
 
@@ -263,7 +266,7 @@ function formatCurrency(val) {
     </div>
     <!-- Header -->
     <div class="flex items-center justify-between">
-      <h2 class="text-xl font-extrabold text-cerulean-800">Add Expense</h2>
+      <h2 class="text-xl font-extrabold text-cerulean-800">{{ t('addExpense.title') }}</h2>
       <button
         type="button"
         @click="emit('cancel')"
@@ -293,13 +296,13 @@ function formatCurrency(val) {
       <div class="flex flex-col gap-4">
         <!-- Title -->
         <div class="flex flex-col gap-1.5">
-          <label class="text-sm font-bold text-cerulean-800">Title</label>
+          <label class="text-sm font-bold text-cerulean-800">{{ t('addExpense.fields.title') }}</label>
           <div class="relative">
             <span class="material-symbols-outlined absolute left-5 top-1/2 -translate-y-1/2 text-cerulean-500 text-xl pointer-events-none">receipt</span>
             <input
               v-model="title"
               type="text"
-              placeholder="e.g. Dinner, Gas, Groceries..."
+              :placeholder="t('addExpense.fields.titlePlaceholder')"
               class="w-full bg-white text-cerulean-800 placeholder:text-cerulean-800/30 rounded-full pl-12 pr-6 py-4 outline-none focus:bg-white focus:ring-2 focus:ring-cerulean-500/30 transition"
               :class="{ 'ring-2 ring-red-400/50 bg-red-50': titleError }"
             />
@@ -310,7 +313,7 @@ function formatCurrency(val) {
         <!-- Amount + Date -->
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div class="flex flex-col gap-1.5">
-            <label class="text-sm font-bold text-cerulean-800">Amount</label>
+            <label class="text-sm font-bold text-cerulean-800">{{ t('addExpense.fields.amount') }}</label>
             <div class="relative">
               <span class=" absolute left-5 top-1/2 -translate-y-1/2 text-cerulean-500 text-xs font-bold pointer-events-none">DH</span>
               <input
@@ -327,7 +330,7 @@ function formatCurrency(val) {
           </div>
 
           <div class="flex flex-col gap-1.5">
-            <label class="text-sm font-bold text-cerulean-800">Date</label>
+            <label class="text-sm font-bold text-cerulean-800">{{ t('addExpense.fields.date') }}</label>
             <div class="relative">
               <span class="material-symbols-outlined absolute left-5 top-1/2 -translate-y-1/2 text-cerulean-500 text-xl pointer-events-none">calendar_today</span>
               <input
@@ -345,7 +348,7 @@ function formatCurrency(val) {
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div class="flex flex-col gap-1.5">
             <label class="text-sm font-bold text-cerulean-800">
-              Category <span class="text-cerulean-800/40 font-normal">(optional)</span>
+              {{ t('addExpense.fields.category') }} <span class="text-cerulean-800/40 font-normal">{{ t('addExpense.fields.categoryOptional') }}</span>
             </label>
             <div class="relative">
               <span class="material-symbols-outlined absolute left-5 top-1/2 -translate-y-1/2 text-cerulean-500 text-xl pointer-events-none">category</span>
@@ -353,7 +356,7 @@ function formatCurrency(val) {
                 v-model="category_id"
                 class="w-full bg-white text-cerulean-800 rounded-full pl-12 pr-6 py-4 outline-none focus:bg-white focus:ring-2 focus:ring-cerulean-500/30 transition appearance-none cursor-pointer"
               >
-                <option :value="null">No category</option>
+                <option :value="null">{{ t('addExpense.fields.noCategory') }}</option>
                 <option v-for="cat in categories" :key="cat.id" :value="cat.id">{{ cat.name }}</option>
               </select>
               <span class="material-symbols-outlined absolute right-5 top-1/2 -translate-y-1/2 text-cerulean-400 text-lg pointer-events-none">expand_more</span>
@@ -362,7 +365,7 @@ function formatCurrency(val) {
 
           <!-- Payer (custom dropdown with avatars) -->
           <div class="flex flex-col gap-1.5">
-            <label class="text-sm font-bold text-cerulean-800">Who paid?</label>
+            <label class="text-sm font-bold text-cerulean-800">{{ t('addExpense.fields.payer') }}</label>
             <div ref="payerRef" class="relative">
               <button
                 type="button"
@@ -379,7 +382,7 @@ function formatCurrency(val) {
                 </template>
                 <template v-else>
                   <span class="material-symbols-outlined text-cerulean-500 text-xl shrink-0">person</span>
-                  <span class="text-sm text-cerulean-800/30">Select a payer...</span>
+                  <span class="text-sm text-cerulean-800/30">{{ t('addExpense.fields.payerPlaceholder') }}</span>
                 </template>
                 <span
                   class="material-symbols-outlined ml-auto text-cerulean-400 text-lg shrink-0 transition-transform"
@@ -415,7 +418,7 @@ function formatCurrency(val) {
 
       <!-- Split Strategy Tabs -->
       <div class="flex flex-col gap-3">
-        <p class="text-sm font-bold text-cerulean-800">Split Method</p>
+        <p class="text-sm font-bold text-cerulean-800">{{ t('addExpense.fields.split') }}</p>
         <div class="flex gap-2">
           <button
             v-for="s in strategies"
@@ -436,16 +439,16 @@ function formatCurrency(val) {
       <!-- Participants -->
       <div class="flex flex-col gap-4">
         <div class="flex items-center justify-between">
-          <p class="text-sm font-bold text-cerulean-800">Participants</p>
+          <p class="text-sm font-bold text-cerulean-800">{{ t('addExpense.fields.participants') }}</p>
           <span class="text-xs font-semibold text-brand-textSecondary">
-            {{ selectedCount }} of {{ participants.length }} selected
+            {{ t('addExpense.participantCount', { selected: selectedCount, total: participants.length }) }}
           </span>
         </div>
 
         <!-- Fixed allocation indicator -->
         <div v-if="splitStrategy === 'fixed' && amount" class="bg-cerulean-50 rounded-2xl px-5 py-4 flex flex-col gap-2">
           <div class="flex items-center justify-between">
-            <span class="text-xs font-bold text-cerulean-800/60 uppercase tracking-wide">Allocated</span>
+            <span class="text-xs font-bold text-cerulean-800/60 uppercase tracking-wide">{{ t('addExpense.allocation.allocated') }}</span>
             <span
               class="text-sm font-extrabold"
               :class="Math.abs(fixedRemaining) < 0.01 ? 'text-emerald-600' : fixedRemaining < 0 ? 'text-red-500' : 'text-cerulean-700'"
@@ -461,14 +464,14 @@ function formatCurrency(val) {
             />
           </div>
           <p v-if="Math.abs(fixedRemaining) >= 0.01" class="text-xs font-semibold" :class="fixedRemaining > 0 ? 'text-cerulean-600' : 'text-red-500'">
-            {{ fixedRemaining > 0 ? `$${fixedRemaining.toFixed(2)} remaining` : `Exceeded by $${Math.abs(fixedRemaining).toFixed(2)}` }}
+            {{ fixedRemaining > 0 ? t('addExpense.allocation.remaining', { fixed: formatCurrency(fixedRemaining) }) : t('addExpense.allocation.exceeded', { fixed: formatCurrency(Math.abs(fixedRemaining)) }) }}
           </p>
         </div>
 
         <!-- Percentage allocation indicator -->
         <div v-if="splitStrategy === 'percentage'" class="bg-cerulean-50 rounded-2xl px-5 py-4 flex flex-col gap-2">
           <div class="flex items-center justify-between">
-            <span class="text-xs font-bold text-cerulean-800/60 uppercase tracking-wide">Allocated</span>
+            <span class="text-xs font-bold text-cerulean-800/60 uppercase tracking-wide">{{ t('addExpense.allocation.allocated') }}</span>
             <span
               class="text-sm font-extrabold"
               :class="Math.abs(percentageRemaining) < 0.1 ? 'text-emerald-600' : percentageRemaining < 0 ? 'text-red-500' : 'text-cerulean-700'"
@@ -484,7 +487,7 @@ function formatCurrency(val) {
             />
           </div>
           <p v-if="Math.abs(percentageRemaining) >= 0.1" class="text-xs font-semibold" :class="percentageRemaining > 0 ? 'text-cerulean-600' : 'text-red-500'">
-            {{ percentageRemaining > 0 ? `${percentageRemaining.toFixed(1)}% remaining` : `Exceeded by ${Math.abs(percentageRemaining).toFixed(1)}%` }}
+            {{ percentageRemaining > 0 ? t('addExpense.allocation.pctRemaining', { pct: percentageRemaining.toFixed(1) }) : t('addExpense.allocation.pctExceeded', { pct: Math.abs(percentageRemaining).toFixed(1) }) }}
           </p>
         </div>
 
@@ -556,7 +559,7 @@ function formatCurrency(val) {
 
         <p v-if="!splitValid && selectedCount > 0 && amount" class="text-xs font-semibold text-amber-600 pl-1">
           <span class="material-symbols-outlined text-[14px] align-middle">info</span>
-          {{ splitStrategy === 'fixed' ? 'Allocate the full amount across participants' : 'Percentages must total 100%' }}
+          {{ splitStrategy === 'fixed' ? t('addExpense.allocation.fixedHint') : t('addExpense.allocation.pctHint') }}
         </p>
       </div>
 
@@ -567,7 +570,7 @@ function formatCurrency(val) {
           @click="emit('cancel')"
           class="flex-1 flex items-center justify-center gap-2 rounded-full py-4 text-sm font-bold text-cerulean-600 bg-cerulean-50 hover:bg-white transition-colors cursor-pointer"
         >
-          Cancel
+          {{ t('addExpense.cancel') }}
         </button>
         <button
           type="submit"
@@ -577,7 +580,7 @@ function formatCurrency(val) {
         >
           <span v-if="isSubmitting" class="material-symbols-outlined text-xl animate-spin">progress_activity</span>
           <template v-else>
-            Create Expense
+            {{ t('addExpense.submit') }}
             <span class="material-symbols-outlined text-xl">check_circle</span>
           </template>
         </button>

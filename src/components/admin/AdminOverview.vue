@@ -1,8 +1,11 @@
 <script setup>
 import { ref, onMounted } from 'vue'
+import { useI18n } from 'vue-i18n'
 import api from '@/lib/axios'
 import ExpenseTrendChart from '@/components/GroupDashboard/ExpenseTrendChart.vue'
 import ExpenseCategoryChart from '@/components/GroupDashboard/ExpenseCategoryChart.vue'
+
+const { t } = useI18n()
 
 const totalGroups = ref(0)
 const totalCategories = ref(0)
@@ -56,15 +59,15 @@ onMounted(loadStats)
       <span
         class="text-brand-primary font-semibold text-[12px] uppercase tracking-[0.14em]"
       >
-        Admin · Overview
+        {{ t('admin.overview.breadcrumb') }}
       </span>
       <h1
         class="text-brand-text font-extrabold text-[38px] leading-[1.05] tracking-[-0.03em] m-0"
       >
-        Dashboard
+        {{ t('admin.overview.title') }}
       </h1>
       <p class="text-brand-textSecondary text-sm pt-1">
-        Quick stats about the platform.
+        {{ t('admin.overview.subtitle') }}
       </p>
     </div>
 
@@ -77,7 +80,7 @@ onMounted(loadStats)
       >
         <div class="flex items-start justify-between">
           <span class="text-brand-textSecondary text-[13px] font-medium">
-            Total Groups
+            {{ t('admin.overview.stats.totalGroups') }}
           </span>
           <div
             class="w-9 h-9 rounded-xl bg-brand-background text-brand-primary flex items-center justify-center"
@@ -96,9 +99,9 @@ onMounted(loadStats)
           <span
             class="px-2.5 py-0.5 rounded-full font-semibold text-[11.5px] bg-brand-background text-brand-primaryHover"
           >
-            Active
+            {{ t('admin.overview.stats.active') }}
           </span>
-          <span>across the platform</span>
+          <span>{{ t('admin.overview.stats.acrossThePlatform') }}</span>
         </div>
       </div>
 
@@ -109,7 +112,7 @@ onMounted(loadStats)
       >
         <div class="flex items-start justify-between">
           <span class="text-brand-textSecondary text-[13px] font-medium">
-            Total Categories
+            {{ t('admin.overview.stats.totalCategories') }}
           </span>
           <div
             class="w-9 h-9 rounded-xl bg-brand-background text-brand-primary flex items-center justify-center"
@@ -128,7 +131,7 @@ onMounted(loadStats)
           <span
             class="px-2.5 py-0.5 rounded-full font-semibold text-[11.5px] bg-brand-background text-brand-primaryHover"
           >
-            Expense types
+            {{ t('admin.overview.stats.expenseTypes') }}
           </span>
         </div>
       </div>
@@ -140,7 +143,7 @@ onMounted(loadStats)
       >
         <div class="flex items-start justify-between">
           <span class="text-brand-textSecondary text-[13px] font-medium">
-            Expenses · 30d
+            {{ t('admin.overview.stats.expenses30d') }}
           </span>
           <div
             class="w-9 h-9 rounded-xl bg-brand-background text-brand-primary flex items-center justify-center"
@@ -159,7 +162,7 @@ onMounted(loadStats)
           <span
             class="px-2.5 py-0.5 rounded-full font-semibold text-[11.5px] bg-brand-background text-brand-primaryHover"
           >
-            Last 30 days
+            {{ t('admin.overview.stats.last30days') }}
           </span>
         </div>
       </div>
@@ -171,7 +174,7 @@ onMounted(loadStats)
       >
         <div class="flex items-start justify-between">
           <span class="text-brand-textSecondary text-[13px] font-medium">
-            Admin Role
+            {{ t('admin.overview.stats.adminRole') }}
           </span>
           <div
             class="w-9 h-9 rounded-xl bg-brand-background text-brand-primary flex items-center justify-center"
@@ -182,7 +185,7 @@ onMounted(loadStats)
         <div
           class="text-brand-text text-[28px] font-extrabold leading-tight tracking-[-0.02em]"
         >
-          Active
+          {{ t('admin.overview.stats.activeRole') }}
         </div>
         <div
           class="flex items-center gap-2.5 text-[12px] text-brand-textSecondary mt-auto"
@@ -190,7 +193,7 @@ onMounted(loadStats)
           <span
             class="px-2.5 py-0.5 rounded-full font-semibold text-[11.5px] bg-brand-background text-brand-primaryHover"
           >
-            Privileged
+            {{ t('admin.overview.stats.privileged') }}
           </span>
         </div>
       </div>
@@ -209,12 +212,12 @@ onMounted(loadStats)
           <p
             class="text-[11px] font-semibold uppercase tracking-[0.14em] text-brand-disabled"
           >
-            Distribution
+            {{ t('admin.overview.chart.distribution') }}
           </p>
           <h3
             class="text-[20px] font-bold text-brand-text tracking-[-0.02em] leading-tight"
           >
-            Expenses by category
+            {{ t('admin.overview.chart.expensesByCategory') }}
           </h3>
         </div>
         <ExpenseCategoryChart :categories-data="categoryUse" />
