@@ -1,14 +1,16 @@
 <script setup>
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 import { useForm, useField } from 'vee-validate'
 import * as yup from 'yup'
 import { useRouter } from 'vue-router'
+import { useI18n } from 'vue-i18n'
 import InputError from '@/components/inputError.vue'
 import api from '@/lib/axios.js'
 import logoRaw from '@/assets/logo.svg?raw'
 
 const emit = defineEmits(['created'])
 const router = useRouter()
+const { t } = useI18n()
 
 // --- Step & success state ---
 const currentStep = ref(1)
@@ -29,13 +31,15 @@ const linkCopied = ref(false)
 const isCreating = ref(false)
 
 // --- Veevalidate (step 1 fields) ---
-const schema = yup.object({
-  name: yup.string().required('Group name is required'),
-  description: yup
-    .string()
-    .required('Description is required')
-    .max(300, 'Description must be 300 characters or less'),
-})
+const schema = computed(() =>
+  yup.object({
+    name: yup.string().required(t('newGroup.errors.nameRequired')),
+    description: yup
+      .string()
+      .required(t('newGroup.errors.descRequired'))
+      .max(300, t('newGroup.errors.descMax')),
+  })
+)
 
 const { handleSubmit, setErrors } = useForm({ validationSchema: schema })
 const { value: name, errorMessage: nameError } = useField('name')
@@ -63,11 +67,11 @@ function addEmail() {
   const val = emailInput.value.trim()
   if (!val) return
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val)) {
-    emailInputError.value = 'Invalid email address'
+    emailInputError.value = t('newGroup.errors.emailInvalid')
     return
   }
   if (invitedEmails.value.includes(val)) {
-    emailInputError.value = 'Already added'
+    emailInputError.value = t('newGroup.errors.emailDuplicate')
     return
   }
   invitedEmails.value.push(val)
@@ -171,7 +175,7 @@ function inviteMore() {
       </div>
 
       <div class="flex flex-col items-center gap-1">
-        <h2 class="text-2xl font-extrabold text-cerulean-800">Your group is ready!</h2>
+        <h2 class="text-2xl font-extrabold text-cerulean-800">{{ t('newGroup.success.title') }}</h2>
         <p class="text-cerulean-500 font-semibold text-base">{{ createdGroup?.name }}</p>
       </div>
 
@@ -182,14 +186,14 @@ function inviteMore() {
           style="background-color: #41778b; box-shadow: 0 4px 20px rgba(22,100,122,0.15)"
         >
           <span class="material-symbols-outlined text-xl">dashboard</span>
-          Go to Dashboard
+          {{ t('newGroup.success.dashboard') }}
         </button>
         <button
           @click="inviteMore"
           class="w-full flex items-center justify-center gap-2 rounded-full py-3.5 text-base font-bold text-cerulean-700 bg-cerulean-100 hover:bg-cerulean-200 transition-colors cursor-pointer"
         >
           <span class="material-symbols-outlined text-xl">person_add</span>
-          Invite More Friends
+          {{ t('newGroup.success.invite') }}
         </button>
       </div>
     </div>
@@ -200,7 +204,7 @@ function inviteMore() {
       <!-- Progress bar -->
       <div class="flex flex-col gap-2">
         <div class="flex items-center justify-between">
-          <span class="text-xs font-bold text-cerulean-800/50">Step {{ currentStep }} of 2</span>
+          <span class="text-xs font-bold text-cerulean-800/50">{{ t('newGroup.step', { current: currentStep }) }}</span>
           <span class="text-xs font-bold text-cerulean-600">{{ currentStep }}/2</span>
         </div>
         <div class="w-full bg-cerulean-100 rounded-full h-1.5">
@@ -213,13 +217,13 @@ function inviteMore() {
 
       <!-- ── Step 1: Group Details ── -->
       <form v-if="currentStep === 1" @submit.prevent="goToStep2" class="flex flex-col gap-5">
-        <h2 class="text-xl font-extrabold text-cerulean-800">Group Details</h2>
+        <h2 class="text-xl font-extrabold text-cerulean-800">{{ t('newGroup.step1.title') }}</h2>
 
         <!-- Avatar -->
         <div class="flex flex-col gap-3">
           <label class="text-sm font-bold text-cerulean-800">
-            Group Photo
-            <span class="text-cerulean-800/40 font-normal">(optional)</span>
+            {{ t('newGroup.step1.photo') }}
+            <span class="text-cerulean-800/40 font-normal">{{ t('newGroup.step1.optional') }}</span>
           </label>
           <div class="flex items-center gap-5">
             <div
@@ -236,9 +240,9 @@ function inviteMore() {
                 class="inline-flex items-center gap-2 rounded-full border-2 border-cerulean-300 px-5 py-2 text-sm font-bold text-cerulean-700 hover:bg-cerulean-100 transition-colors cursor-pointer"
               >
                 <span class="material-symbols-outlined text-base">upload</span>
-                Upload photo
+                {{ t('newGroup.step1.upload') }}
               </button>
-              <p class="text-xs text-cerulean-800/40">JPG, PNG or GIF · Max 2MB</p>
+              <p class="text-xs text-cerulean-800/40">{{ t('newGroup.step1.uploadHint') }}</p>
             </div>
             <input ref="fileInput" type="file" accept="image/*" class="hidden" @change="onFileChange" />
           </div>
@@ -246,12 +250,12 @@ function inviteMore() {
 
         <!-- Name -->
         <div class="flex flex-col gap-1.5">
-          <label class="text-sm font-bold text-cerulean-800">Group Name</label>
+          <label class="text-sm font-bold text-cerulean-800">{{ t('newGroup.step1.name') }}</label>
           <div class="relative">
             <span class="material-symbols-outlined absolute left-5 top-1/2 -translate-y-1/2 text-cerulean-500 text-xl pointer-events-none">group</span>
             <input
               type="text"
-              placeholder="e.g. Roommates, Road Trip..."
+              :placeholder="t('newGroup.step1.namePlaceholder')"
               v-model="name"
               class="w-full bg-cerulean-100 text-cerulean-800 placeholder:text-cerulean-800/30 rounded-full pl-12 pr-6 py-4 outline-none focus:bg-white focus:ring-2 focus:ring-cerulean-500/30 transition"
               :class="{ 'ring-2 ring-red-400/50 bg-red-50': nameError }"
@@ -262,11 +266,11 @@ function inviteMore() {
 
         <!-- Description -->
         <div class="flex flex-col gap-1.5">
-          <label class="text-sm font-bold text-cerulean-800">Description</label>
+          <label class="text-sm font-bold text-cerulean-800">{{ t('newGroup.step1.description') }}</label>
           <div class="relative">
             <textarea
               rows="4"
-              placeholder="What's this group about?"
+              :placeholder="t('newGroup.step1.descPlaceholder')"
               v-model="description"
               maxlength="300"
               class="w-full bg-cerulean-100 text-cerulean-800 placeholder:text-cerulean-800/30 rounded-2xl px-5 py-4 outline-none focus:bg-white focus:ring-2 focus:ring-cerulean-500/30 transition resize-none"
@@ -284,24 +288,24 @@ function inviteMore() {
           class="w-full flex items-center justify-center gap-2 rounded-full py-4 text-base font-bold text-white cursor-pointer"
           style="background-color: #41778b; box-shadow: 0 4px 20px rgba(22,100,122,0.15)"
         >
-          Next Step
+          {{ t('newGroup.step1.next') }}
           <span class="material-symbols-outlined text-xl">arrow_forward</span>
         </button>
       </form>
 
       <!-- ── Step 2: Invite Roommates ── -->
       <div v-else class="flex flex-col gap-5">
-        <h2 class="text-xl font-extrabold text-cerulean-800">Invite Roommates</h2>
+        <h2 class="text-xl font-extrabold text-cerulean-800">{{ t('newGroup.step2.title') }}</h2>
 
         <!-- Email input -->
         <div class="flex flex-col gap-1.5">
-          <label class="text-sm font-bold text-cerulean-800">Invite by Email</label>
+          <label class="text-sm font-bold text-cerulean-800">{{ t('newGroup.step2.inviteByEmail') }}</label>
           <div class="flex gap-2">
             <div class="relative flex-1">
               <span class="material-symbols-outlined absolute left-5 top-1/2 -translate-y-1/2 text-cerulean-500 text-xl pointer-events-none">mail</span>
               <input
                 type="email"
-                placeholder="friend@email.com"
+                :placeholder="t('newGroup.step2.emailPlaceholder')"
                 v-model="emailInput"
                 @keydown.enter.prevent="addEmail"
                 class="w-full bg-cerulean-100 text-cerulean-800 placeholder:text-cerulean-800/30 rounded-full pl-12 pr-6 py-4 outline-none focus:bg-white focus:ring-2 focus:ring-cerulean-500/30 transition"
@@ -329,15 +333,15 @@ function inviteMore() {
         >
           <span class="material-symbols-outlined text-cerulean-600">link</span>
           <span class="text-sm font-bold text-cerulean-700 flex-1 text-left">
-            {{ linkCopied ? 'Link copied!' : 'Copy invite link' }}
+            {{ linkCopied ? t('newGroup.step2.linkCopied') : t('newGroup.step2.copyLink') }}
           </span>
           <span v-if="linkCopied" class="material-symbols-outlined text-cerulean-500 text-base">check</span>
         </button>
-        <p class="text-xs text-cerulean-800/40 pl-1">Invite link is available after the group is created.</p>
+        <p class="text-xs text-cerulean-800/40 pl-1">{{ t('newGroup.step2.linkAfterCreate') }}</p>
 
         <!-- Invited emails list -->
         <div v-if="invitedEmails.length" class="flex flex-col gap-2">
-          <p class="text-xs font-bold text-cerulean-800/50 uppercase tracking-wide">To be invited</p>
+          <p class="text-xs font-bold text-cerulean-800/50 uppercase tracking-wide">{{ t('newGroup.step2.toBeInvited') }}</p>
           <div
             v-for="email in invitedEmails"
             :key="email"
@@ -368,7 +372,7 @@ function inviteMore() {
           >
             <span v-if="isCreating" class="material-symbols-outlined text-xl animate-spin">progress_activity</span>
             <template v-else>
-              Create Group
+              {{ t('newGroup.step2.create') }}
               <span class="material-symbols-outlined text-xl">check_circle</span>
             </template>
           </button>
@@ -378,7 +382,7 @@ function inviteMore() {
             class="w-full flex items-center justify-center gap-2 rounded-full py-3 text-sm font-bold text-cerulean-600 hover:bg-cerulean-100 transition-colors cursor-pointer"
           >
             <span class="material-symbols-outlined text-base">arrow_back</span>
-            Back
+            {{ t('newGroup.step2.back') }}
           </button>
         </div>
       </div>

@@ -1,4 +1,8 @@
 <script setup>
+import { useI18n } from 'vue-i18n'
+
+const { t } = useI18n()
+
 const props = defineProps({
   expenses: {
     type: Array,
@@ -10,15 +14,19 @@ const props = defineProps({
 function formatDate(dateStr) {
   return new Date(dateStr).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })
 }
+
+function formatCurrency(val) {
+  return `${Number(val).toFixed(2)} DH`
+}
 </script>
 
 <template>
   <div class="bg-white rounded-2xl p-6 shadow-[0_2px_12px_rgba(22,100,122,0.06)]">
-    <h3 class="text-brand-text font-bold text-lg pb-5 border-b border-brand-border mb-5">Recent Activity</h3>
+    <h3 class="text-brand-text font-bold text-lg pb-5 border-b border-brand-border mb-5">{{ t('dashboard.recentActivity.title') }}</h3>
 
     <div v-if="!expenses.length" class="flex flex-col items-center justify-center py-8 gap-2">
       <span class="material-symbols-outlined text-[40px] text-brand-disabled">receipt_long</span>
-      <p class="text-brand-textSecondary text-sm font-medium">No expenses yet</p>
+      <p class="text-brand-textSecondary text-sm font-medium">{{ t('dashboard.recentActivity.empty') }}</p>
     </div>
 
     <div v-else class="flex flex-col gap-0">
@@ -39,7 +47,7 @@ function formatDate(dateStr) {
             <span v-if="expense.category?.name"> · {{ expense.category.name }}</span>
           </p>
         </div>
-        <span class="text-cerulean-700 font-extrabold text-sm shrink-0">${{ Number(expense.amount).toFixed(2) }}</span>
+        <span class="text-cerulean-700 font-extrabold text-sm shrink-0">{{ formatCurrency(expense.amount) }}</span>
       </div>
 
       <router-link
@@ -47,7 +55,7 @@ function formatDate(dateStr) {
         :to="{ name: 'group-detail', params: { id: groupId }, query: { tab: 'expenses' } }"
         class="w-full text-center text-cerulean-700 text-sm font-bold py-3 rounded-full bg-cerulean-50 hover:bg-cerulean-100 transition-colors mt-3"
       >
-        View more
+        {{ t('dashboard.recentActivity.viewMore') }}
       </router-link>
     </div>
   </div>

@@ -1,5 +1,6 @@
 <script setup>
 import { ref, onMounted } from 'vue'
+import { useI18n } from 'vue-i18n'
 import api from '@/lib/axios'
 import Swal from 'sweetalert2'
 
@@ -10,6 +11,8 @@ const props = defineProps({
 })
 
 const emit = defineEmits(['ownership-transferred'])
+
+const { t } = useI18n()
 
 const members = ref([])
 const loading = ref(true)
@@ -34,12 +37,12 @@ async function fetchMembers(page = 1) {
 
 async function kickMember(member) {
   const { isConfirmed } = await Swal.fire({
-    title: `Kick ${member.user?.name}?`,
-    text: 'This member will be removed from the group.',
+    title: t('members.dialogs.kick.title', { name: member.user?.name }),
+    text: t('members.dialogs.kick.text'),
     icon: 'warning',
     showCancelButton: true,
-    confirmButtonText: 'Kick',
-    cancelButtonText: 'Cancel',
+    confirmButtonText: t('members.dialogs.kick.confirm'),
+    cancelButtonText: t('members.dialogs.kick.cancel'),
     confirmButtonColor: '#ef4444',
     cancelButtonColor: '#e5e7eb',
   })
@@ -51,8 +54,8 @@ async function kickMember(member) {
     members.value = members.value.filter((m) => m.id !== member.id)
   } catch (err) {
     Swal.fire({
-      title: 'Cannot kick member',
-      text: err.response?.data?.message ?? 'Something went wrong.',
+      title: t('members.dialogs.kick.errorTitle'),
+      text: err.response?.data?.message ?? t('members.dialogs.kick.errorText'),
       icon: 'error',
       confirmButtonColor: '#16647a',
     })
@@ -63,12 +66,12 @@ async function kickMember(member) {
 
 async function transferOwnership(member) {
   const { isConfirmed } = await Swal.fire({
-    title: 'Transfer Ownership?',
-    html: `<p class="text-sm text-gray-500">You are about to make <strong>${member.user?.name}</strong> the new owner.<br/>You will become a regular member and lose owner privileges.</p>`,
+    title: t('members.dialogs.transfer.title'),
+    html: `<p class="text-sm text-gray-500">${t('members.dialogs.transfer.text', { name: member.user?.name })}</p>`,
     icon: 'warning',
     showCancelButton: true,
-    confirmButtonText: 'Yes, transfer',
-    cancelButtonText: 'Cancel',
+    confirmButtonText: t('members.dialogs.transfer.confirm'),
+    cancelButtonText: t('members.dialogs.transfer.cancel'),
     confirmButtonColor: '#16647a',
     cancelButtonColor: '#e5e7eb',
   })
@@ -83,8 +86,8 @@ async function transferOwnership(member) {
     emit('ownership-transferred')
   } catch (err) {
     Swal.fire({
-      title: 'Transfer failed',
-      text: err.response?.data?.message ?? 'Something went wrong.',
+      title: t('members.dialogs.transfer.errorTitle'),
+      text: err.response?.data?.message ?? t('members.dialogs.kick.errorText'),
       icon: 'error',
       confirmButtonColor: '#16647a',
     })
@@ -99,8 +102,8 @@ onMounted(() => fetchMembers())
 <template>
   <div class="flex flex-col gap-6">
     <div class="flex items-center justify-between">
-      <h2 class="text-brand-text font-bold text-xl">Members</h2>
-      <span class="text-brand-textSecondary text-sm font-medium">{{ members.length }} member{{ members.length !== 1 ? 's' : '' }}</span>
+      <h2 class="text-brand-text font-bold text-xl">{{ t('members.title') }}</h2>
+      <span class="text-brand-textSecondary text-sm font-medium">{{ t('members.count', members.length) }}</span>
     </div>
 
     <!-- Loading -->
@@ -111,7 +114,7 @@ onMounted(() => fetchMembers())
     <!-- Empty -->
     <div v-else-if="!members.length" class="flex flex-col items-center justify-center py-24 gap-4">
       <span class="material-symbols-outlined text-[56px] text-brand-disabled">group</span>
-      <p class="text-brand-textSecondary font-semibold text-lg">No members found</p>
+      <p class="text-brand-textSecondary font-semibold text-lg">{{ t('members.empty') }}</p>
     </div>
 
     <!-- List -->
@@ -153,7 +156,7 @@ onMounted(() => fetchMembers())
             @click="transferOwnership(member)"
             :disabled="transferring === member.id || kicking === member.id"
             class="w-9 h-9 rounded-full flex items-center justify-center transition-all hover:bg-cerulean-50 disabled:opacity-40 disabled:cursor-not-allowed text-brand-primary hover:text-brand-primaryHover"
-            title="Transfer ownership"
+            :title="t('members.transferOwnership')"
           >
             <span
               v-if="transferring === member.id"
@@ -168,7 +171,7 @@ onMounted(() => fetchMembers())
             :disabled="kicking === member.id || transferring === member.id"
             class="w-9 h-9 rounded-full flex items-center justify-center transition-all hover:bg-red-50 disabled:opacity-40 disabled:cursor-not-allowed"
             :class="kicking === member.id ? 'text-brand-disabled' : 'text-red-400 hover:text-red-500'"
-            title="Remove member"
+            :title="t('members.removeMember')"
           >
             <span
               v-if="kicking === member.id"
@@ -187,7 +190,7 @@ onMounted(() => fetchMembers())
           class="px-4 py-2 rounded-full text-sm font-semibold transition-colors"
           :class="currentPage <= 1 ? 'text-brand-disabled bg-brand-surface' : 'text-brand-primary bg-cerulean-50 hover:bg-cerulean-100'"
         >
-          Previous
+          {{ t('members.previous') }}
         </button>
         <span class="text-brand-textSecondary text-sm font-medium px-3">
           {{ currentPage }} / {{ lastPage }}
@@ -198,7 +201,7 @@ onMounted(() => fetchMembers())
           class="px-4 py-2 rounded-full text-sm font-semibold transition-colors"
           :class="currentPage >= lastPage ? 'text-brand-disabled bg-brand-surface' : 'text-brand-primary bg-cerulean-50 hover:bg-cerulean-100'"
         >
-          Next
+          {{ t('members.next') }}
         </button>
       </div>
     </div>

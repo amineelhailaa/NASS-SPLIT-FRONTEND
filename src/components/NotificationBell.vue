@@ -1,6 +1,7 @@
 <script setup>
 import { ref, onMounted, onUnmounted } from 'vue'
 import { useRouter } from 'vue-router'
+import { useI18n } from 'vue-i18n'
 import api from '@/lib/axios'
 import echo from '@/lib/echo'
 import { useAuthStore } from '@/stores/auth.js'
@@ -10,6 +11,7 @@ const props = defineProps({
 })
 
 const router = useRouter()
+const { t } = useI18n()
 
 const notifications = ref([])
 const unreadCount = ref(0)
@@ -117,7 +119,7 @@ onMounted(() => {
       // Broadcast sends payload flat; normalize to match API shape
       if (!notif.data) {
         const { id, type, ...rest } = notif
-        notif = { id, type, data: rest, read_at: null, time_ago: 'just now' }
+        notif = { id, type, data: rest, read_at: null, time_ago: t('notifications.justNow') }
       }
       notifications.value.unshift(notif)
       unreadCount.value++
@@ -144,7 +146,7 @@ onUnmounted(() => {
   >
     <span class="material-symbols-outlined text-[20px] shrink-0">notifications</span>
     <span class="text-sm whitespace-nowrap overflow-hidden max-w-0 group-hover/sb:max-w-48 transition-[max-width] duration-200">
-      Notifications
+      {{ t('notifications.label') }}
     </span>
     <span
       v-if="unreadCount > 0"
@@ -183,12 +185,12 @@ onUnmounted(() => {
       <!-- Header -->
       <div class="flex items-center justify-between px-4 py-3 bg-brand-surface/60">
         <div class="flex items-center gap-2">
-          <span class="text-brand-text font-bold text-sm">Notifications</span>
+          <span class="text-brand-text font-bold text-sm">{{ t('notifications.title') }}</span>
           <span
             v-if="unreadCount > 0"
             class="text-[10px] font-bold px-1.5 py-0.5 rounded-full bg-red-50 text-red-500"
           >
-            {{ unreadCount }} new
+            {{ t('notifications.newCount', { count: unreadCount }) }}
           </span>
         </div>
         <button
@@ -196,7 +198,7 @@ onUnmounted(() => {
           @click="markAllRead"
           class="text-[11px] font-semibold text-brand-primary hover:text-brand-primaryHover transition-colors"
         >
-          Mark all read
+          {{ t('notifications.markAllRead') }}
         </button>
       </div>
 
@@ -208,7 +210,7 @@ onUnmounted(() => {
       <!-- Empty -->
       <div v-else-if="!notifications.length" class="flex flex-col items-center justify-center py-10 gap-2">
         <span class="material-symbols-outlined text-[36px] text-brand-disabled">notifications_off</span>
-        <p class="text-brand-textSecondary text-xs font-medium">No notifications yet</p>
+        <p class="text-brand-textSecondary text-xs font-medium">{{ t('notifications.empty') }}</p>
       </div>
 
       <!-- List -->

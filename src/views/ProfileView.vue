@@ -1,19 +1,23 @@
 <script setup>
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 import { useForm, useField } from 'vee-validate'
 import * as yup from 'yup'
 import { useRouter } from 'vue-router'
+import { useI18n } from 'vue-i18n'
 import { useAuthStore } from '@/stores/auth.js'
 import api from '@/lib/axios.js'
 import InputError from '@/components/inputError.vue'
 
 const router = useRouter()
+const { t } = useI18n()
 const auth = useAuthStore()
 
 // ─── Profile form ───
-const profileSchema = yup.object({
-  name: yup.string().required('Full name is required').min(2, 'Name is too short'),
-})
+const profileSchema = computed(() =>
+  yup.object({
+    name: yup.string().required(t('profile.errors.nameRequired')).min(2, t('profile.errors.nameShort')),
+  })
+)
 
 const {
   handleSubmit: handleProfileSubmit,
@@ -40,7 +44,7 @@ function onFileChange(e) {
   if (!file) return
 
   if (file.size > MAX_AVATAR_SIZE) {
-    avatarError.value = 'Photo must be under 2 MB.'
+    avatarError.value = t('profile.personalInfo.photoTooLarge')
     avatarFile.value = null
     e.target.value = ''
     return
@@ -56,14 +60,16 @@ function triggerUpload() {
 }
 
 // ─── Password form ───
-const passwordSchema = yup.object({
-  current_password: yup.string().required('Current password is required'),
-  password: yup.string().required('New password is required').min(8, 'Minimum 8 characters'),
-  password_confirmation: yup
-    .string()
-    .required('Please confirm your new password')
-    .oneOf([yup.ref('password')], 'Passwords do not match'),
-})
+const passwordSchema = computed(() =>
+  yup.object({
+    current_password: yup.string().required(t('profile.errors.currentRequired')),
+    password: yup.string().required(t('profile.errors.newRequired')).min(8, t('profile.errors.newMin')),
+    password_confirmation: yup
+      .string()
+      .required(t('profile.errors.confirmRequired'))
+      .oneOf([yup.ref('password')], t('profile.errors.confirmMismatch')),
+  })
+)
 
 const {
   handleSubmit: handlePasswordSubmit,
@@ -143,29 +149,29 @@ const submitPassword = handlePasswordSubmit(async (values) => {
       class="flex items-center gap-1.5 text-sm font-semibold text-brand-textSecondary hover:text-brand-text transition-colors cursor-pointer"
     >
       <span class="material-symbols-outlined text-lg">arrow_back</span>
-      Back
+      {{ t('profile.back') }}
     </button>
 
     <h1 class="text-3xl md:text-4xl font-extrabold text-brand-text tracking-tight pt-6">
-      Edit Profile
+      {{ t('profile.title') }}
     </h1>
     <p class="text-brand-textSecondary text-base pt-2">
-      Update your personal information and password.
+      {{ t('profile.subtitle') }}
     </p>
 
     <div class="flex flex-col lg:flex-row gap-8 pt-10">
       <!-- Profile info card -->
       <div class="flex-1">
         <div class="bg-brand-surface rounded-3xl p-8 shadow-[0_4px_24px_rgba(22,100,122,0.06)]">
-          <h2 class="text-xl font-bold text-brand-text">Personal Information</h2>
+          <h2 class="text-xl font-bold text-brand-text">{{ t('profile.personalInfo.title') }}</h2>
           <p class="text-brand-textSecondary text-sm pt-1">
-            Manage your name, email, and profile photo.
+            {{ t('profile.personalInfo.subtitle') }}
           </p>
 
           <form @submit.prevent="submitProfile" class="flex flex-col gap-6 pt-8">
             <!-- Avatar -->
             <div class="flex flex-col gap-3">
-              <label class="text-sm font-bold text-brand-text">Profile Photo</label>
+              <label class="text-sm font-bold text-brand-text">{{ t('profile.personalInfo.photo') }}</label>
               <div class="flex items-center gap-5">
                 <div
                   class="w-20 h-20 rounded-full bg-cerulean-100 overflow-hidden shrink-0 flex items-center justify-center shadow-[0_4px_20px_rgba(22,100,122,0.10)]"
@@ -188,10 +194,10 @@ const submitPassword = handlePasswordSubmit(async (values) => {
                       class="inline-flex items-center gap-2 rounded-full bg-cerulean-100 px-5 py-2 text-sm font-bold text-cerulean-700 hover:bg-cerulean-200 transition-colors cursor-pointer"
                     >
                       <span class="material-symbols-outlined text-base">upload</span>
-                      Change photo
+                      {{ t('profile.personalInfo.changePhoto') }}
                     </button>
                   </div>
-                  <p class="text-xs text-brand-textSecondary">JPG, PNG or GIF · Max 2 MB</p>
+                  <p class="text-xs text-brand-textSecondary">{{ t('profile.personalInfo.photoHint') }}</p>
                 </div>
                 <input
                   ref="fileInput"
@@ -206,7 +212,7 @@ const submitPassword = handlePasswordSubmit(async (values) => {
 
             <!-- Name -->
             <div class="flex flex-col gap-1.5">
-              <label class="text-sm font-bold text-brand-text">Full Name</label>
+              <label class="text-sm font-bold text-brand-text">{{ t('profile.personalInfo.fullName') }}</label>
               <div class="relative">
                 <span
                   class="material-symbols-outlined absolute left-5 top-1/2 -translate-y-1/2 text-cerulean-500 text-xl pointer-events-none"
@@ -236,7 +242,7 @@ const submitPassword = handlePasswordSubmit(async (values) => {
                   >progress_activity</span
                 >
                 <template v-else>
-                  Save Changes
+                  {{ t('profile.personalInfo.save') }}
                   <span class="material-symbols-outlined text-lg">check</span>
                 </template>
               </button>
@@ -254,7 +260,7 @@ const submitPassword = handlePasswordSubmit(async (values) => {
                   class="text-sm font-semibold text-emerald-600 flex items-center gap-1"
                 >
                   <span class="material-symbols-outlined text-lg">check_circle</span>
-                  Saved
+                  {{ t('profile.personalInfo.saved') }}
                 </span>
               </Transition>
             </div>
@@ -265,15 +271,15 @@ const submitPassword = handlePasswordSubmit(async (values) => {
       <!-- Password card -->
       <div class="flex-1">
         <div class="bg-brand-surface rounded-3xl p-8 shadow-[0_4px_24px_rgba(22,100,122,0.06)]">
-          <h2 class="text-xl font-bold text-brand-text">Change Password</h2>
+          <h2 class="text-xl font-bold text-brand-text">{{ t('profile.password.title') }}</h2>
           <p class="text-brand-textSecondary text-sm pt-1">
-            Update your password to keep your account secure.
+            {{ t('profile.password.subtitle') }}
           </p>
 
           <form @submit.prevent="submitPassword" class="flex flex-col gap-6 pt-8">
             <!-- Current password -->
             <div class="flex flex-col gap-1.5">
-              <label class="text-sm font-bold text-brand-text">Current Password</label>
+              <label class="text-sm font-bold text-brand-text">{{ t('profile.password.current') }}</label>
               <div class="relative">
                 <span
                   class="material-symbols-outlined absolute left-5 top-1/2 -translate-y-1/2 text-cerulean-500 text-xl pointer-events-none"
@@ -292,7 +298,7 @@ const submitPassword = handlePasswordSubmit(async (values) => {
 
             <!-- New password -->
             <div class="flex flex-col gap-1.5">
-              <label class="text-sm font-bold text-brand-text">New Password</label>
+              <label class="text-sm font-bold text-brand-text">{{ t('profile.password.new') }}</label>
               <div class="relative">
                 <span
                   class="material-symbols-outlined absolute left-5 top-1/2 -translate-y-1/2 text-cerulean-500 text-xl pointer-events-none"
@@ -321,7 +327,7 @@ const submitPassword = handlePasswordSubmit(async (values) => {
 
             <!-- Confirm new password -->
             <div class="flex flex-col gap-1.5">
-              <label class="text-sm font-bold text-brand-text">Confirm New Password</label>
+              <label class="text-sm font-bold text-brand-text">{{ t('profile.password.confirm') }}</label>
               <div class="relative">
                 <span
                   class="material-symbols-outlined absolute left-5 top-1/2 -translate-y-1/2 text-cerulean-500 text-xl pointer-events-none"
@@ -351,7 +357,7 @@ const submitPassword = handlePasswordSubmit(async (values) => {
                   >progress_activity</span
                 >
                 <template v-else>
-                  Update Password
+                  {{ t('profile.password.update') }}
                   <span class="material-symbols-outlined text-lg">check</span>
                 </template>
               </button>
@@ -369,7 +375,7 @@ const submitPassword = handlePasswordSubmit(async (values) => {
                   class="text-sm font-semibold text-emerald-600 flex items-center gap-1"
                 >
                   <span class="material-symbols-outlined text-lg">check_circle</span>
-                  Password updated
+                  {{ t('profile.password.updated') }}
                 </span>
               </Transition>
             </div>

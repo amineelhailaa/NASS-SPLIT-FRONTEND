@@ -1,11 +1,14 @@
 <script setup>
 import { ref, onMounted } from 'vue'
+import { useI18n } from 'vue-i18n'
 import api from '@/lib/axios'
 
 const props = defineProps({
   groupId: [Number, String],
   group: Object,
 })
+
+const { t } = useI18n()
 
 const payments = ref([])
 const loading = ref(true)
@@ -42,7 +45,7 @@ function formatDateShort(dateStr) {
 }
 
 function formatCurrency(val) {
-  return `$${Number(val).toFixed(2)}`
+  return `${Number(val).toFixed(2)} DH`
 }
 
 onMounted(() => fetchPayments())
@@ -51,7 +54,7 @@ onMounted(() => fetchPayments())
 <template>
   <div class="flex flex-col gap-6">
     <div class="flex items-center justify-between">
-      <h2 class="text-brand-text font-bold text-xl">My Payments</h2>
+      <h2 class="text-brand-text font-bold text-xl">{{ t('payments.title') }}</h2>
     </div>
 
     <!-- Loading -->
@@ -62,8 +65,8 @@ onMounted(() => fetchPayments())
     <!-- Empty -->
     <div v-else-if="!payments.length" class="flex flex-col items-center justify-center py-24 gap-4">
       <span class="material-symbols-outlined text-[56px] text-brand-disabled">payments</span>
-      <p class="text-brand-textSecondary font-semibold text-lg">No payments yet</p>
-      <p class="text-brand-textSecondary text-sm">Settle debts from the Settle tab</p>
+      <p class="text-brand-textSecondary font-semibold text-lg">{{ t('payments.empty') }}</p>
+      <p class="text-brand-textSecondary text-sm">{{ t('payments.hint') }}</p>
     </div>
 
     <!-- List -->
@@ -91,7 +94,7 @@ onMounted(() => fetchPayments())
               <p class="text-brand-text font-semibold text-xs sm:text-sm truncate leading-tight">
                 {{ payment.debtor?.user?.name ?? 'Unknown' }}
               </p>
-              <p class="text-brand-textSecondary text-[10px] sm:text-xs leading-tight">paid</p>
+              <p class="text-brand-textSecondary text-[10px] sm:text-xs leading-tight">{{ t('payments.paid') }}</p>
             </div>
           </div>
 
@@ -106,7 +109,7 @@ onMounted(() => fetchPayments())
               <p class="text-brand-text font-semibold text-xs sm:text-sm truncate leading-tight">
                 {{ payment.creditor?.user?.name ?? 'Unknown' }}
               </p>
-              <p class="text-brand-textSecondary text-[10px] sm:text-xs leading-tight">received</p>
+              <p class="text-brand-textSecondary text-[10px] sm:text-xs leading-tight">{{ t('payments.received') }}</p>
             </div>
             <div class="w-9 h-9 sm:w-11 sm:h-11 rounded-full bg-emerald-50 shrink-0 overflow-hidden flex items-center justify-center">
               <img
@@ -148,7 +151,7 @@ onMounted(() => fetchPayments())
           class="px-4 py-2 rounded-full text-sm font-semibold transition-colors"
           :class="currentPage <= 1 ? 'text-brand-disabled bg-brand-surface' : 'text-brand-primary bg-cerulean-50 hover:bg-cerulean-100'"
         >
-          Previous
+          {{ t('payments.previous') }}
         </button>
         <span class="text-brand-textSecondary text-sm font-medium px-3">
           {{ currentPage }} / {{ lastPage }}
@@ -159,7 +162,7 @@ onMounted(() => fetchPayments())
           class="px-4 py-2 rounded-full text-sm font-semibold transition-colors"
           :class="currentPage >= lastPage ? 'text-brand-disabled bg-brand-surface' : 'text-brand-primary bg-cerulean-50 hover:bg-cerulean-100'"
         >
-          Next
+          {{ t('payments.next') }}
         </button>
       </div>
     </div>

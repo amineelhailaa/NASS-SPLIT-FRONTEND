@@ -1,4 +1,8 @@
 <script setup>
+import { useI18n } from 'vue-i18n'
+
+const { t } = useI18n()
+
 defineProps({
   owes: {
     type: Array,
@@ -18,15 +22,19 @@ function initials(name) {
     .toUpperCase()
     .slice(0, 2)
 }
+
+function formatCurrency(val) {
+  return `${Number(val).toFixed(2)} DH`
+}
 </script>
 
 <template>
   <div class="bg-white rounded-2xl p-6 shadow-[0_2px_12px_rgba(22,100,122,0.06)]">
-    <h3 class="text-brand-text font-bold text-lg pb-5 border-b border-brand-border mb-5">Who Owes Who</h3>
+    <h3 class="text-brand-text font-bold text-lg pb-5 border-b border-brand-border mb-5">{{ t('dashboard.owesSection.title') }}</h3>
 
     <div v-if="!owes.length" class="flex flex-col items-center justify-center py-8 gap-2">
       <span class="material-symbols-outlined text-[40px] text-brand-disabled">check_circle</span>
-      <p class="text-brand-textSecondary text-sm font-medium">All settled up!</p>
+      <p class="text-brand-textSecondary text-sm font-medium">{{ t('dashboard.owesSection.allSettled') }}</p>
     </div>
 
     <div v-else class="flex flex-col gap-3">
@@ -55,7 +63,7 @@ function initials(name) {
         <span class="material-symbols-outlined text-brand-primary text-[18px] shrink-0">arrow_forward</span>
 
         <!-- Amount -->
-        <span class="text-cerulean-700 font-extrabold text-sm shrink-0 px-1">${{ Number(owe.amount).toFixed(2) }}</span>
+        <span class="text-cerulean-700 font-extrabold text-sm shrink-0 px-1">{{ formatCurrency(owe.amount) }}</span>
 
         <!-- Creditor -->
         <div class="flex items-center gap-2 flex-1 min-w-0 justify-end">
