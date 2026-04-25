@@ -4,6 +4,7 @@ import Swal from 'sweetalert2'
 import router from '@/router'
 import echo from '@/lib/echo'
 import { useAuthStore } from '@/stores/auth.js'
+import { i18n } from '@/i18n'
 
 const api = axios.create({
   baseURL: import.meta.env.VITE_API_URL,
@@ -51,12 +52,13 @@ api.interceptors.response.use(
         clearAuthState()
         api.post('/logout').catch(() => {})
         router.replace({ name: 'login' })
+        const { t } = i18n.global
         Swal.fire({
           icon: 'error',
-          title: 'Account banned',
-          text: message || 'Your account has been banned. Please contact support.',
+          title: t('bannedModal.title'),
+          text: message || t('bannedModal.text'),
           confirmButtonColor: '#41778b',
-          confirmButtonText: 'OK',
+          confirmButtonText: t('bannedModal.ok'),
         })
       }
     }
