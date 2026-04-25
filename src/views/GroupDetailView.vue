@@ -1,6 +1,7 @@
 <script setup>
 import { ref, computed, onMounted, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
+import { useI18n } from 'vue-i18n'
 import DashboardTab from '@/components/GroupDashboard/DashboardTab.vue'
 import ExpensesTab from '@/components/GroupDashboard/ExpensesTab.vue'
 import PaymentsTab from '@/components/GroupDashboard/PaymentsTab.vue'
@@ -14,6 +15,7 @@ import NotificationBell from '@/components/NotificationBell.vue'
 import api from '@/lib/axios'
 import Swal from 'sweetalert2'
 
+const { t } = useI18n()
 const route = useRoute()
 const router = useRouter()
 const groupId = route.params.id
@@ -36,16 +38,16 @@ watch(() => route.query.tab, (tab) => {
 const isOwner = computed(() => group.value?.pivot?.role === 'owner')
 
 const tabs = computed(() => [
-  { key: 'dashboard', label: 'Dashboard', icon: 'dashboard', component: DashboardTab },
-  { key: 'expenses', label: 'Expenses', icon: 'receipt_long', component: ExpensesTab },
-  { key: 'payments', label: 'My Payments', icon: 'payments', component: PaymentsTab },
-  { key: 'settle', label: 'Settle', icon: 'handshake', component: SettleTab },
-  { key: 'chat', label: 'Chat', icon: 'chat', component: ChatTab },
-  { key: 'members', label: 'Members', icon: 'group', component: MembersTab },
+  { key: 'dashboard', label: t('groupDetail.tabs.dashboard'), icon: 'dashboard', component: DashboardTab },
+  { key: 'expenses', label: t('groupDetail.tabs.expenses'), icon: 'receipt_long', component: ExpensesTab },
+  { key: 'payments', label: t('groupDetail.tabs.payments'), icon: 'payments', component: PaymentsTab },
+  { key: 'settle', label: t('groupDetail.tabs.settle'), icon: 'handshake', component: SettleTab },
+  { key: 'chat', label: t('groupDetail.tabs.chat'), icon: 'chat', component: ChatTab },
+  { key: 'members', label: t('groupDetail.tabs.members'), icon: 'group', component: MembersTab },
   ...(isOwner.value
     ? [
-        { key: 'invitations', label: 'Invitations', icon: 'mark_email_unread', component: InvitationsTab },
-        { key: 'settings', label: 'Settings', icon: 'settings', component: SettingsTab },
+        { key: 'invitations', label: t('groupDetail.tabs.invitations'), icon: 'mark_email_unread', component: InvitationsTab },
+        { key: 'settings', label: t('groupDetail.tabs.settings'), icon: 'settings', component: SettingsTab },
       ]
     : []),
 ])
@@ -56,12 +58,12 @@ const currentComponent = computed(() =>
 
 async function leaveGroup() {
   const { isConfirmed } = await Swal.fire({
-    title: 'Leave Group?',
-    text: 'You will lose access to this group.',
+    title: t('groupDetail.dialogs.leave.title'),
+    text: t('groupDetail.dialogs.leave.text'),
     icon: 'warning',
     showCancelButton: true,
-    confirmButtonText: 'Yes, leave',
-    cancelButtonText: 'Cancel',
+    confirmButtonText: t('groupDetail.dialogs.leave.confirm'),
+    cancelButtonText: t('groupDetail.dialogs.leave.cancel'),
     confirmButtonColor: '#ef4444',
   })
   if (!isConfirmed) return
@@ -70,8 +72,8 @@ async function leaveGroup() {
     await router.push({ name: 'groups' })
   } catch (err) {
     Swal.fire({
-      title: 'Cannot Leave',
-      text: err.response?.data?.message ?? 'Something went wrong.',
+      title: t('groupDetail.dialogs.leave.cannotLeave'),
+      text: err.response?.data?.message ?? t('groupDetail.dialogs.leave.error'),
       icon: 'error',
       confirmButtonColor: '#16647a',
     })
@@ -98,7 +100,7 @@ onMounted(async () => {
     expenses.value = expensesRes.data.data.data
     balance.value = balanceRes.data.data
   } catch {
-    error.value = 'Failed to load group data.'
+    error.value = t('groupDetail.error')
   } finally {
     loading.value = false
   }
@@ -122,7 +124,7 @@ onMounted(async () => {
           <span
             class="text-sm font-semibold whitespace-nowrap overflow-hidden max-w-0 group-hover/sb:max-w-48 transition-[max-width] duration-200"
           >
-            Back
+            {{ t('groupDetail.back') }}
           </span>
         </button>
 
@@ -158,7 +160,7 @@ onMounted(async () => {
         >
           <span class="material-symbols-outlined text-[20px] shrink-0">home</span>
           <span class="text-sm whitespace-nowrap overflow-hidden max-w-0 group-hover/sb:max-w-48 transition-[max-width] duration-200">
-            Home
+            {{ t('groupDetail.home') }}
           </span>
         </button>
 
@@ -197,7 +199,7 @@ onMounted(async () => {
         <span
           class="text-sm font-semibold whitespace-nowrap overflow-hidden max-w-0 group-hover/sb:max-w-48 transition-[max-width] duration-200"
         >
-          Leave Group
+          {{ t('groupDetail.leaveGroup') }}
         </span>
       </button>
     </aside>

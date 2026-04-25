@@ -1,5 +1,6 @@
 <script setup>
 import { ref, onMounted, watch } from 'vue'
+import { useI18n } from 'vue-i18n'
 import NavBar from '@/components/NavBar.vue'
 import AppFooter from '@/components/AppFooter.vue'
 import GroupCard from '@/components/GroupCard.vue'
@@ -7,6 +8,7 @@ import NewGroup from '@/components/NewGroup.vue'
 import { useAuthStore } from '@/stores/auth'
 import api from '@/lib/axios'
 
+const { t } = useI18n()
 const auth = useAuthStore()
 
 const search = ref('')
@@ -90,9 +92,9 @@ function onGroupCreated() {
       <!-- Page Header -->
       <section class="flex flex-col md:flex-row justify-between items-start md:items-end gap-4 pb-10">
         <div>
-          <h1 class="text-brand-text text-4xl md:text-5xl font-extrabold tracking-tight ">My Groups</h1>
+          <h1 class="text-brand-text text-4xl md:text-5xl font-extrabold tracking-tight ">{{ t('groups.title') }}</h1>
           <p class="text-brand-primary text-lg pt-6 ">
-            Welcome back, {{ auth.user?.name ?? 'there' }}. You have {{ pagination?.total ?? 0 }} active groups.
+            {{ t('groups.welcome', { name: auth.user?.name ?? '', count: pagination?.total ?? 0 }) }}
           </p>
         </div>
         <button
@@ -100,7 +102,7 @@ function onGroupCreated() {
           class="bg-cerulean-500 from-brand-primary to-brand-accent text-white px-6 py-3 rounded-full font-bold flex items-center gap-2 shadow-[0_4px_20px_rgba(65,119,139,0.25)] hover:opacity-90 transition-opacity"
         >
           <span class="material-symbols-outlined">add_circle</span>
-          Create New Group
+          {{ t('groups.createNew') }}
         </button>
       </section>
 
@@ -112,7 +114,7 @@ function onGroupCreated() {
           <input
             v-model="search"
             type="text"
-            placeholder="Search groups..."
+            :placeholder="t('groups.search')"
             class="w-full w-max-10 pl-12 pr-5 py-3 bg-white rounded-full  focus:ring-2 focus:ring-brand-primary outline-none text-brand-text placeholder:text-brand-disabled transition-all"
           />
         </div>
@@ -123,7 +125,7 @@ function onGroupCreated() {
             @click="dropdownOpen = !dropdownOpen"
             class="flex items-center gap-2 px-5 py-3 rounded-full text-sm font-bold bg-white text-brand-textSecondary  hover:ring-brand-primary transition-all whitespace-nowrap"
           >
-            Sort: <span class="text-cerulean-500">{{ sortBy === 'name' ? 'Name' : 'Date Created' }}</span>
+            {{ t('groups.sort') }} <span class="text-cerulean-500">{{ sortBy === 'name' ? t('groups.sortName') : t('groups.sortDate') }}</span>
             <span class="material-symbols-outlined text-[18px]">keyboard_arrow_down</span>
           </button>
 
@@ -140,7 +142,7 @@ function onGroupCreated() {
                   : 'text-brand-textSecondary hover:bg-brand-surface'
               "
             >
-              Name
+              {{ t('groups.sortName') }}
             </button>
             <button
               @click="() => { sortBy = 'created_at'; dropdownOpen = false }"
@@ -151,7 +153,7 @@ function onGroupCreated() {
                   : 'text-brand-textSecondary hover:bg-brand-surface'
               "
             >
-              Date Created
+              {{ t('groups.sortDate') }}
             </button>
           </div>
         </div>
@@ -160,7 +162,7 @@ function onGroupCreated() {
         <button
           @click="toggleSortDir()"
           class="flex items-center justify-center px-5 py-2 rounded-full bg-white   hover:ring-brand-primary transition-all"
-          :title="sortDir === 'asc' ? 'Ascending' : 'Descending'"
+          :title="sortDir === 'asc' ? t('groups.sortAsc') : t('groups.sortDesc')"
         >
           <span class="material-symbols-outlined text-[18px]">{{ sortDir === 'asc' ? 'north' : 'south' }}</span>
         </button>
@@ -188,7 +190,7 @@ function onGroupCreated() {
       <!-- Empty state -->
       <div v-else class="flex flex-col items-center justify-center py-24 gap-4">
         <span class="material-symbols-outlined text-[64px] text-brand-disabled">search_off</span>
-        <p class="text-brand-textSecondary font-semibold text-lg">No groups found.</p>
+        <p class="text-brand-textSecondary font-semibold text-lg">{{ t('groups.empty') }}</p>
       </div>
 
       <!-- Pagination -->
@@ -240,16 +242,16 @@ function onGroupCreated() {
         <div class="absolute bottom-0 left-0 -ml-16 -mb-16 size-56 bg-black/10 rounded-full blur-3xl" />
         <div class="relative z-10 flex flex-col md:flex-row items-start md:items-center justify-between gap-8">
           <div class="text-white">
-            <h2 class="text-3xl font-extrabold mb-3">Balance Across All Groups</h2>
+            <h2 class="text-3xl font-extrabold mb-3">{{ t('groups.balance.title') }}</h2>
             <p class="text-white/80 text-lg">
-              You are currently owed a net total of
-              <span class="text-white font-bold">-$145.20</span>
+              {{ t('groups.balance.owed') }}
+              <span class="text-white font-bold">-145.20 DH</span>
             </p>
           </div>
           <button
             class="border border-white/30 text-white px-8 py-3.5 rounded-full font-bold hover:bg-white/10 transition-colors whitespace-nowrap"
           >
-            View Report
+            {{ t('groups.balance.viewReport') }}
           </button>
         </div>
       </section>

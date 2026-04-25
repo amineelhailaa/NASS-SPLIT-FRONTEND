@@ -5,15 +5,18 @@ import InputError from '@/components/inputError.vue'
 import { useForm, useField } from 'vee-validate'
 import * as yup from 'yup'
 import { ref } from 'vue'
+import { useI18n } from 'vue-i18n'
 import api from '@/lib/axios.js'
+
+const { t } = useI18n()
 
 const success = ref(false)
 
 const schema = yup.object({
-  name:    yup.string().required('Name is required').max(100),
-  email:   yup.string().required('Email is required').email('Invalid email'),
-  subject: yup.string().required('Subject is required').max(150),
-  message: yup.string().required('Message is required').max(2000),
+  name:    yup.string().required(t('contact.form.errors.nameRequired')).max(100),
+  email:   yup.string().required(t('contact.form.errors.emailRequired')).email(t('contact.form.errors.emailInvalid')),
+  subject: yup.string().required(t('contact.form.errors.subjectRequired')).max(150),
+  message: yup.string().required(t('contact.form.errors.messageRequired')).max(2000),
 })
 
 const { handleSubmit, setErrors, isSubmitting, resetForm } = useForm({ validationSchema: schema })
@@ -36,7 +39,7 @@ const send = handleSubmit(async (values) => {
       }
       setErrors(errs)
     } else if (err.response?.status === 429) {
-      setErrors({ name: 'Too many messages. Please wait a moment.' })
+      setErrors({ name: t('contact.form.errors.rateLimited') })
     }
   }
 })
@@ -55,27 +58,26 @@ const send = handleSubmit(async (values) => {
       <div class="flex flex-col gap-6">
         <div class="inline-flex w-fit items-center gap-2 rounded-full bg-cerulean-500/10 px-5 py-1.5">
           <span class="material-symbols-outlined text-cerulean-500 text-lg">mail</span>
-          <span class="text-cerulean-500 font-bold text-sm tracking-wide">Get in Touch</span>
+          <span class="text-cerulean-500 font-bold text-sm tracking-wide">{{ t('contact.hero.badge') }}</span>
         </div>
         <h1 class="text-6xl md:text-7xl font-extrabold tracking-tight leading-none">
-          Contact <span class="text-cerulean-700">Us</span>
+          {{ t('contact.hero.titleL1') }} <span class="text-cerulean-700">{{ t('contact.hero.titleL2') }}</span>
         </h1>
         <p class="text-xl text-cerulean-800/60 leading-relaxed max-w-xl">
-          Have a question or need help? Fill out the form and we'll get back to you shortly.
+          {{ t('contact.hero.subtitle') }}
         </p>
       </div>
     </section>
 
     <!-- Form -->
     <section class="px-16 pb-16">
-      <!-- Success banner -->
       <div
         v-if="success"
         class="mb-6 flex items-center gap-3 bg-cerulean-100 rounded-2xl px-6 py-4"
       >
         <span class="material-symbols-outlined text-cerulean-600 text-xl shrink-0">check_circle</span>
         <p class="text-cerulean-800 font-medium text-sm">
-          Your message was sent! We'll get back to you as soon as possible.
+          {{ t('contact.form.success') }}
         </p>
       </div>
 
@@ -84,14 +86,13 @@ const send = handleSubmit(async (values) => {
         style="box-shadow: 0 8px 32px rgba(22, 100, 122, 0.06)"
         @submit.prevent="send"
       >
-        <!-- Name + Email row -->
         <div class="grid md:grid-cols-2 gap-6">
           <div class="flex flex-col gap-2">
-            <label class="text-sm font-bold text-cerulean-800">Full Name</label>
+            <label class="text-sm font-bold text-cerulean-800">{{ t('contact.form.name') }}</label>
             <input
               v-model="name"
               type="text"
-              placeholder="Your name"
+              :placeholder="t('contact.form.namePlaceholder')"
               class="w-full rounded-full bg-cerulean-50 px-6 py-3.5 text-base text-cerulean-800 placeholder:text-cerulean-800/30 outline-none focus:bg-white focus:ring-2 focus:ring-cerulean-500/30 transition"
               :class="{ 'ring-2 ring-red-400/50 bg-red-50': nameError }"
             />
@@ -99,11 +100,11 @@ const send = handleSubmit(async (values) => {
           </div>
 
           <div class="flex flex-col gap-2">
-            <label class="text-sm font-bold text-cerulean-800">Email</label>
+            <label class="text-sm font-bold text-cerulean-800">{{ t('contact.form.email') }}</label>
             <input
               v-model="email"
               type="email"
-              placeholder="your@email.com"
+              :placeholder="t('common.emailPlaceholder')"
               class="w-full rounded-full bg-cerulean-50 px-6 py-3.5 text-base text-cerulean-800 placeholder:text-cerulean-800/30 outline-none focus:bg-white focus:ring-2 focus:ring-cerulean-500/30 transition"
               :class="{ 'ring-2 ring-red-400/50 bg-red-50': emailError }"
             />
@@ -112,11 +113,11 @@ const send = handleSubmit(async (values) => {
         </div>
 
         <div class="flex flex-col gap-2">
-          <label class="text-sm font-bold text-cerulean-800">Subject</label>
+          <label class="text-sm font-bold text-cerulean-800">{{ t('contact.form.subject') }}</label>
           <input
             v-model="subject"
             type="text"
-            placeholder="What is this about?"
+            :placeholder="t('contact.form.subjectPlaceholder')"
             class="w-full rounded-full bg-cerulean-50 px-6 py-3.5 text-base text-cerulean-800 placeholder:text-cerulean-800/30 outline-none focus:bg-white focus:ring-2 focus:ring-cerulean-500/30 transition"
             :class="{ 'ring-2 ring-red-400/50 bg-red-50': subjectError }"
           />
@@ -124,10 +125,10 @@ const send = handleSubmit(async (values) => {
         </div>
 
         <div class="flex flex-col gap-2">
-          <label class="text-sm font-bold text-cerulean-800">Message</label>
+          <label class="text-sm font-bold text-cerulean-800">{{ t('contact.form.message') }}</label>
           <textarea
             v-model="message"
-            placeholder="Write your message here..."
+            :placeholder="t('contact.form.messagePlaceholder')"
             rows="6"
             class="w-full rounded-2xl bg-cerulean-50 px-6 py-4 text-base text-cerulean-800 placeholder:text-cerulean-800/30 outline-none focus:bg-white focus:ring-2 focus:ring-cerulean-500/30 transition resize-none"
             :class="{ 'ring-2 ring-red-400/50 bg-red-50': messageError }"
@@ -143,7 +144,7 @@ const send = handleSubmit(async (values) => {
         >
           <span v-if="isSubmitting" class="material-symbols-outlined text-xl animate-spin">progress_activity</span>
           <template v-else>
-            Send Message
+            {{ t('contact.form.submit') }}
             <span class="material-symbols-outlined text-xl">send</span>
           </template>
         </button>
@@ -162,8 +163,8 @@ const send = handleSubmit(async (values) => {
             <span class="material-symbols-outlined text-cerulean-500">call</span>
           </div>
           <div class="flex flex-col gap-1">
-            <h3 class="text-lg font-bold">Call & WhatsApp</h3>
-            <p class="text-cerulean-800/60 text-sm">Reach us directly on phone or WhatsApp.</p>
+            <h3 class="text-lg font-bold">{{ t('contact.info.call.title') }}</h3>
+            <p class="text-cerulean-800/60 text-sm">{{ t('contact.info.call.desc') }}</p>
           </div>
           <a href="tel:+212612887419" class="text-cerulean-600 font-bold text-lg hover:text-cerulean-800 transition-colors">
             +212 612 887 419
@@ -178,17 +179,17 @@ const send = handleSubmit(async (values) => {
             <span class="material-symbols-outlined text-cerulean-500">schedule</span>
           </div>
           <div class="flex flex-col gap-1">
-            <h3 class="text-lg font-bold">Working Hours</h3>
-            <p class="text-cerulean-800/60 text-sm">We're available during these hours.</p>
+            <h3 class="text-lg font-bold">{{ t('contact.info.hours.title') }}</h3>
+            <p class="text-cerulean-800/60 text-sm">{{ t('contact.info.hours.desc') }}</p>
           </div>
           <div class="flex flex-col gap-2">
             <div class="flex items-center justify-between">
-              <span class="text-sm text-cerulean-800/70">Daily</span>
-              <span class="text-sm font-bold text-cerulean-700">8:00 AM – 5:00 PM</span>
+              <span class="text-sm text-cerulean-800/70">{{ t('contact.info.hours.daily') }}</span>
+              <span class="text-sm font-bold text-cerulean-700">{{ t('contact.info.hours.dailyHours') }}</span>
             </div>
             <div class="flex items-center justify-between">
-              <span class="text-sm text-cerulean-800/70">Weekend</span>
-              <span class="inline-flex items-center rounded-full bg-red-50 px-3 py-0.5 text-xs font-bold text-red-400">Closed</span>
+              <span class="text-sm text-cerulean-800/70">{{ t('contact.info.hours.weekend') }}</span>
+              <span class="inline-flex items-center rounded-full bg-red-50 px-3 py-0.5 text-xs font-bold text-red-400">{{ t('contact.info.hours.closed') }}</span>
             </div>
           </div>
         </div>
@@ -201,8 +202,8 @@ const send = handleSubmit(async (values) => {
             <span class="material-symbols-outlined text-cerulean-500">alternate_email</span>
           </div>
           <div class="flex flex-col gap-1">
-            <h3 class="text-lg font-bold">Write to Us</h3>
-            <p class="text-cerulean-800/60 text-sm">Send us an email anytime.</p>
+            <h3 class="text-lg font-bold">{{ t('contact.info.email.title') }}</h3>
+            <p class="text-cerulean-800/60 text-sm">{{ t('contact.info.email.desc') }}</p>
           </div>
           <div class="flex flex-col gap-2">
             <a href="mailto:amineelhailaa@gmail.com" class="text-cerulean-600 font-semibold text-sm hover:text-cerulean-800 transition-colors break-all">amineelhailaa@gmail.com</a>

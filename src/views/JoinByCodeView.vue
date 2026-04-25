@@ -1,11 +1,13 @@
 <script setup>
 import { ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
+import { useI18n } from 'vue-i18n'
 import api from '@/lib/axios'
 import logoRaw from '@/assets/logo.svg?raw'
 
 const route = useRoute()
 const router = useRouter()
+const { t } = useI18n()
 const code = route.params.code
 
 const status = ref('preview') // 'preview' | 'joining' | 'success' | 'error'
@@ -19,11 +21,11 @@ async function join() {
     const res = await api.post(`/api/v1/groups/join/${code}`)
     const group = res.data.data
     groupId.value = group?.id
-    groupName.value = group?.name ?? 'the group'
+    groupName.value = group?.name ?? ''
     status.value = 'success'
     setTimeout(() => router.push({ name: 'group-detail', params: { id: groupId.value } }), 1800)
   } catch (err) {
-    message.value = err.response?.data?.message ?? 'This invite link is invalid or has expired.'
+    message.value = err.response?.data?.message ?? t('join.errors.invalid')
     status.value = 'error'
   }
 }
@@ -46,8 +48,8 @@ async function join() {
         </div>
 
         <div class="flex flex-col items-center gap-1 text-center">
-          <p class="text-brand-textSecondary text-sm">You've been invited via a shareable link</p>
-          <h1 class="text-brand-text font-extrabold text-2xl">Join Group</h1>
+          <p class="text-brand-textSecondary text-sm">{{ t('join.linkSubtitle') }}</p>
+          <h1 class="text-brand-text font-extrabold text-2xl">{{ t('join.joinTitle') }}</h1>
         </div>
 
         <div class="flex flex-col gap-3 w-full">
@@ -57,14 +59,14 @@ async function join() {
             style="background-color: #41778b; box-shadow: 0 4px 20px rgba(22,100,122,0.15)"
           >
             <span class="material-symbols-outlined text-xl">check_circle</span>
-            Accept & Join
+            {{ t('join.acceptAndJoin') }}
           </button>
           <button
             @click="router.push({ name: 'groups' })"
             class="w-full flex items-center justify-center gap-2 rounded-full py-3.5 text-sm font-bold text-cerulean-600 bg-cerulean-50 hover:bg-cerulean-100 transition-colors"
           >
             <span class="material-symbols-outlined text-lg">close</span>
-            Cancel
+            {{ t('join.cancel') }}
           </button>
         </div>
       </template>
@@ -72,7 +74,7 @@ async function join() {
       <!-- Joining -->
       <div v-else-if="status === 'joining'" class="flex flex-col items-center gap-3 py-6">
         <div class="w-8 h-8 rounded-full border-2 border-brand-primary border-t-transparent animate-spin" />
-        <p class="text-brand-textSecondary text-sm">Joining group...</p>
+        <p class="text-brand-textSecondary text-sm">{{ t('join.joining') }}</p>
       </div>
 
       <!-- Success -->
@@ -81,9 +83,9 @@ async function join() {
           <span class="material-symbols-outlined text-emerald-500 text-[32px]">check_circle</span>
         </div>
         <div class="flex flex-col gap-1">
-          <p class="text-brand-text font-bold text-lg">You're in!</p>
+          <p class="text-brand-text font-bold text-lg">{{ t('join.accepted.title') }}</p>
           <p class="text-brand-textSecondary text-sm">
-            Redirecting to <span class="font-semibold text-brand-primary">{{ groupName }}</span>...
+            {{ t('join.accepted.redirecting', { groupName }) }}
           </p>
         </div>
       </div>
@@ -94,7 +96,7 @@ async function join() {
           <span class="material-symbols-outlined text-red-400 text-[32px]">error_outline</span>
         </div>
         <div class="flex flex-col gap-1">
-          <p class="text-brand-text font-bold text-lg">Can't join</p>
+          <p class="text-brand-text font-bold text-lg">{{ t('join.cantJoin') }}</p>
           <p class="text-brand-textSecondary text-sm">{{ message }}</p>
         </div>
         <button
@@ -102,7 +104,7 @@ async function join() {
           class="mt-2 w-full rounded-full py-3.5 text-sm font-bold text-white"
           style="background-color: #41778b"
         >
-          Go to my groups
+          {{ t('join.goToGroups') }}
         </button>
       </div>
 

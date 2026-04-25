@@ -1,10 +1,12 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import { useClipboard } from '@vueuse/core'
+import { useI18n } from 'vue-i18n'
 import Swal from 'sweetalert2'
 import api from '@/lib/axios'
 
 const { copy, copied: linkCopied } = useClipboard({ legacy: true })
+const { t } = useI18n()
 
 const props = defineProps({
   groupId: [Number, String],
@@ -48,8 +50,8 @@ async function sendInvite() {
   emailError.value = ''
   sendSuccess.value = false
   const val = emailInput.value.trim()
-  if (!val) { emailError.value = 'Email is required'; return }
-  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val)) { emailError.value = 'Invalid email address'; return }
+  if (!val) { emailError.value = t('invitations.errors.emailRequired'); return }
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val)) { emailError.value = t('invitations.errors.emailInvalid'); return }
 
   sending.value = true
   try {
@@ -59,7 +61,7 @@ async function sendInvite() {
     setTimeout(() => (sendSuccess.value = false), 3000)
     await fetchInvitations()
   } catch (err) {
-    emailError.value = err.response?.data?.message ?? 'Failed to send invitation'
+    emailError.value = err.response?.data?.message ?? t('invitations.errors.sendFailed')
   } finally {
     sending.value = false
   }
@@ -67,12 +69,12 @@ async function sendInvite() {
 
 async function cancelInvitation(invitation) {
   const result = await Swal.fire({
-    title: 'Cancel this invitation?',
-    text: `The invite sent to ${invitation.email} will be revoked.`,
+    title: t('invitations.dialogs.cancel.title'),
+    text: t('invitations.dialogs.cancel.text', { email: invitation.email }),
     icon: 'warning',
     showCancelButton: true,
-    confirmButtonText: 'Cancel invitation',
-    cancelButtonText: 'Keep it',
+    confirmButtonText: t('invitations.dialogs.cancel.confirm'),
+    cancelButtonText: t('invitations.dialogs.cancel.keep'),
     confirmButtonColor: '#ef4444',
     cancelButtonColor: '#41778b',
   })
@@ -94,9 +96,9 @@ async function copyLink() {
 function formatExpiry(dateStr) {
   const d = new Date(dateStr)
   const diff = Math.ceil((d - Date.now()) / 86400000)
-  if (diff <= 0) return 'Expired'
-  if (diff === 1) return 'Expires tomorrow'
-  return `Expires in ${diff} days`
+  if (diff <= 0) return t('invitations.expired')
+  if (diff === 1) return t('invitations.expiresTomorrow')
+  return t('invitations.expiresIn', { diff })
 }
 
 onMounted(() => {
@@ -106,11 +108,11 @@ onMounted(() => {
 
 <template>
   <div class="flex flex-col gap-6">
-    <h2 class="text-brand-text font-bold text-xl">Invitations</h2>
+    <h2 class="text-brand-text font-bold text-xl">{{ t('invitations.title') }}</h2>
 
     <!-- Invite by email -->
     <div class="bg-white rounded-2xl p-5 shadow-[0_2px_12px_rgba(22,100,122,0.06)] flex flex-col gap-4">
-      <p class="text-sm font-bold text-cerulean-800">Invite by Email</p>
+      <p class="text-sm font-bold text-cerulean-800">{{ t('invitations.inviteByEmail') }}</p>
 
       <div class="flex gap-2">
         <div class="flex-1 relative">
@@ -118,7 +120,7 @@ onMounted(() => {
           <input
             v-model="emailInput"
             type="email"
-            placeholder="friend@email.com"
+            :placeholder="t('invitations.emailPlaceholder')"
             @keydown.enter.prevent="sendInvite"
             class="w-full bg-cerulean-100 text-cerulean-800 placeholder:text-cerulean-800/30 rounded-full pl-11 pr-5 py-3.5 outline-none focus:bg-white focus:ring-2 focus:ring-cerulean-500/30 transition text-sm"
             :class="{ 'ring-2 ring-red-400/50 bg-red-50': emailError }"
@@ -133,7 +135,7 @@ onMounted(() => {
           <span v-if="sending" class="material-symbols-outlined text-lg animate-spin">progress_activity</span>
           <template v-else>
             <span class="material-symbols-outlined text-lg">send</span>
-            Send
+            {{ t('invitations.send') }}
           </template>
         </button>
       </div>
@@ -145,7 +147,7 @@ onMounted(() => {
       </p>
       <p v-if="sendSuccess" class="text-xs font-semibold text-brand-primary flex items-center gap-1">
         <span class="material-symbols-outlined text-[14px]">check_circle</span>
-        Invitation sent successfully
+        {{ t('invitations.success') }}
       </p>
 
       <!-- Copy invite link -->
@@ -157,7 +159,7 @@ onMounted(() => {
       >
         <span class="material-symbols-outlined text-cerulean-500 text-[20px]">link</span>
         <span class="text-sm font-semibold text-cerulean-700 flex-1 text-left">
-          {{ linkCopied ? 'Link copied!' : 'Copy invite link' }}
+          {{ linkCopied ? t('invitations.linkCopied') : t('invitations.copyLink') }}
         </span>
         <span v-if="linkCopied" class="material-symbols-outlined text-brand-primary text-[18px]">check</span>
         <span v-else class="material-symbols-outlined text-cerulean-400 text-[18px]">content_copy</span>
@@ -167,8 +169,8 @@ onMounted(() => {
     <!-- Pending invitations -->
     <div class="flex flex-col gap-3">
       <div class="flex items-center justify-between">
-        <p class="text-sm font-bold text-cerulean-800">Pending Invitations</p>
-        <span class="text-xs font-semibold text-brand-textSecondary">{{ invitations.length }} pending</span>
+        <p class="text-sm font-bold text-cerulean-800">{{ t('invitations.pending') }}</p>
+        <span class="text-xs font-semibold text-brand-textSecondary">{{ t('invitations.pendingCount', { count: invitations.length }) }}</span>
       </div>
 
       <!-- Loading -->
@@ -179,18 +181,18 @@ onMounted(() => {
       <!-- Error -->
       <div v-else-if="loadError" class="flex flex-col items-center justify-center py-16 gap-3">
         <span class="material-symbols-outlined text-[48px] text-red-400">error</span>
-        <p class="text-red-500 font-semibold text-sm">Failed to load invitations</p>
+        <p class="text-red-500 font-semibold text-sm">{{ t('invitations.loadFailed') }}</p>
         <button
           type="button"
           @click="fetchInvitations"
           class="text-brand-primary text-xs font-bold hover:underline"
-        >Try again</button>
+        >{{ t('invitations.tryAgain') }}</button>
       </div>
 
       <!-- Empty -->
       <div v-else-if="!invitations.length" class="flex flex-col items-center justify-center py-16 gap-3">
         <span class="material-symbols-outlined text-[48px] text-brand-disabled">mark_email_unread</span>
-        <p class="text-brand-textSecondary font-semibold text-sm">No pending invitations</p>
+        <p class="text-brand-textSecondary font-semibold text-sm">{{ t('invitations.empty') }}</p>
       </div>
 
       <!-- List -->
@@ -213,7 +215,7 @@ onMounted(() => {
 
           <!-- Status badge -->
           <span class="text-xs font-semibold px-3 py-1 rounded-full border-2 border-brand-primary text-brand-primary shrink-0">
-            pending
+            {{ t('invitations.pendingLabel') }}
           </span>
 
           <!-- Cancel -->

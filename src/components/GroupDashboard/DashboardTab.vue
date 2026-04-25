@@ -1,9 +1,12 @@
 <script setup>
+import { useI18n } from 'vue-i18n'
 import StatCard from './StatCard.vue'
 import ExpenseTrendChart from './ExpenseTrendChart.vue'
 import RecentActivity from './RecentActivity.vue'
 import SpendingByCategory from './SpendingByCategory.vue'
 import ExpenseCategoryChart from "@/components/GroupDashboard/ExpenseCategoryChart.vue";
+
+const { t } = useI18n()
 
 const props = defineProps({
   stats: Object,
@@ -18,7 +21,7 @@ function formatCurrency(val) {
   if (val == null) return '—'
   const num = Number(val)
   const abs = Math.abs(num).toFixed(2)
-  return num < 0 ? `-$${abs}` : `$${abs}`
+  return num < 0 ? `-${abs} DH` : `${abs} DH`
 }
 </script>
 
@@ -27,17 +30,17 @@ function formatCurrency(val) {
     <!-- Primary Stat Cards -->
     <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
       <StatCard
-        label="Total Spent"
+        :label="t('dashboard.stats.totalSpent')"
         :value="formatCurrency(stats?.total_spent)"
         icon="payments"
       />
       <StatCard
-        label="My Balance"
+        :label="t('dashboard.stats.myBalance')"
         :value="formatCurrency(typeof balance === 'object' ? balance?.balance : balance)"
         icon="account_balance_wallet"
       />
       <StatCard
-        label="Active Members"
+        :label="t('dashboard.stats.activeMembers')"
         :value="stats?.total_members ?? '—'"
         icon="group"
       />
@@ -46,17 +49,17 @@ function formatCurrency(val) {
     <!-- Secondary Stat Cards -->
     <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
       <StatCard
-        label="Total Expenses"
+        :label="t('dashboard.stats.totalExpenses')"
         :value="stats?.total_expenses ?? '—'"
         icon="receipt_long"
       />
       <StatCard
-        label="Paid by Me"
+        :label="t('dashboard.stats.paidByMe')"
         :value="formatCurrency(stats?.paid_by_me)"
         icon="credit_card"
       />
       <StatCard
-        label="My Share"
+        :label="t('dashboard.stats.myShare')"
         :value="formatCurrency(stats?.my_share)"
         icon="pie_chart"
       />

@@ -1,5 +1,6 @@
 <script setup>
 import { ref, onMounted } from 'vue'
+import { useI18n } from 'vue-i18n'
 import api from '@/lib/axios'
 
 const props = defineProps({
@@ -12,6 +13,8 @@ const loading = ref(true)
 const currentPage = ref(1)
 const lastPage = ref(1)
 const hoveredSplitId = ref(null)
+
+const { t } = useI18n()
 
 const currentUser = JSON.parse(localStorage.getItem('user') || '{}')
 const downloading = ref(false)
@@ -63,12 +66,12 @@ function formatDateShort(dateStr) {
 }
 
 function formatCurrency(val) {
-  return `$${Number(val).toFixed(2)}`
+  return `${Number(val).toFixed(2)} DH`
 }
 
 function myShare(expense) {
   const split = expense.splits?.find((s) => s.debtor?.user?.id === currentUser.id)
-  return split ? Number(split.amount).toFixed(2) : null
+  return split ? formatCurrency(split.amount) : null
 }
 
 onMounted(() => fetchExpenses())
@@ -77,7 +80,7 @@ onMounted(() => fetchExpenses())
 <template>
   <div class="flex flex-col gap-6">
     <div class="flex items-center justify-between">
-      <h2 class="text-brand-text font-bold text-xl">Expenses</h2>
+      <h2 class="text-brand-text font-bold text-xl">{{ t('expenses.title') }}</h2>
       <button
         @click="downloadExpenses"
         :disabled="downloading"
@@ -85,7 +88,7 @@ onMounted(() => fetchExpenses())
         :class="downloading ? 'text-brand-disabled bg-brand-surface cursor-not-allowed' : 'text-brand-primary bg-cerulean-50 hover:bg-cerulean-100'"
       >
         <span class="material-symbols-outlined text-[17px]">{{ downloading ? 'hourglass_empty' : 'download' }}</span>
-        <span class="hidden sm:inline">{{ downloading ? 'Downloading…' : 'Export' }}</span>
+        <span class="hidden sm:inline">{{ downloading ? t('expenses.downloading') : t('expenses.export') }}</span>
       </button>
     </div>
 
@@ -97,7 +100,7 @@ onMounted(() => fetchExpenses())
     <!-- Empty -->
     <div v-else-if="!expenses.length" class="flex flex-col items-center justify-center py-24 gap-4">
       <span class="material-symbols-outlined text-[56px] text-brand-disabled">receipt_long</span>
-      <p class="text-brand-textSecondary font-semibold text-lg">No expenses yet</p>
+      <p class="text-brand-textSecondary font-semibold text-lg">{{ t('expenses.empty') }}</p>
     </div>
 
     <!-- List -->
@@ -136,7 +139,7 @@ onMounted(() => fetchExpenses())
             <span class="text-brand-textSecondary text-xs">{{ formatDate(expense.date) }}</span>
             <span v-if="expense.payer?.user?.name" class="text-brand-disabled text-xs">·</span>
             <span v-if="expense.payer?.user?.name" class="text-brand-textSecondary text-xs">
-              Paid by {{ expense.payer.user.name }}
+              {{ t('expenses.paidBy', { name: expense.payer.user.name }) }}
             </span>
           </div>
 
@@ -152,7 +155,7 @@ onMounted(() => fetchExpenses())
               v-if="myShare(expense)"
               class="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-brand-surface text-brand-textSecondary"
             >
-              Your share: ${{ myShare(expense) }}
+              {{ t('expenses.yourShare', { amount: myShare(expense) }) }}
             </span>
           </div>
         </div>
@@ -180,7 +183,7 @@ onMounted(() => fetchExpenses())
               class="absolute right-0 top-full mt-1.5 w-56 bg-white rounded-2xl shadow-[0_8px_24px_rgba(22,100,122,0.13)] p-3 z-50 flex flex-col gap-2"
             >
               <p class="text-brand-textSecondary text-[10px] font-semibold uppercase tracking-wide">
-                Split between
+                {{ t('expenses.splitBetween') }}
               </p>
               <div
                 v-for="split in expense.splits"
@@ -200,7 +203,7 @@ onMounted(() => fetchExpenses())
                   {{ split.debtor?.user?.name }}
                 </span>
                 <span class="text-cerulean-700 text-xs font-bold shrink-0">
-                  ${{ Number(split.amount).toFixed(2) }}
+                  {{ formatCurrency(split.amount) }}
                 </span>
               </div>
             </div>
@@ -221,7 +224,7 @@ onMounted(() => fetchExpenses())
           class="px-4 py-2 rounded-full text-sm font-semibold transition-colors"
           :class="currentPage <= 1 ? 'text-brand-disabled bg-brand-surface' : 'text-brand-primary bg-cerulean-50 hover:bg-cerulean-100'"
         >
-          Previous
+          {{ t('expenses.previous') }}
         </button>
         <span class="text-brand-textSecondary text-sm font-medium px-3">
           {{ currentPage }} / {{ lastPage }}
@@ -232,7 +235,7 @@ onMounted(() => fetchExpenses())
           class="px-4 py-2 rounded-full text-sm font-semibold transition-colors"
           :class="currentPage >= lastPage ? 'text-brand-disabled bg-brand-surface' : 'text-brand-primary bg-cerulean-50 hover:bg-cerulean-100'"
         >
-          Next
+          {{ t('expenses.next') }}
         </button>
       </div>
     </div>

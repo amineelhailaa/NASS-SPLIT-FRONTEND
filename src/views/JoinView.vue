@@ -1,11 +1,13 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
+import { useI18n } from 'vue-i18n'
 import api from '@/lib/axios'
 import logoRaw from '@/assets/logo.svg?raw'
 
 const route = useRoute()
 const router = useRouter()
+const { t } = useI18n()
 const token = route.params.token
 
 const invitation = ref(null)
@@ -19,7 +21,7 @@ onMounted(async () => {
     const res = await api.get(`/api/v1/invitations/${token}`)
     invitation.value = res.data.data
   } catch (err) {
-    error.value = err.response?.data?.message ?? 'This invitation is invalid or has expired.'
+    error.value = err.response?.data?.message ?? t('join.errors.invalid')
   } finally {
     loading.value = false
   }
@@ -33,7 +35,7 @@ async function accept() {
     const groupId = res.data.data?.id ?? invitation.value?.group?.id
     setTimeout(() => router.push({ name: 'group-detail', params: { id: groupId } }), 1800)
   } catch (err) {
-    error.value = err.response?.data?.message ?? 'Failed to accept invitation.'
+    error.value = err.response?.data?.message ?? t('join.errors.acceptFailed')
   } finally {
     acting.value = null
   }
@@ -46,7 +48,7 @@ async function decline() {
     done.value = 'declined'
     setTimeout(() => router.push({ name: 'groups' }), 1800)
   } catch (err) {
-    error.value = err.response?.data?.message ?? 'Failed to decline invitation.'
+    error.value = err.response?.data?.message ?? t('join.errors.declineFailed')
   } finally {
     acting.value = null
   }
@@ -66,7 +68,7 @@ async function decline() {
       <!-- Loading -->
       <div v-if="loading" class="flex flex-col items-center gap-3 py-6">
         <div class="w-8 h-8 rounded-full border-2 border-brand-primary border-t-transparent animate-spin" />
-        <p class="text-brand-textSecondary text-sm">Loading invitation...</p>
+        <p class="text-brand-textSecondary text-sm">{{ t('join.loading') }}</p>
       </div>
 
       <!-- Error -->
@@ -75,7 +77,7 @@ async function decline() {
           <span class="material-symbols-outlined text-red-400 text-[32px]">error_outline</span>
         </div>
         <div class="flex flex-col gap-1">
-          <p class="text-brand-text font-bold text-lg">Invitation unavailable</p>
+          <p class="text-brand-text font-bold text-lg">{{ t('join.errorTitle') }}</p>
           <p class="text-brand-textSecondary text-sm">{{ error }}</p>
         </div>
         <button
@@ -83,7 +85,7 @@ async function decline() {
           class="mt-2 w-full rounded-full py-3.5 text-sm font-bold text-white"
           style="background-color: #41778b"
         >
-          Go to my groups
+          {{ t('join.goToGroups') }}
         </button>
       </div>
 
@@ -93,8 +95,8 @@ async function decline() {
           <span class="material-symbols-outlined text-emerald-500 text-[32px]">check_circle</span>
         </div>
         <div class="flex flex-col gap-1">
-          <p class="text-brand-text font-bold text-lg">You're in!</p>
-          <p class="text-brand-textSecondary text-sm">Redirecting to <span class="font-semibold text-brand-primary">{{ invitation?.group?.name }}</span>...</p>
+          <p class="text-brand-text font-bold text-lg">{{ t('join.accepted.title') }}</p>
+          <p class="text-brand-textSecondary text-sm">{{ t('join.accepted.redirecting', { groupName: invitation?.group?.name }) }}</p>
         </div>
       </div>
 
@@ -104,8 +106,8 @@ async function decline() {
           <span class="material-symbols-outlined text-brand-textSecondary text-[32px]">do_not_disturb</span>
         </div>
         <div class="flex flex-col gap-1">
-          <p class="text-brand-text font-bold text-lg">Invitation declined</p>
-          <p class="text-brand-textSecondary text-sm">Redirecting to your groups...</p>
+          <p class="text-brand-text font-bold text-lg">{{ t('join.declined.title') }}</p>
+          <p class="text-brand-textSecondary text-sm">{{ t('join.declined.redirecting') }}</p>
         </div>
       </div>
 
@@ -124,7 +126,7 @@ async function decline() {
 
         <!-- Text -->
         <div class="flex flex-col items-center gap-1 text-center">
-          <p class="text-brand-textSecondary text-sm">You've been invited to join</p>
+          <p class="text-brand-textSecondary text-sm">{{ t('join.invited') }}</p>
           <h1 class="text-brand-text font-extrabold text-2xl">{{ invitation.group?.name }}</h1>
           <p v-if="invitation.group?.description" class="text-brand-textSecondary text-sm mt-1 line-clamp-2">
             {{ invitation.group.description }}
@@ -135,7 +137,7 @@ async function decline() {
         <div class="flex items-center gap-2 bg-cerulean-50 rounded-xl px-4 py-2.5 w-full justify-center">
           <span class="material-symbols-outlined text-cerulean-500 text-[16px]">schedule</span>
           <span class="text-xs font-semibold text-cerulean-700">
-            Expires {{ new Date(invitation.expires_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) }}
+            {{ t('join.expires', { date: new Date(invitation.expires_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) }) }}
           </span>
         </div>
 
@@ -150,7 +152,7 @@ async function decline() {
             <span v-if="acting === 'accept'" class="material-symbols-outlined text-xl animate-spin">progress_activity</span>
             <template v-else>
               <span class="material-symbols-outlined text-xl">check_circle</span>
-              Accept Invitation
+              {{ t('join.accept') }}
             </template>
           </button>
 
@@ -162,7 +164,7 @@ async function decline() {
             <span v-if="acting === 'decline'" class="material-symbols-outlined text-lg animate-spin">progress_activity</span>
             <template v-else>
               <span class="material-symbols-outlined text-lg">close</span>
-              Decline
+              {{ t('join.decline') }}
             </template>
           </button>
         </div>

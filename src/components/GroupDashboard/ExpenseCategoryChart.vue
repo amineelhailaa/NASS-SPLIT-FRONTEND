@@ -1,5 +1,6 @@
 <script setup>
 import { computed } from 'vue'
+import { useI18n } from 'vue-i18n'
 import Chart from 'primevue/chart'
 
 const props = defineProps({
@@ -8,7 +9,9 @@ const props = defineProps({
     default: () => [],
   },
 })
-console.log(props.categoriesData)
+
+const { t } = useI18n()
+
 const COLORS = [
   '#16647a', '#387d94', '#5a96ae', '#7db0c6', '#a0c9de',
   '#c3e2f0', '#3d8a6e', '#5aaa8a', '#78c9a6', '#96e8c2',
@@ -16,10 +19,10 @@ const COLORS = [
 
 const hasData = computed(() => props.categoriesData.length > 0)
 const chartData = computed(() => ({
-  labels: props.categoriesData.map((d) => d.category?.name ?? d.category ?? 'Uncategorized'),
+  labels: props.categoriesData.map((d) => d.category?.name ?? d.category ?? t('charts.uncategorized')),
   datasets: [
     {
-      label: 'Expenses by Category',
+      label: t('charts.expensesByCategory'),
       data: props.categoriesData.map((d) => Number(d.total)),
       backgroundColor: props.categoriesData.map((category, i) => COLORS[i % COLORS.length]),
       borderWidth: 0,
@@ -64,7 +67,7 @@ const chartOptions = {
       class="flex flex-col items-center justify-center gap-3 py-10 text-brand-textSecondary"
     >
       <span class="material-symbols-outlined text-[36px] text-brand-disabled">pie_chart</span>
-      <p class="text-[13px] font-medium">Not enough data yet</p>
+      <p class="text-[13px] font-medium">{{ t('charts.notEnoughData') }}</p>
     </div>
     <div v-else class="w-full" style="height: 280px">
       <Chart type="doughnut" :data="chartData" :options="chartOptions" class="w-full h-full" />

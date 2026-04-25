@@ -1,6 +1,9 @@
 <script setup>
 import { computed } from 'vue'
 import { useRouter } from 'vue-router'
+import { useI18n } from 'vue-i18n'
+
+const { t } = useI18n()
 
 const props = defineProps({
   id: Number,
@@ -69,7 +72,7 @@ const categoryStyle = computed(() => {
       <span
         v-if="role === 'owner'"
         class="absolute top-3 left-3 bg-amber-400/90 backdrop-blur-sm w-7 h-7 rounded-full flex items-center justify-center z-10"
-        title="You own this group"
+        :title="t('groupCard.ownerTitle')"
       >
         <span class="material-symbols-outlined text-white text-[16px]">crown</span>
       </span>
@@ -80,7 +83,7 @@ const categoryStyle = computed(() => {
       <h3 class="text-brand-text text-xl font-bold">{{ name }}</h3>
       <p class="text-brand-primary font-medium text-sm flex items-center gap-1 pt-1">
         <span class="material-symbols-outlined text-[17px]">group</span>
-        {{ memberCount }} Members
+        {{ t('groupCard.members', memberCount) }}
       </p>
     </div>
 
@@ -89,7 +92,7 @@ const categoryStyle = computed(() => {
       class="cursor-pointer w-full bg-brand-primary text-white py-3 rounded-full font-bold hover:bg-brand-primaryHover transition-colors flex items-center justify-center gap-2 text-sm"
       @click="router.push({ name: 'group-detail', params: { id } })"
     >
-      Enter Group
+      {{ t('groupCard.enterGroup') }}
       <span class="material-symbols-outlined text-[18px]">arrow_forward</span>
     </button>
   </div>

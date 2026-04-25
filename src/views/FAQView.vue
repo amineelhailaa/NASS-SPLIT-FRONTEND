@@ -1,34 +1,12 @@
 <script setup>
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
+import { useI18n } from 'vue-i18n'
 import NavBar from '@/components/NavBar.vue'
 import AppFooter from '@/components/AppFooter.vue'
 
-const faqs = [
-  {
-    question: 'Is Nass Split free?',
-    answer:
-      'Yes, Nass Split is free to use for core splitting and group management. We offer a premium tier for automated bank syncing and detailed financial reporting, but the essential features will always remain free for everyone.',
-    tags: [],
-  },
-  {
-    question: 'How do I invite roommates?',
-    answer:
-      "Tap the 'Groups' tab, select your household, and hit 'Invite Members'. You can share a unique invite link or scan a QR code to get everyone on board instantly.",
-    tags: ['Easy Setup', 'Unlimited Members'],
-  },
-  {
-    question: 'Is my data secure?',
-    answer:
-      'Absolutely. We use 256-bit AES encryption and never store your sensitive bank credentials. Your financial privacy is our top priority.',
-    tags: [],
-  },
-  {
-    question: 'How do I settle up?',
-    answer:
-      "When you're ready to clear balances, Nass Split calculates the 'Optimal Path'—minimizing the total number of transfers. You can record a payment as cash or link your preferred payment app to settle instantly.",
-    tags: ['Optimized Debt Reduction'],
-  },
-]
+const { tm, rt } = useI18n()
+
+const faqs = computed(() => tm('faq.items'))
 
 const openIndex = ref(null)
 
@@ -51,14 +29,14 @@ function toggle(index) {
       <div class="flex flex-col gap-6">
         <div class="inline-flex w-fit items-center gap-2 rounded-full bg-cerulean-500/10 px-5 py-1.5">
           <span class="material-symbols-outlined text-cerulean-500 text-lg">help_center</span>
-          <span class="text-cerulean-500 font-bold text-sm tracking-wide">Support Center</span>
+          <span class="text-cerulean-500 font-bold text-sm tracking-wide">{{ $t('faq.hero.badge') }}</span>
         </div>
         <h1 class="text-6xl md:text-7xl font-extrabold tracking-tight leading-none">
-          Frequently Asked<br />
-          <span class="text-cerulean-700">Questions</span>
+          {{ $t('faq.hero.titleL1') }}<br />
+          <span class="text-cerulean-700">{{ $t('faq.hero.titleL2') }}</span>
         </h1>
         <p class="text-xl text-cerulean-800/60 leading-relaxed max-w-2xl">
-          Everything you need to know about managing shared expenses effortlessly with Nass Split.
+          {{ $t('faq.hero.subtitle') }}
         </p>
       </div>
     </section>
@@ -72,30 +50,28 @@ function toggle(index) {
           class="bg-white rounded-2xl overflow-hidden transition-all duration-300"
           :style="{ boxShadow: openIndex === index ? '0 12px 40px rgba(22, 100, 122, 0.10)' : '0 4px 20px rgba(22, 100, 122, 0.06)' }"
         >
-          <!-- Question row -->
           <button
             class="w-full flex items-center justify-between gap-6 px-8 py-6 text-left cursor-pointer"
             @click="toggle(index)"
           >
-            <span class="text-lg font-bold text-cerulean-800">{{ faq.question }}</span>
+            <span class="text-lg font-bold text-cerulean-800">{{ rt(faq.question) }}</span>
             <span
               class="material-symbols-outlined text-cerulean-500 shrink-0 transition-transform duration-300"
               :class="openIndex === index ? 'rotate-180' : ''"
             >expand_more</span>
           </button>
 
-          <!-- Answer -->
           <div
             v-show="openIndex === index"
             class="px-8 pb-8 flex flex-col gap-4"
           >
-            <p class="text-cerulean-800/70 leading-relaxed text-base">{{ faq.answer }}</p>
-            <div v-if="faq.tags.length" class="flex flex-wrap gap-2">
+            <p class="text-cerulean-800/70 leading-relaxed text-base">{{ rt(faq.answer) }}</p>
+            <div v-if="faq.tags && faq.tags.length" class="flex flex-wrap gap-2">
               <span
-                v-for="tag in faq.tags"
-                :key="tag"
+                v-for="(tag, i) in faq.tags"
+                :key="i"
                 class="inline-flex items-center rounded-full bg-cerulean-500/10 px-4 py-1 text-sm font-semibold text-cerulean-600"
-              >{{ tag }}</span>
+              >{{ rt(tag) }}</span>
             </div>
           </div>
         </div>
@@ -113,31 +89,29 @@ function toggle(index) {
             <div class="w-12 h-12 rounded-2xl bg-white/20 flex items-center justify-center shrink-0">
               <span class="material-symbols-outlined text-white">support_agent</span>
             </div>
-            <h2 class="text-3xl font-bold text-white">Still have questions?</h2>
+            <h2 class="text-3xl font-bold text-white">{{ $t('faq.stillHaveQuestions.title') }}</h2>
           </div>
-          <p class="text-white/80 text-lg">Our support team typically responds in under 2 hours.</p>
+          <p class="text-white/80 text-lg">{{ $t('faq.stillHaveQuestions.subtitle') }}</p>
         </div>
         <button
           class="shrink-0 rounded-full px-10 py-4 text-base font-bold bg-white hover:scale-105 active:scale-95 transition-all cursor-pointer"
           style="color: #bc7f4a"
         >
-          Contact Support
+          {{ $t('faq.stillHaveQuestions.button') }}
         </button>
       </div>
     </section>
 
     <!-- CTA Banner -->
-    <section
-      class="mb-24 px-10 py-20 text-center relative overflow-hidden bg-cerulean-800"
-    >
+    <section class="mb-24 px-10 py-20 text-center relative overflow-hidden bg-cerulean-800">
       <div class="relative z-10 flex flex-col gap-8 items-center">
         <h2 class="text-4xl md:text-5xl font-extrabold text-white tracking-tight">
-          Join over 50,000 roommates managing<br class="hidden md:block" /> expenses without the stress.
+          {{ $t('faq.bottomCta.title') }}
         </h2>
         <button
           class="bg-white text-cerulean-700 font-bold px-10 py-4 rounded-full shadow-lg hover:scale-105 active:scale-95 transition-all cursor-pointer"
         >
-          Watch Demo
+          {{ $t('faq.bottomCta.button') }}
         </button>
       </div>
     </section>

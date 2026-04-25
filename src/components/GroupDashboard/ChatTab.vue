@@ -1,5 +1,6 @@
 <script setup>
 import {ref, computed, onMounted, onUnmounted, nextTick} from 'vue'
+import { useI18n } from 'vue-i18n'
 import echo from "@/lib/echo.js";
 import api from '@/lib/axios'
 import Swal from 'sweetalert2'
@@ -8,6 +9,8 @@ const props = defineProps({
   groupId: [Number, String],
   group: Object,
 })
+
+const { t } = useI18n()
 
 const conversation = ref(null)
 const messages = ref([])
@@ -34,7 +37,6 @@ const currentUser = JSON.parse(localStorage.getItem('user') || '{}')
 
 const lastActiveText = computed(() => {
  let lastmessage =  messages.value[messages.value.length-1];
- console.log(lastmessage)
  return lastmessage? formatDateTime(lastmessage.created_at) : null ;
 })
 
@@ -49,7 +51,7 @@ async function loadChat() {
     await nextTick()
     scrollToBottom()
   } catch {
-    error.value = 'Failed to load chat'
+    error.value = t('chat.error')
   } finally {
     loading.value = false
   }
@@ -75,12 +77,12 @@ async function sendMessage() {
 
 async function deleteMessage(messageId) {
   const {isConfirmed} = await Swal.fire({
-    title: 'Delete message?',
-    text: 'This action cannot be undone.',
+    title: t('chat.dialogs.delete.title'),
+    text: t('chat.dialogs.delete.text'),
     icon: 'warning',
     showCancelButton: true,
-    confirmButtonText: 'Delete',
-    cancelButtonText: 'Cancel',
+    confirmButtonText: t('chat.dialogs.delete.confirm'),
+    cancelButtonText: t('chat.dialogs.delete.cancel'),
     confirmButtonColor: '#16647a',
     cancelButtonColor: '#e5e7eb',
   })
@@ -141,7 +143,7 @@ onUnmounted(() => {
           <h1 class="text-brand-text font-bold text-[15px] leading-tight">{{ props.group.name }}</h1>
           <div class="flex items-center gap-1.5">
             <span class="text-brand-textSecondary text-xs">
-              {{ props.group.users.length }} member{{ props.group.users.length !== 1 ? 's' : '' }}
+              {{ t('groupCard.members', props.group.users.length) }}
             </span>
             <template v-if="lastActiveText">
               <span class="text-brand-disabled text-xs">·</span>
@@ -159,7 +161,7 @@ onUnmounted(() => {
         <div v-if="loading" class="flex-1 flex items-center justify-center">
           <div class="flex flex-col items-center gap-3">
             <div class="w-8 h-8 rounded-full border-2 border-brand-primary border-t-transparent animate-spin"></div>
-            <p class="text-brand-textSecondary text-sm">Loading conversation...</p>
+            <p class="text-brand-textSecondary text-sm">{{ t('chat.loading') }}</p>
           </div>
         </div>
 
@@ -170,7 +172,7 @@ onUnmounted(() => {
           </div>
           <div class="flex flex-col items-center gap-1">
             <p class="text-brand-text font-semibold text-sm">{{ error }}</p>
-            <p class="text-brand-textSecondary text-xs">Try refreshing the page</p>
+            <p class="text-brand-textSecondary text-xs">{{ t('chat.loadError') }}</p>
           </div>
         </div>
 
@@ -186,9 +188,9 @@ onUnmounted(() => {
                 <span class="material-symbols-outlined text-2xl text-brand-disabled">forum</span>
               </div>
               <div class="flex flex-col items-center gap-1.5">
-                <p class="text-brand-text font-semibold text-sm">No messages yet</p>
-                <p class="text-brand-textSecondary text-xs text-center">Start the conversation with your group</p>
-                <p class="text-brand-disabled text-xs">Send the first message ↓</p>
+                <p class="text-brand-text font-semibold text-sm">{{ t('chat.empty') }}</p>
+                <p class="text-brand-textSecondary text-xs text-center">{{ t('chat.emptySubtitle') }}</p>
+                <p class="text-brand-disabled text-xs">{{ t('chat.firstMessage') }}</p>
               </div>
             </div>
 
@@ -269,7 +271,7 @@ onUnmounted(() => {
               v-model="newMessage"
               @keyup.enter="sendMessage"
               type="text"
-              placeholder="Write a message..."
+              :placeholder="t('chat.placeholder')"
               class="flex-1 bg-white rounded-full px-4 py-2 text-brand-text text-sm outline-none placeholder:text-brand-disabled shadow-[0_1px_3px_rgba(22,100,122,0.06)] focus:ring-2 focus:ring-brand-primary/10"
             />
             <button
