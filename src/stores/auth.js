@@ -46,7 +46,7 @@ export const useAuthStore = defineStore('auth', () => {
         return
       }
 
-      throw error
+      console.error('Failed to restore session:', error)
     }
   }
 
