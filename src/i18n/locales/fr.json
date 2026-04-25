@@ -1,0 +1,921 @@
+{
+  "brand": {
+    "name": "NASS SPLIT"
+  },
+  "common": {
+    "home": "Accueil",
+    "login": "Connexion",
+    "language": "Langue",
+    "emailAddress": "Adresse e-mail",
+    "emailPlaceholder": "votre{'@'}email.com",
+    "password": "Mot de passe",
+    "passwordPlaceholder": "••••••••",
+    "togglePassword": "Afficher ou masquer le mot de passe",
+    "toggleConfirmPassword": "Afficher ou masquer la confirmation",
+    "copyright": "© {year} Nass Split · YouCode",
+    "tooManyAttempts": "Trop de tentatives. Veuillez patienter avant de réessayer."
+  },
+  "nav": {
+    "home": "Accueil",
+    "groups": "Groupes",
+    "contact": "Contact",
+    "faq": "FAQ",
+    "getStarted": "Commencer",
+    "editProfile": "Modifier le profil",
+    "preferences": "Préférences",
+    "logout": "Se déconnecter"
+  },
+  "footer": {
+    "tagline": "La façon intelligente de partager les dépenses avec vos amis, votre famille et vos colocataires.",
+    "product": {
+      "title": "Produit",
+      "features": "Fonctionnalités",
+      "howItWorks": "Comment ça marche",
+      "pricing": "Tarifs",
+      "changelog": "Nouveautés"
+    },
+    "company": {
+      "title": "Entreprise",
+      "about": "À propos",
+      "blog": "Blog",
+      "careers": "Carrières",
+      "contact": "Contact"
+    },
+    "legal": {
+      "title": "Légal",
+      "terms": "Conditions d'utilisation",
+      "privacy": "Politique de confidentialité",
+      "cookies": "Politique des cookies",
+      "gdpr": "RGPD"
+    },
+    "rights": "© YouCode {year}. Tous droits réservés."
+  },
+  "home": {
+    "hero": {
+      "badge": "Simplifiez les dépenses de groupe",
+      "title": "Profitez, on s'occupe des calculs.",
+      "subtitle": "NASS SPLIT est bien plus qu'une calculatrice. C'est un tiers de confiance numérique qui centralise vos dépenses et calcule instantanément qui doit quoi.",
+      "ctaPrimary": "Créer un groupe gratuitement",
+      "ctaSecondary": "Voir la démo"
+    },
+    "benefits": {
+      "title": "Adieu la gêne, bonjour la transparence",
+      "subtitle": "Une solution pensée pour simplifier la vie en communauté sans les frictions habituelles liées à l'argent.",
+      "noAwkwardness": {
+        "title": "Fini la gêne",
+        "desc": "Plus de post-its égarés ni de demandes d'argent maladroites par SMS. Tout est clair, documenté et visible par tous en temps réel."
+      },
+      "forEveryone": {
+        "title": "Pour tout le monde",
+        "desc": "Que vous soyez un organisateur méticuleux ou un participant qui suit simplement, l'interface intuitive s'adapte à tous les niveaux."
+      }
+    },
+    "howItWorks": {
+      "title": "Comment ça marche ?",
+      "subtitle": "Gérez les dépenses de votre groupe en 3 étapes ultra-simples.",
+      "step1": {
+        "title": "Ajoutez une dépense",
+        "desc": "Saisissez le montant et prenez en photo le reçu. Vos justificatifs sont archivés et accessibles en un clic."
+      },
+      "step2": {
+        "title": "Répartition intelligente",
+        "desc": "Partagez les coûts à parts égales, en pourcentage, ou excluez certains membres selon la situation."
+      },
+      "step3": {
+        "title": "Suivi instantané",
+        "desc": "Le solde de chacun est recalculé instantanément. Vous savez exactement qui doit rembourser qui, à tout moment."
+      }
+    },
+    "features": {
+      "title": "Tout ce dont vous avez besoin",
+      "subtitle": "Bien plus qu'un simple partage, une plateforme de gestion complète.",
+      "categories": {
+        "title": "Catégories",
+        "desc": "Classez vos dépenses par type (Loisirs, Courses, Transport) pour une meilleure analyse."
+      },
+      "messaging": {
+        "title": "Messagerie",
+        "desc": "Discutez d'une dépense précise directement dans l'application."
+      },
+      "reminders": {
+        "title": "Rappels",
+        "desc": "Notifications automatiques pour les factures et remboursements en attente."
+      },
+      "realtime": {
+        "title": "Mises à jour en direct",
+        "desc": "Calcul des soldes et notifications instantanés."
+      }
+    },
+    "cta": {
+      "title": "Prêt à simplifier vos dépenses ?",
+      "subtitle": "Rejoignez les milliers d'utilisateurs qui ont déjà dit adieu aux calculs complexes et aux tensions liées à l'argent.",
+      "button": "Créer mon groupe gratuitement"
+    }
+  },
+  "about": {
+    "hero": {
+      "badge": "ÉTABLI EN 2024",
+      "titleL1": "À propos de",
+      "titleL2": "Nass Split",
+      "subtitle": "Apporter sérénité et transparence à la vie partagée grâce à une gestion financière sans stress."
+    },
+    "story": {
+      "title": "Notre Histoire",
+      "p1": "Nass Split est né de la frustration commune de partager les factures entre colocataires. Tout a commencé avec un tableur taché de café et une conversation gênante sur qui devait quoi pour la facture d'électricité.",
+      "p2": "Nous avons compris que le problème n'était pas seulement l'argent — c'était la friction qu'il créait dans les amitiés. Nous avons conçu Nass Split pour remplacer les calculs complexes par de simples clics, et la tension par la clarté."
+    },
+    "values": {
+      "title": "Nos Valeurs",
+      "subtitle": "Ce qui guide chaque ligne de code que nous écrivons.",
+      "transparency": {
+        "title": "Transparence",
+        "desc": "Aucun frais caché, aucun jargon complexe. Chaque transaction et répartition est clairement visible par toutes les personnes concernées."
+      },
+      "friendship": {
+        "title": "Amitié",
+        "desc": "Nous pensons que les finances ne devraient jamais s'interposer entre amis. Notre outil est conçu pour préserver votre harmonie sociale."
+      },
+      "simplicity": {
+        "title": "Simplicité",
+        "desc": "La complexité est l'ennemie de l'action. Nous restons intuitifs pour que vous puissiez reprendre votre vie."
+      }
+    },
+    "cta": {
+      "title": "Prêt pour une vie sans stress ?",
+      "subtitle": "Rejoignez les milliers de colocataires qui ont retrouvé leur tranquillité d'esprit et simplifié leurs finances partagées avec Nass Split.",
+      "primary": "Commencer gratuitement",
+      "secondary": "Voir la démo"
+    }
+  },
+  "faq": {
+    "hero": {
+      "badge": "Centre d'aide",
+      "titleL1": "Questions",
+      "titleL2": "fréquentes",
+      "subtitle": "Tout ce que vous devez savoir pour gérer les dépenses partagées sans effort avec Nass Split."
+    },
+    "items": [
+      {
+        "question": "Nass Split est-il gratuit ?",
+        "answer": "Oui, Nass Split est gratuit pour le partage de base et la gestion des groupes. Nous proposons une offre premium pour la synchronisation bancaire automatique et des rapports financiers détaillés, mais les fonctionnalités essentielles resteront toujours gratuites pour tous.",
+        "tags": []
+      },
+      {
+        "question": "Comment inviter mes colocataires ?",
+        "answer": "Appuyez sur l'onglet « Groupes », sélectionnez votre foyer et cliquez sur « Inviter des membres ». Vous pouvez partager un lien d'invitation unique ou scanner un QR code pour embarquer tout le monde instantanément.",
+        "tags": ["Configuration facile", "Membres illimités"]
+      },
+      {
+        "question": "Mes données sont-elles sécurisées ?",
+        "answer": "Absolument. Nous utilisons un chiffrement AES 256 bits et ne stockons jamais vos identifiants bancaires sensibles. Votre confidentialité financière est notre priorité.",
+        "tags": []
+      },
+      {
+        "question": "Comment régler les comptes ?",
+        "answer": "Lorsque vous êtes prêt à solder les comptes, Nass Split calcule le « Chemin optimal » en minimisant le nombre total de transferts. Vous pouvez enregistrer un paiement en espèces ou lier votre application de paiement préférée pour régler instantanément.",
+        "tags": ["Réduction optimisée de la dette"]
+      }
+    ],
+    "stillHaveQuestions": {
+      "title": "D'autres questions ?",
+      "subtitle": "Notre équipe d'assistance répond généralement en moins de 2 heures.",
+      "button": "Contacter le support"
+    },
+    "bottomCta": {
+      "title": "Plus de 50 000 colocataires gèrent leurs dépenses sans stress.",
+      "button": "Voir la démo"
+    }
+  },
+  "contact": {
+    "hero": {
+      "badge": "Entrons en contact",
+      "titleL1": "Contactez",
+      "titleL2": "-nous",
+      "subtitle": "Une question ou besoin d'aide ? Remplissez le formulaire et nous vous répondrons rapidement."
+    },
+    "form": {
+      "success": "Votre message a bien été envoyé ! Nous vous répondrons dès que possible.",
+      "name": "Nom complet",
+      "namePlaceholder": "Votre nom",
+      "email": "E-mail",
+      "subject": "Objet",
+      "subjectPlaceholder": "De quoi s'agit-il ?",
+      "message": "Message",
+      "messagePlaceholder": "Écrivez votre message ici...",
+      "submit": "Envoyer le message",
+      "errors": {
+        "nameRequired": "Le nom est requis",
+        "emailRequired": "L'e-mail est requis",
+        "emailInvalid": "E-mail invalide",
+        "subjectRequired": "L'objet est requis",
+        "messageRequired": "Le message est requis",
+        "rateLimited": "Trop de messages. Merci de patienter un instant."
+      }
+    },
+    "info": {
+      "call": {
+        "title": "Téléphone & WhatsApp",
+        "desc": "Joignez-nous directement par téléphone ou WhatsApp."
+      },
+      "hours": {
+        "title": "Horaires d'ouverture",
+        "desc": "Nous sommes disponibles pendant ces créneaux.",
+        "daily": "En semaine",
+        "dailyHours": "8h00 – 17h00",
+        "weekend": "Week-end",
+        "closed": "Fermé"
+      },
+      "email": {
+        "title": "Écrivez-nous",
+        "desc": "Envoyez-nous un e-mail à tout moment."
+      }
+    }
+  },
+  "notFound": {
+    "title": "Page introuvable",
+    "subtitle": "La page que vous cherchez n'existe pas.",
+    "goHome": "Retour à l'accueil"
+  },
+  "groups": {
+    "title": "Mes Groupes",
+    "welcome": "Bon retour, {name}. Vous avez {count} groupe actif.",
+    "createNew": "Créer un nouveau groupe",
+    "search": "Rechercher des groupes...",
+    "sort": "Trier :",
+    "sortName": "Nom",
+    "sortDate": "Date de création",
+    "sortAsc": "Croissant",
+    "sortDesc": "Décroissant",
+    "empty": "Aucun groupe trouvé.",
+    "balance": {
+      "title": "Solde sur tous les groupes",
+      "owed": "Vous êtes actuellement dû un total net de",
+      "viewReport": "Voir le rapport"
+    }
+  },
+  "groupDetail": {
+    "back": "Retour",
+    "home": "Accueil",
+    "tabs": {
+      "dashboard": "Tableau de bord",
+      "expenses": "Dépenses",
+      "payments": "Mes paiements",
+      "settle": "Régler",
+      "chat": "Discussion",
+      "members": "Membres",
+      "invitations": "Invitations",
+      "settings": "Paramètres"
+    },
+    "leaveGroup": "Quitter le groupe",
+    "error": "Impossible de charger les données du groupe.",
+    "dialogs": {
+      "leave": {
+        "title": "Quitter le groupe ?",
+        "text": "Vous perdrez l'accès à ce groupe.",
+        "confirm": "Oui, quitter",
+        "cancel": "Annuler",
+        "cannotLeave": "Impossible de quitter",
+        "error": "Une erreur s'est produite."
+      }
+    }
+  },
+  "groupCard": {
+    "members": "{count} Membre | {count} Membres",
+    "enterGroup": "Accéder au groupe",
+    "ownerTitle": "Vous possédez ce groupe"
+  },
+  "newGroup": {
+    "errors": {
+      "nameRequired": "Le nom du groupe est requis",
+      "descRequired": "La description est requise",
+      "descMax": "La description doit contenir 300 caractères ou moins",
+      "emailInvalid": "Adresse e-mail invalide",
+      "emailDuplicate": "Déjà ajouté"
+    },
+    "success": {
+      "title": "Votre groupe est prêt !",
+      "dashboard": "Aller au tableau de bord",
+      "invite": "Inviter d'autres amis"
+    },
+    "step": "Étape {current} sur 2",
+    "step1": {
+      "title": "Détails du groupe",
+      "photo": "Photo du groupe",
+      "optional": "(optionnel)",
+      "upload": "Importer une photo",
+      "uploadHint": "JPG, PNG ou GIF · Max 2 Mo",
+      "name": "Nom du groupe",
+      "namePlaceholder": "ex. Colocataires, Voyage en voiture...",
+      "description": "Description",
+      "descPlaceholder": "De quoi parle ce groupe ?",
+      "next": "Étape suivante"
+    },
+    "step2": {
+      "title": "Inviter des colocataires",
+      "inviteByEmail": "Inviter par e-mail",
+      "emailPlaceholder": "ami{'@'}email.com",
+      "copyLink": "Copier le lien d'invitation",
+      "linkCopied": "Lien copié !",
+      "linkAfterCreate": "Le lien d'invitation sera disponible après la création du groupe.",
+      "toBeInvited": "À inviter",
+      "create": "Créer le groupe",
+      "back": "Retour"
+    }
+  },
+  "notifications": {
+    "label": "Notifications",
+    "title": "Notifications",
+    "newCount": "{count} nouvelle(s)",
+    "markAllRead": "Tout marquer comme lu",
+    "empty": "Aucune notification pour l'instant",
+    "justNow": "à l'instant"
+  },
+  "addExpense": {
+    "title": "Ajouter une dépense",
+    "errors": {
+      "titleRequired": "Le titre est requis",
+      "amountRequired": "Le montant est requis",
+      "amountMin": "Le montant doit être d'au moins 1",
+      "amountNumber": "Le montant doit être un nombre",
+      "payerRequired": "Le payeur est requis",
+      "payerSelect": "Veuillez sélectionner un payeur",
+      "noParticipant": "Sélectionnez au moins un participant",
+      "fixedTotal": "Les montants fixes doivent être égaux au montant total de la dépense",
+      "pctTotal": "Les pourcentages doivent totaliser 100%",
+      "fileTooLarge": "Chaque pièce jointe doit faire 5 Mo maximum.",
+      "generic": "Une erreur s'est produite. Veuillez réessayer.",
+      "loadFailed": "Impossible de charger les données du formulaire"
+    },
+    "fields": {
+      "title": "Titre",
+      "titlePlaceholder": "ex. Dîner, Essence, Courses...",
+      "amount": "Montant",
+      "amountPlaceholder": "0.00",
+      "date": "Date",
+      "category": "Catégorie",
+      "categoryOptional": "(optionnel)",
+      "noCategory": "Sans catégorie",
+      "payer": "Qui a payé ?",
+      "payerPlaceholder": "Sélectionner un payeur...",
+      "attachments": "Pièces jointes",
+      "attachmentsOptional": "(optionnel)",
+      "attachmentsHelp": "Ajoutez des reçus, captures d'écran ou fichiers justificatifs.",
+      "attachmentsMax": "5 Mo maximum par fichier.",
+      "addFiles": "Ajouter des fichiers",
+      "replaceFiles": "Remplacer les fichiers",
+      "selectedFiles": "{count} fichier sélectionné | {count} fichiers sélectionnés",
+      "split": "Mode de répartition",
+      "participants": "Participants"
+    },
+    "strategies": {
+      "equal": "Égal",
+      "fixed": "Fixe",
+      "percentage": "Pourcentage"
+    },
+    "allocation": {
+      "allocated": "Alloué",
+      "remaining": "{fixed} restant",
+      "exceeded": "Dépassé de {fixed}",
+      "pctRemaining": "{pct}% restant",
+      "pctExceeded": "Dépassé de {pct}%",
+      "fixedHint": "Répartissez le montant total entre les participants",
+      "pctHint": "Les pourcentages doivent totaliser 100%"
+    },
+    "participantCount": "{selected} sur {total} sélectionné(s)",
+    "cancel": "Annuler",
+    "submit": "Créer la dépense",
+    "successTitle": "Dépense ajoutée !",
+    "successText": "La dépense a été enregistrée avec succès."
+  },
+  "dashboard": {
+    "stats": {
+      "totalSpent": "Total dépensé",
+      "myBalance": "Mon solde",
+      "activeMembers": "Membres actifs",
+      "totalExpenses": "Total des dépenses",
+      "paidByMe": "Payé par moi",
+      "myShare": "Ma part"
+    },
+    "recentActivity": {
+      "title": "Activité récente",
+      "empty": "Aucune dépense pour l'instant",
+      "viewMore": "Voir plus"
+    },
+    "owesSection": {
+      "title": "Qui doit quoi à qui",
+      "allSettled": "Tout est réglé !"
+    }
+  },
+  "expenses": {
+    "title": "Dépenses",
+    "export": "Exporter",
+    "downloading": "Téléchargement…",
+    "empty": "Aucune dépense pour l'instant",
+    "paidBy": "Payé par {name}",
+    "yourShare": "Votre part : {amount}",
+    "splitBetween": "Réparti entre",
+    "previous": "Précédent",
+    "next": "Suivant"
+  },
+  "members": {
+    "title": "Membres",
+    "count": "{count} membre | {count} membres",
+    "empty": "Aucun membre trouvé",
+    "transferOwnership": "Transférer la propriété",
+    "removeMember": "Retirer le membre",
+    "previous": "Précédent",
+    "next": "Suivant",
+    "dialogs": {
+      "kick": {
+        "title": "Expulser {name} ?",
+        "text": "Ce membre sera retiré du groupe.",
+        "confirm": "Expulser",
+        "cancel": "Annuler",
+        "errorTitle": "Impossible d'expulser le membre",
+        "errorText": "Une erreur s'est produite."
+      },
+      "transfer": {
+        "title": "Transférer la propriété ?",
+        "text": "Vous êtes sur le point de faire de <strong>{name}</strong> le nouveau propriétaire de ce groupe. Cette action est irréversible.",
+        "confirm": "Oui, transférer",
+        "cancel": "Annuler",
+        "errorTitle": "Transfert échoué"
+      }
+    }
+  },
+  "settings": {
+    "title": "Paramètres du groupe",
+    "general": "Général",
+    "name": "Nom du groupe",
+    "description": "Description",
+    "saving": "Enregistrement...",
+    "save": "Enregistrer les modifications",
+    "saved": "Groupe mis à jour",
+    "saveFailed": "Impossible de mettre à jour le groupe",
+    "settingFailed": "Impossible de mettre à jour le paramètre",
+    "rules": "Règles",
+    "settleBeforeLeaving": "Régler avant de partir",
+    "settleDesc": "Les membres doivent régler leurs dettes avant de quitter ou d'être expulsés",
+    "dangerZone": "Zone de danger",
+    "deleteDesc": "Supprimer définitivement ce groupe et toutes ses données.",
+    "deleting": "Suppression...",
+    "deleteButton": "Supprimer le groupe",
+    "dialogs": {
+      "toggleSettle": {
+        "title": "Activer/Désactiver la règle de règlement ?",
+        "textEnable": "Les membres pourront marquer les dettes comme réglées.",
+        "textDisable": "Le règlement sera désactivé pour ce groupe.",
+        "confirm": "Oui, confirmer",
+        "cancel": "Annuler"
+      },
+      "delete": {
+        "title": "Supprimer le groupe ?",
+        "text": "Cela supprimera définitivement le groupe et toutes ses données. Cette action est irréversible.",
+        "confirm": "Oui, supprimer",
+        "cancel": "Annuler",
+        "successTitle": "Supprimé !",
+        "successText": "Le groupe a été supprimé."
+      }
+    }
+  },
+  "invitations": {
+    "title": "Invitations",
+    "inviteByEmail": "Inviter par e-mail",
+    "emailPlaceholder": "ami{'@'}email.com",
+    "send": "Envoyer",
+    "success": "Invitation envoyée avec succès",
+    "errors": {
+      "emailRequired": "L'e-mail est requis",
+      "emailInvalid": "Adresse e-mail invalide",
+      "sendFailed": "Impossible d'envoyer l'invitation"
+    },
+    "copyLink": "Copier le lien d'invitation",
+    "linkCopied": "Lien copié !",
+    "pending": "Invitations en attente",
+    "pendingCount": "{count} en attente",
+    "loadFailed": "Impossible de charger les invitations",
+    "tryAgain": "Réessayer",
+    "empty": "Aucune invitation en attente",
+    "pendingLabel": "en attente",
+    "expired": "Expirée",
+    "expiresTomorrow": "Expire demain",
+    "expiresIn": "Expire dans {diff} jours",
+    "dialogs": {
+      "cancel": {
+        "title": "Annuler cette invitation ?",
+        "text": "L'invitation envoyée à {email} sera révoquée.",
+        "confirm": "Annuler l'invitation",
+        "keep": "Conserver"
+      }
+    }
+  },
+  "settle": {
+    "title": "Qui doit quoi à qui",
+    "count": "{count} règlement | {count} règlements",
+    "allSettled": "Tout est réglé !",
+    "noDebts": "Aucune dette en cours dans ce groupe",
+    "recording": "Enregistrement…",
+    "markSettled": "Marquer comme réglé",
+    "failed": "Impossible d'enregistrer le paiement",
+    "recorded": "Paiement de {amount} enregistré"
+  },
+  "payments": {
+    "title": "Mes paiements",
+    "empty": "Aucun paiement pour l'instant",
+    "hint": "Réglez les dettes depuis l'onglet Régler",
+    "paid": "payé",
+    "received": "reçu",
+    "previous": "Précédent",
+    "next": "Suivant"
+  },
+  "chat": {
+    "loading": "Chargement de la conversation...",
+    "loadError": "Essayez de rafraîchir la page",
+    "empty": "Aucun message pour l'instant",
+    "emptySubtitle": "Commencez la conversation avec votre groupe",
+    "firstMessage": "Envoyez le premier message ↓",
+    "placeholder": "Écrire un message...",
+    "error": "Impossible de charger la discussion",
+    "dialogs": {
+      "delete": {
+        "title": "Supprimer le message ?",
+        "text": "Cette action est irréversible.",
+        "confirm": "Supprimer",
+        "cancel": "Annuler"
+      }
+    }
+  },
+  "join": {
+    "loading": "Chargement de l'invitation...",
+    "errorTitle": "Invitation indisponible",
+    "goToGroups": "Aller à mes groupes",
+    "linkSubtitle": "Vous avez été invité via un lien partageable",
+    "joinTitle": "Rejoindre le groupe",
+    "acceptAndJoin": "Accepter & rejoindre",
+    "cancel": "Annuler",
+    "joining": "Rejoindre le groupe...",
+    "cantJoin": "Impossible de rejoindre",
+    "accepted": {
+      "title": "Vous êtes dans le groupe !",
+      "redirecting": "Redirection vers {groupName}..."
+    },
+    "declined": {
+      "title": "Invitation refusée",
+      "redirecting": "Redirection vers vos groupes..."
+    },
+    "invited": "Vous avez été invité à rejoindre",
+    "expires": "Expire le {date}",
+    "accept": "Accepter l'invitation",
+    "decline": "Refuser",
+    "errors": {
+      "invalid": "Cette invitation est invalide ou a expiré.",
+      "acceptFailed": "Impossible d'accepter l'invitation.",
+      "declineFailed": "Impossible de refuser l'invitation."
+    }
+  },
+  "profile": {
+    "back": "Retour",
+    "title": "Modifier le profil",
+    "subtitle": "Mettez à jour vos informations personnelles et votre mot de passe.",
+    "personalInfo": {
+      "title": "Informations personnelles",
+      "subtitle": "Gérez votre nom, e-mail et photo de profil.",
+      "photo": "Photo de profil",
+      "changePhoto": "Changer la photo",
+      "photoHint": "JPG, PNG ou GIF · Max 2 Mo",
+      "photoTooLarge": "La photo doit faire moins de 2 Mo.",
+      "fullName": "Nom complet",
+      "save": "Enregistrer les modifications",
+      "saved": "Enregistré"
+    },
+    "password": {
+      "title": "Changer le mot de passe",
+      "subtitle": "Mettez à jour votre mot de passe pour sécuriser votre compte.",
+      "current": "Mot de passe actuel",
+      "new": "Nouveau mot de passe",
+      "confirm": "Confirmer le nouveau mot de passe",
+      "update": "Mettre à jour le mot de passe",
+      "updated": "Mot de passe mis à jour"
+    },
+    "errors": {
+      "nameRequired": "Le nom complet est requis",
+      "nameShort": "Le nom est trop court",
+      "currentRequired": "Le mot de passe actuel est requis",
+      "newRequired": "Le nouveau mot de passe est requis",
+      "newMin": "8 caractères minimum",
+      "confirmRequired": "Veuillez confirmer votre nouveau mot de passe",
+      "confirmMismatch": "Les mots de passe ne correspondent pas"
+    }
+  },
+  "admin": {
+    "sidebar": {
+      "workspace": "Espace de travail",
+      "overview": "Vue d'ensemble",
+      "categories": "Catégories",
+      "groups": "Groupes",
+      "users": "Utilisateurs",
+      "messages": "Messages",
+      "ledgerAdmin": "Admin du registre",
+      "logout": "Déconnexion"
+    },
+    "overview": {
+      "breadcrumb": "Admin · Vue d'ensemble",
+      "title": "Tableau de bord",
+      "subtitle": "Statistiques rapides sur la plateforme.",
+      "stats": {
+        "totalGroups": "Total des groupes",
+        "active": "Actif",
+        "acrossThePlatform": "sur la plateforme",
+        "totalCategories": "Total des catégories",
+        "expenseTypes": "Types de dépenses",
+        "expenses30d": "Dépenses · 30j",
+        "last30days": "30 derniers jours",
+        "adminRole": "Rôle admin",
+        "activeRole": "Actif",
+        "privileged": "Privilégié"
+      },
+      "chart": {
+        "distribution": "Répartition",
+        "expensesByCategory": "Dépenses par catégorie"
+      }
+    },
+    "categories": {
+      "breadcrumb": "Admin · Catalogue",
+      "title": "Catégories",
+      "subtitle": "Gérez les catégories de dépenses disponibles sur la plateforme.",
+      "add": {
+        "label": "Nouvelle entrée",
+        "title": "Ajouter une catégorie",
+        "placeholder": "Nom de la catégorie",
+        "button": "Ajouter"
+      },
+      "table": {
+        "label": "Répertoire",
+        "title": "Toutes les catégories",
+        "total": "{total} au total",
+        "loading": "Chargement...",
+        "empty": "Aucune catégorie pour l'instant.",
+        "colId": "ID",
+        "colName": "Nom",
+        "colCreated": "Créé",
+        "colUpdated": "Mis à jour",
+        "colActions": "Actions",
+        "save": "Enregistrer",
+        "cancel": "Annuler",
+        "edit": "Modifier",
+        "delete": "Supprimer",
+        "pageOf": "Page {page} sur {last}"
+      },
+      "flash": {
+        "created": "Catégorie créée avec succès.",
+        "updated": "Catégorie mise à jour avec succès.",
+        "deleted": "Catégorie supprimée."
+      },
+      "dialogs": {
+        "delete": {
+          "title": "Supprimer la catégorie ?",
+          "text": "Cette action est irréversible.",
+          "confirm": "Supprimer",
+          "cancel": "Annuler"
+        }
+      }
+    },
+    "groups": {
+      "breadcrumb": "Admin · Registre",
+      "title": "Groupes",
+      "subtitle": "Tous les groupes actifs sur la plateforme.",
+      "table": {
+        "label": "Répertoire",
+        "title": "Tous les groupes",
+        "searchPlaceholder": "Rechercher des groupes...",
+        "total": "{total} au total",
+        "loading": "Chargement...",
+        "empty": "Aucun groupe trouvé.",
+        "colId": "ID",
+        "colGroup": "Groupe",
+        "colDescription": "Description",
+        "colMembers": "Membres",
+        "colSettle": "Régler",
+        "colInvite": "Inviter",
+        "colCreated": "Créé",
+        "colUpdated": "Mis à jour",
+        "settleOn": "Activé",
+        "settleOff": "Désactivé",
+        "noMembers": "Aucun membre dans ce groupe.",
+        "pageOf": "Page {page} sur {last}"
+      }
+    },
+    "users": {
+      "breadcrumb": "Admin · Personnes",
+      "title": "Utilisateurs",
+      "subtitle": "Tous les utilisateurs inscrits sur la plateforme.",
+      "table": {
+        "label": "Répertoire",
+        "title": "Tous les utilisateurs",
+        "searchPlaceholder": "Rechercher des utilisateurs...",
+        "total": "{total} au total",
+        "loading": "Chargement...",
+        "empty": "Aucun utilisateur trouvé.",
+        "colId": "ID",
+        "colUser": "Utilisateur",
+        "colEmail": "E-mail",
+        "colRole": "Rôle",
+        "colStatus": "Statut",
+        "colJoined": "Inscrit",
+        "colActions": "Actions",
+        "banned": "Banni",
+        "active": "Actif",
+        "ban": "Bannir",
+        "unban": "Débannir",
+        "pageOf": "Page {page} sur {last}"
+      },
+      "flash": {
+        "banned": "Utilisateur banni.",
+        "unbanned": "Utilisateur débanni."
+      },
+      "dialogs": {
+        "ban": {
+          "title": "Bannir cet utilisateur ?",
+          "text": "Il perdra l'accès à la plateforme.",
+          "confirm": "Bannir",
+          "cancel": "Annuler"
+        },
+        "unban": {
+          "title": "Débannir cet utilisateur ?",
+          "text": "Il retrouvera l'accès à la plateforme.",
+          "confirm": "Débannir",
+          "cancel": "Annuler"
+        }
+      }
+    },
+    "contacts": {
+      "breadcrumb": "Admin · Boîte de réception",
+      "title": "Messages de contact",
+      "subtitle": "Messages soumis via le formulaire de contact.",
+      "filter": {
+        "all": "Tous",
+        "pending": "En attente",
+        "treated": "Traité"
+      },
+      "loading": "Chargement…",
+      "empty": "Aucun message trouvé.",
+      "table": {
+        "colName": "Nom",
+        "colEmail": "E-mail",
+        "colSubject": "Objet",
+        "colDate": "Date",
+        "colStatus": "Statut"
+      },
+      "status": {
+        "treated": "Traité",
+        "pending": "En attente",
+        "markAsTreated": "Marquer comme traité",
+        "markAsPending": "Marquer comme en attente",
+        "markTreatedTitle": "Marquer comme traité",
+        "markPendingTitle": "Marquer comme en attente"
+      },
+      "popup": {
+        "inboxMessage": "Message de la boîte de réception",
+        "delete": "Supprimer"
+      },
+      "pageOf": "Page {current} sur {last}",
+      "dialogs": {
+        "delete": {
+          "title": "Supprimer ce message ?",
+          "text": "Cette action est irréversible.",
+          "confirm": "Supprimer",
+          "cancel": "Annuler"
+        }
+      }
+    }
+  },
+  "auth": {
+    "login": {
+      "title": "Bon retour",
+      "subtitle": "Revenez dans votre sanctuaire financier.",
+      "forgot": "Oublié ?",
+      "submit": "Se connecter",
+      "divider": "ou continuer avec",
+      "google": "Google",
+      "github": "GitHub",
+      "signupPrompt": "Pas encore de compte ?",
+      "signupLink": "S'inscrire",
+      "brandTitleL1": "Votre sanctuaire",
+      "brandTitleL2": "financier vous attend.",
+      "brandSubtitle": "Gérez vos dépenses partagées avec clarté, confiance et sans friction.",
+      "errors": {
+        "emailRequired": "L'e-mail est requis",
+        "emailInvalid": "Adresse e-mail invalide",
+        "passwordRequired": "Le mot de passe est requis",
+        "passwordMin": "8 caractères minimum"
+      },
+      "features": {
+        "smartSplitting": {
+          "title": "Répartition intelligente",
+          "desc": "Partagez à parts égales, en pourcentage, ou excluez des membres — recalculé instantanément."
+        },
+        "optimalSettlements": {
+          "title": "Règlements optimaux",
+          "desc": "Nous minimisons les transferts pour que moins de personnes aient à se rembourser."
+        },
+        "encryption": {
+          "title": "Chiffrement de bout en bout",
+          "desc": "Vos soldes et vos données sont entièrement sécurisés à chaque étape."
+        }
+      }
+    },
+    "signup": {
+      "title": "Créer un compte",
+      "subtitle": "Votre sanctuaire financier commence ici.",
+      "brandTitleL1": "Rejoignez ceux qui",
+      "brandTitleL2": "partagent plus malin.",
+      "brandSubtitle": "Créez votre compte gratuit et dites adieu aux prises de tête des dépenses.",
+      "avatarLabel": "Photo de profil",
+      "avatarPreviewAlt": "Aperçu de l'avatar",
+      "uploadPhoto": "Importer une photo",
+      "uploadHint": "JPG, PNG ou GIF · Max 2 Mo",
+      "avatarTooLarge": "La photo doit faire moins de 2 Mo.",
+      "fullName": "Nom complet",
+      "fullNamePlaceholder": "Amine El Hailaa",
+      "confirmPassword": "Confirmer le mot de passe",
+      "submit": "Créer mon compte",
+      "loginPrompt": "Vous avez déjà un compte ?",
+      "loginLink": "Se connecter",
+      "errors": {
+        "nameRequired": "Le nom complet est requis",
+        "nameShort": "Le nom est trop court",
+        "emailRequired": "L'e-mail est requis",
+        "emailInvalid": "Adresse e-mail invalide",
+        "passwordRequired": "Le mot de passe est requis",
+        "passwordMin": "8 caractères minimum",
+        "confirmRequired": "Veuillez confirmer votre mot de passe",
+        "passwordMismatch": "Les mots de passe ne correspondent pas"
+      },
+      "features": {
+        "createGroup": {
+          "title": "Créez votre premier groupe",
+          "desc": "Invitez vos colocataires et commencez à partager les dépenses en quelques secondes."
+        },
+        "trackExpense": {
+          "title": "Suivez chaque dépense",
+          "desc": "Ajoutez des reçus, définissez des catégories et gardez l'œil sur chaque facture."
+        },
+        "settle": {
+          "title": "Réglez sans gêne",
+          "desc": "Soldez les comptes en un clic — fini les relances inconfortables."
+        }
+      }
+    },
+    "forgotPassword": {
+      "title": "Mot de passe oublié ?",
+      "subtitle": "Pas d'inquiétude — nous vous enverrons un lien de réinitialisation.",
+      "brandTitleL1": "Réinitialisez votre",
+      "brandTitleL2": "mot de passe.",
+      "brandSubtitle": "Saisissez votre e-mail et nous vous enverrons un lien sécurisé pour définir un nouveau mot de passe.",
+      "tip1": "Pensez à vérifier le dossier spam si vous ne voyez rien après quelques minutes.",
+      "tip2": "Le lien de réinitialisation expire après 60 minutes pour votre sécurité.",
+      "submit": "Envoyer le lien",
+      "rememberedPrompt": "Vous vous en souvenez ?",
+      "backToLogin": "Retour à la connexion",
+      "successFallback": "Lien envoyé ! Consultez votre boîte de réception.",
+      "errors": {
+        "emailRequired": "L'e-mail est requis",
+        "emailInvalid": "Adresse e-mail invalide"
+      }
+    },
+    "resetPassword": {
+      "title": "Nouveau mot de passe",
+      "subtitle": "Créez un mot de passe robuste pour votre compte.",
+      "brandTitleL1": "Définissez un nouveau",
+      "brandTitleL2": "mot de passe.",
+      "brandSubtitle": "Choisissez un mot de passe fort pour sécuriser votre compte.",
+      "tip1": "Utilisez au moins 8 caractères, avec un mélange de lettres et de chiffres.",
+      "tip2": "Vous serez déconnecté de tous les autres appareils après la réinitialisation.",
+      "newPassword": "Nouveau mot de passe",
+      "confirmPassword": "Confirmer le mot de passe",
+      "submit": "Réinitialiser",
+      "backPrompt": "Retour à la",
+      "loginLink": "connexion",
+      "errors": {
+        "emailRequired": "L'e-mail est requis",
+        "emailInvalid": "Adresse e-mail invalide",
+        "passwordRequired": "Le mot de passe est requis",
+        "passwordMin": "8 caractères minimum",
+        "confirmRequired": "Veuillez confirmer votre mot de passe",
+        "passwordMismatch": "Les mots de passe ne correspondent pas"
+      }
+    }
+  },
+  "charts": {
+    "last30days": "30 derniers jours",
+    "expenseTimeline": "Chronologie des dépenses",
+    "expensesByCategory": "Dépenses par catégorie",
+    "uncategorized": "Non catégorisé",
+    "notEnoughData": "Pas assez de données"
+  },
+  "bannedModal": {
+    "title": "Compte banni",
+    "text": "Votre compte a été banni. Veuillez contacter le support.",
+    "ok": "OK"
+  }
+}

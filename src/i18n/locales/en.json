@@ -1,0 +1,921 @@
+{
+  "brand": {
+    "name": "NASS SPLIT"
+  },
+  "common": {
+    "home": "Home",
+    "login": "Login",
+    "language": "Language",
+    "emailAddress": "Email Address",
+    "emailPlaceholder": "your{'@'}email.com",
+    "password": "Password",
+    "passwordPlaceholder": "••••••••",
+    "togglePassword": "Toggle password visibility",
+    "toggleConfirmPassword": "Toggle confirm password visibility",
+    "copyright": "© {year} Nass Split · YouCode",
+    "tooManyAttempts": "Too many attempts. Please wait before retrying."
+  },
+  "nav": {
+    "home": "Home",
+    "groups": "Groups",
+    "contact": "Contact Us",
+    "faq": "FAQ",
+    "getStarted": "Get Started",
+    "editProfile": "Edit Profile",
+    "preferences": "Preferences",
+    "logout": "Log Out"
+  },
+  "footer": {
+    "tagline": "The smart way to share expenses with friends, family, and teammates.",
+    "product": {
+      "title": "Product",
+      "features": "Features",
+      "howItWorks": "How it works",
+      "pricing": "Pricing",
+      "changelog": "Changelog"
+    },
+    "company": {
+      "title": "Company",
+      "about": "About us",
+      "blog": "Blog",
+      "careers": "Careers",
+      "contact": "Contact"
+    },
+    "legal": {
+      "title": "Legal",
+      "terms": "Terms of Use",
+      "privacy": "Privacy Policy",
+      "cookies": "Cookie Policy",
+      "gdpr": "GDPR"
+    },
+    "rights": "© YouCode {year}. All rights reserved."
+  },
+  "home": {
+    "hero": {
+      "badge": "Simplify group expenses",
+      "title": "Focus on the fun, we'll do the math.",
+      "subtitle": "NASS SPLIT is more than a calculator. It's a digital trusted third party that centralizes your expenses and instantly calculates who owes what.",
+      "ctaPrimary": "Create a group for free",
+      "ctaSecondary": "Watch demo"
+    },
+    "benefits": {
+      "title": "Goodbye awkwardness, hello transparency",
+      "subtitle": "A solution designed to simplify community life without the usual money-related frictions.",
+      "noAwkwardness": {
+        "title": "No more awkwardness",
+        "desc": "No more lost post-it notes or awkward money requests via text. Everything is clear, documented, and visible to everyone in real-time."
+      },
+      "forEveryone": {
+        "title": "For everyone",
+        "desc": "Whether you're a meticulous organizer or a participant following along, the intuitive interface adapts to all levels of tech-savviness."
+      }
+    },
+    "howItWorks": {
+      "title": "How it works?",
+      "subtitle": "Manage your group expenses in 3 ultra-simple steps.",
+      "step1": {
+        "title": "Add an expense",
+        "desc": "Enter the amount and snap a photo of the receipt. Your proofs are archived and accessible in one click."
+      },
+      "step2": {
+        "title": "Smart Distribution",
+        "desc": "Split costs fairly, by percentage, or exclude certain members depending on the situation."
+      },
+      "step3": {
+        "title": "Instant Tracking",
+        "desc": "Everyone's balance is recalculated instantly. You know exactly who needs to repay whom, at any time."
+      }
+    },
+    "features": {
+      "title": "Everything you need",
+      "subtitle": "More than just a split, a complete management platform.",
+      "categories": {
+        "title": "Categories",
+        "desc": "Classify your expenses by type (Leisure, Groceries, Transport) for better analysis."
+      },
+      "messaging": {
+        "title": "Messaging",
+        "desc": "Discuss a specific expense directly within the application."
+      },
+      "reminders": {
+        "title": "Reminders",
+        "desc": "Automatic notifications for pending bills and repayments."
+      },
+      "realtime": {
+        "title": "Real-time Updates",
+        "desc": "Instant balance calculation and notifications."
+      }
+    },
+    "cta": {
+      "title": "Ready to simplify your expenses?",
+      "subtitle": "Join thousands of users who have already said goodbye to complex calculations and money tensions.",
+      "button": "Create my group for free"
+    }
+  },
+  "about": {
+    "hero": {
+      "badge": "ESTABLISHED 2024",
+      "titleL1": "About",
+      "titleL2": "Nass Split",
+      "subtitle": "To bring peace and transparency to shared living through stress-free finance management."
+    },
+    "story": {
+      "title": "Our Story",
+      "p1": "Nass Split was born from the common frustration of splitting bills with roommates. It started with a coffee-stained spreadsheet and an awkward conversation about who owed what for the utility bill.",
+      "p2": "We realized that the problem wasn't just about the money—it was about the friction it created in friendships. We built Nass Split to replace complex math with simple clicks, and tension with clarity."
+    },
+    "values": {
+      "title": "Our Core Values",
+      "subtitle": "What guides every line of code we write.",
+      "transparency": {
+        "title": "Transparency",
+        "desc": "No hidden fees, no complex jargon. Every transaction and split is clearly visible to everyone involved."
+      },
+      "friendship": {
+        "title": "Friendship",
+        "desc": "We believe finances should never come between friends. Our tool is designed to protect your social harmony."
+      },
+      "simplicity": {
+        "title": "Simplicity",
+        "desc": "Complexity is the enemy of action. We keep things intuitive so you can get back to living your life."
+      }
+    },
+    "cta": {
+      "title": "Ready for a stress-free living?",
+      "subtitle": "Join thousands of roommates who have reclaimed their peace of mind and simplified their shared finances with Nass Split.",
+      "primary": "Get Started Free",
+      "secondary": "View Demo"
+    }
+  },
+  "faq": {
+    "hero": {
+      "badge": "Support Center",
+      "titleL1": "Frequently Asked",
+      "titleL2": "Questions",
+      "subtitle": "Everything you need to know about managing shared expenses effortlessly with Nass Split."
+    },
+    "items": [
+      {
+        "question": "Is Nass Split free?",
+        "answer": "Yes, Nass Split is free to use for core splitting and group management. We offer a premium tier for automated bank syncing and detailed financial reporting, but the essential features will always remain free for everyone.",
+        "tags": []
+      },
+      {
+        "question": "How do I invite roommates?",
+        "answer": "Tap the 'Groups' tab, select your household, and hit 'Invite Members'. You can share a unique invite link or scan a QR code to get everyone on board instantly.",
+        "tags": ["Easy Setup", "Unlimited Members"]
+      },
+      {
+        "question": "Is my data secure?",
+        "answer": "Absolutely. We use 256-bit AES encryption and never store your sensitive bank credentials. Your financial privacy is our top priority.",
+        "tags": []
+      },
+      {
+        "question": "How do I settle up?",
+        "answer": "When you're ready to clear balances, Nass Split calculates the 'Optimal Path'—minimizing the total number of transfers. You can record a payment as cash or link your preferred payment app to settle instantly.",
+        "tags": ["Optimized Debt Reduction"]
+      }
+    ],
+    "stillHaveQuestions": {
+      "title": "Still have questions?",
+      "subtitle": "Our support team typically responds in under 2 hours.",
+      "button": "Contact Support"
+    },
+    "bottomCta": {
+      "title": "Join over 50,000 roommates managing expenses without the stress.",
+      "button": "Watch Demo"
+    }
+  },
+  "contact": {
+    "hero": {
+      "badge": "Get in Touch",
+      "titleL1": "Contact",
+      "titleL2": "Us",
+      "subtitle": "Have a question or need help? Fill out the form and we'll get back to you shortly."
+    },
+    "form": {
+      "success": "Your message was sent! We'll get back to you as soon as possible.",
+      "name": "Full Name",
+      "namePlaceholder": "Your name",
+      "email": "Email",
+      "subject": "Subject",
+      "subjectPlaceholder": "What is this about?",
+      "message": "Message",
+      "messagePlaceholder": "Write your message here...",
+      "submit": "Send Message",
+      "errors": {
+        "nameRequired": "Name is required",
+        "emailRequired": "Email is required",
+        "emailInvalid": "Invalid email",
+        "subjectRequired": "Subject is required",
+        "messageRequired": "Message is required",
+        "rateLimited": "Too many messages. Please wait a moment."
+      }
+    },
+    "info": {
+      "call": {
+        "title": "Call & WhatsApp",
+        "desc": "Reach us directly on phone or WhatsApp."
+      },
+      "hours": {
+        "title": "Working Hours",
+        "desc": "We're available during these hours.",
+        "daily": "Daily",
+        "dailyHours": "8:00 AM – 5:00 PM",
+        "weekend": "Weekend",
+        "closed": "Closed"
+      },
+      "email": {
+        "title": "Write to Us",
+        "desc": "Send us an email anytime."
+      }
+    }
+  },
+  "notFound": {
+    "title": "Page not found",
+    "subtitle": "The page you're looking for doesn't exist.",
+    "goHome": "Go home"
+  },
+  "auth": {
+    "login": {
+      "title": "Welcome Back",
+      "subtitle": "Continue to your financial sanctuary.",
+      "forgot": "Forgot?",
+      "submit": "Log In",
+      "divider": "or continue with",
+      "google": "Google",
+      "github": "GitHub",
+      "signupPrompt": "Don't have an account?",
+      "signupLink": "Sign Up",
+      "brandTitleL1": "Your financial",
+      "brandTitleL2": "sanctuary awaits.",
+      "brandSubtitle": "Manage shared expenses with clarity, trust, and zero friction.",
+      "errors": {
+        "emailRequired": "Email is required",
+        "emailInvalid": "Invalid email address",
+        "passwordRequired": "Password is required",
+        "passwordMin": "Minimum 8 characters"
+      },
+      "features": {
+        "smartSplitting": {
+          "title": "Smart Splitting",
+          "desc": "Split equally, by percentage, or exclude members — instantly recalculated."
+        },
+        "optimalSettlements": {
+          "title": "Optimal Settlements",
+          "desc": "We minimize transfers so fewer people pay back fewer people."
+        },
+        "encryption": {
+          "title": "End-to-End Encryption",
+          "desc": "Your balances and data are fully secured at every step."
+        }
+      }
+    },
+    "signup": {
+      "title": "Create Account",
+      "subtitle": "Your financial sanctuary starts here.",
+      "brandTitleL1": "Join thousands",
+      "brandTitleL2": "splitting smarter.",
+      "brandSubtitle": "Create your free account and say goodbye to expense headaches.",
+      "avatarLabel": "Profile Photo",
+      "avatarPreviewAlt": "Avatar preview",
+      "uploadPhoto": "Upload photo",
+      "uploadHint": "JPG, PNG or GIF · Max 2 MB",
+      "avatarTooLarge": "Photo must be under 2 MB.",
+      "fullName": "Full Name",
+      "fullNamePlaceholder": "Amine El Hailaa",
+      "confirmPassword": "Confirm Password",
+      "submit": "Create Account",
+      "loginPrompt": "Already have an account?",
+      "loginLink": "Log In",
+      "errors": {
+        "nameRequired": "Full name is required",
+        "nameShort": "Name is too short",
+        "emailRequired": "Email is required",
+        "emailInvalid": "Invalid email address",
+        "passwordRequired": "Password is required",
+        "passwordMin": "Minimum 8 characters",
+        "confirmRequired": "Please confirm your password",
+        "passwordMismatch": "Passwords do not match"
+      },
+      "features": {
+        "createGroup": {
+          "title": "Create Your First Group",
+          "desc": "Invite roommates and start splitting expenses in seconds."
+        },
+        "trackExpense": {
+          "title": "Track Every Expense",
+          "desc": "Add receipts, set categories, and stay on top of every bill."
+        },
+        "settle": {
+          "title": "Settle Without Awkwardness",
+          "desc": "Clear balances with one tap — no more uncomfortable reminders."
+        }
+      }
+    },
+    "forgotPassword": {
+      "title": "Forgot Password?",
+      "subtitle": "No worries — we'll send you a reset link.",
+      "brandTitleL1": "Reset your",
+      "brandTitleL2": "password.",
+      "brandSubtitle": "Enter your email and we'll send a secure link to set a new password.",
+      "tip1": "Check your spam folder if you don't see it within a few minutes.",
+      "tip2": "The reset link expires after 60 minutes for your security.",
+      "submit": "Send Reset Link",
+      "rememberedPrompt": "Remembered it?",
+      "backToLogin": "Back to Login",
+      "successFallback": "Reset link sent! Check your inbox.",
+      "errors": {
+        "emailRequired": "Email is required",
+        "emailInvalid": "Invalid email address"
+      }
+    },
+    "resetPassword": {
+      "title": "New Password",
+      "subtitle": "Create a strong password for your account.",
+      "brandTitleL1": "Set a new",
+      "brandTitleL2": "password.",
+      "brandSubtitle": "Choose a strong password to keep your account secure.",
+      "tip1": "Use at least 8 characters with a mix of letters and numbers.",
+      "tip2": "You'll be logged out of all other devices after resetting.",
+      "newPassword": "New Password",
+      "confirmPassword": "Confirm Password",
+      "submit": "Reset Password",
+      "backPrompt": "Back to",
+      "loginLink": "Login",
+      "errors": {
+        "emailRequired": "Email is required",
+        "emailInvalid": "Invalid email address",
+        "passwordRequired": "Password is required",
+        "passwordMin": "Minimum 8 characters",
+        "confirmRequired": "Please confirm your password",
+        "passwordMismatch": "Passwords do not match"
+      }
+    }
+  },
+  "groups": {
+    "title": "My Groups",
+    "welcome": "Welcome back, {name}. You have {count} active groups.",
+    "createNew": "Create New Group",
+    "search": "Search groups...",
+    "sort": "Sort:",
+    "sortName": "Name",
+    "sortDate": "Date Created",
+    "sortAsc": "Ascending",
+    "sortDesc": "Descending",
+    "empty": "No groups found.",
+    "balance": {
+      "title": "Balance Across All Groups",
+      "owed": "You are currently owed a net total of",
+      "viewReport": "View Report"
+    }
+  },
+  "groupDetail": {
+    "back": "Back",
+    "home": "Home",
+    "tabs": {
+      "dashboard": "Dashboard",
+      "expenses": "Expenses",
+      "payments": "My Payments",
+      "settle": "Settle",
+      "chat": "Chat",
+      "members": "Members",
+      "invitations": "Invitations",
+      "settings": "Settings"
+    },
+    "leaveGroup": "Leave Group",
+    "error": "Failed to load group data.",
+    "dialogs": {
+      "leave": {
+        "title": "Leave Group?",
+        "text": "You will lose access to this group.",
+        "confirm": "Yes, leave",
+        "cancel": "Cancel",
+        "cannotLeave": "Cannot Leave",
+        "error": "Something went wrong."
+      }
+    }
+  },
+  "groupCard": {
+    "members": "{count} Member | {count} Members",
+    "enterGroup": "Enter Group",
+    "ownerTitle": "You own this group"
+  },
+  "newGroup": {
+    "errors": {
+      "nameRequired": "Group name is required",
+      "descRequired": "Description is required",
+      "descMax": "Description must be 300 characters or less",
+      "emailInvalid": "Invalid email address",
+      "emailDuplicate": "Already added"
+    },
+    "success": {
+      "title": "Your group is ready!",
+      "dashboard": "Go to Dashboard",
+      "invite": "Invite More Friends"
+    },
+    "step": "Step {current} of 2",
+    "step1": {
+      "title": "Group Details",
+      "photo": "Group Photo",
+      "optional": "(optional)",
+      "upload": "Upload photo",
+      "uploadHint": "JPG, PNG or GIF · Max 2MB",
+      "name": "Group Name",
+      "namePlaceholder": "e.g. Roommates, Road Trip...",
+      "description": "Description",
+      "descPlaceholder": "What's this group about?",
+      "next": "Next Step"
+    },
+    "step2": {
+      "title": "Invite Roommates",
+      "inviteByEmail": "Invite by Email",
+      "emailPlaceholder": "friend{'@'}email.com",
+      "copyLink": "Copy invite link",
+      "linkCopied": "Link copied!",
+      "linkAfterCreate": "Invite link is available after the group is created.",
+      "toBeInvited": "To be invited",
+      "create": "Create Group",
+      "back": "Back"
+    }
+  },
+  "notifications": {
+    "label": "Notifications",
+    "title": "Notifications",
+    "newCount": "{count} new",
+    "markAllRead": "Mark all read",
+    "empty": "No notifications yet",
+    "justNow": "just now"
+  },
+  "addExpense": {
+    "title": "Add Expense",
+    "errors": {
+      "titleRequired": "Title is required",
+      "amountRequired": "Amount is required",
+      "amountMin": "Amount must be at least 1",
+      "amountNumber": "Amount must be a number",
+      "payerRequired": "Payer is required",
+      "payerSelect": "Please select a payer",
+      "noParticipant": "Select at least one participant",
+      "fixedTotal": "Fixed amounts must equal the total expense amount",
+      "pctTotal": "Percentages must add up to 100%",
+      "fileTooLarge": "Each attachment must be 5 MB or smaller.",
+      "generic": "Something went wrong. Please try again.",
+      "loadFailed": "Failed to load form data"
+    },
+    "fields": {
+      "title": "Title",
+      "titlePlaceholder": "e.g. Dinner, Gas, Groceries...",
+      "amount": "Amount",
+      "amountPlaceholder": "0.00",
+      "date": "Date",
+      "category": "Category",
+      "categoryOptional": "(optional)",
+      "noCategory": "No category",
+      "payer": "Who paid?",
+      "payerPlaceholder": "Select a payer...",
+      "attachments": "Attachments",
+      "attachmentsOptional": "(optional)",
+      "attachmentsHelp": "Add receipts, screenshots, or supporting files.",
+      "attachmentsMax": "Up to 5 MB per file.",
+      "addFiles": "Add files",
+      "replaceFiles": "Replace files",
+      "selectedFiles": "{count} file selected | {count} files selected",
+      "split": "Split Method",
+      "participants": "Participants"
+    },
+    "strategies": {
+      "equal": "Equal",
+      "fixed": "Fixed",
+      "percentage": "Percentage"
+    },
+    "allocation": {
+      "allocated": "Allocated",
+      "remaining": "{fixed} remaining",
+      "exceeded": "Exceeded by {fixed}",
+      "pctRemaining": "{pct}% remaining",
+      "pctExceeded": "Exceeded by {pct}%",
+      "fixedHint": "Allocate the full amount across participants",
+      "pctHint": "Percentages must total 100%"
+    },
+    "participantCount": "{selected} of {total} selected",
+    "cancel": "Cancel",
+    "submit": "Create Expense",
+    "successTitle": "Expense added!",
+    "successText": "The expense has been saved successfully."
+  },
+  "dashboard": {
+    "stats": {
+      "totalSpent": "Total Spent",
+      "myBalance": "My Balance",
+      "activeMembers": "Active Members",
+      "totalExpenses": "Total Expenses",
+      "paidByMe": "Paid by Me",
+      "myShare": "My Share"
+    },
+    "recentActivity": {
+      "title": "Recent Activity",
+      "empty": "No expenses yet",
+      "viewMore": "View more"
+    },
+    "owesSection": {
+      "title": "Who Owes Who",
+      "allSettled": "All settled up!"
+    }
+  },
+  "expenses": {
+    "title": "Expenses",
+    "export": "Export",
+    "downloading": "Downloading…",
+    "empty": "No expenses yet",
+    "paidBy": "Paid by {name}",
+    "yourShare": "Your share: {amount}",
+    "splitBetween": "Split between",
+    "previous": "Previous",
+    "next": "Next"
+  },
+  "members": {
+    "title": "Members",
+    "count": "{count} member | {count} members",
+    "empty": "No members found",
+    "transferOwnership": "Transfer ownership",
+    "removeMember": "Remove member",
+    "previous": "Previous",
+    "next": "Next",
+    "dialogs": {
+      "kick": {
+        "title": "Kick {name}?",
+        "text": "This member will be removed from the group.",
+        "confirm": "Kick",
+        "cancel": "Cancel",
+        "errorTitle": "Cannot kick member",
+        "errorText": "Something went wrong."
+      },
+      "transfer": {
+        "title": "Transfer Ownership?",
+        "text": "You are about to make <strong>{name}</strong> the new owner of this group. This action cannot be undone.",
+        "confirm": "Yes, transfer",
+        "cancel": "Cancel",
+        "errorTitle": "Transfer failed"
+      }
+    }
+  },
+  "settings": {
+    "title": "Group Settings",
+    "general": "General",
+    "name": "Group Name",
+    "description": "Description",
+    "saving": "Saving...",
+    "save": "Save Changes",
+    "saved": "Group updated",
+    "saveFailed": "Failed to update group",
+    "settingFailed": "Failed to update setting",
+    "rules": "Rules",
+    "settleBeforeLeaving": "Settle before leaving",
+    "settleDesc": "Members must settle debts before leaving or being kicked",
+    "dangerZone": "Danger Zone",
+    "deleteDesc": "Permanently delete this group and all its data.",
+    "deleting": "Deleting...",
+    "deleteButton": "Delete Group",
+    "dialogs": {
+      "toggleSettle": {
+        "title": "Enable/Disable settle rule?",
+        "textEnable": "Members will be able to mark debts as settled.",
+        "textDisable": "Settling will be turned off for this group.",
+        "confirm": "Yes, confirm",
+        "cancel": "Cancel"
+      },
+      "delete": {
+        "title": "Delete group?",
+        "text": "This will permanently delete the group and all its data. This cannot be undone.",
+        "confirm": "Yes, delete it",
+        "cancel": "Cancel",
+        "successTitle": "Deleted!",
+        "successText": "The group has been deleted."
+      }
+    }
+  },
+  "invitations": {
+    "title": "Invitations",
+    "inviteByEmail": "Invite by Email",
+    "emailPlaceholder": "friend{'@'}email.com",
+    "send": "Send",
+    "success": "Invitation sent successfully",
+    "errors": {
+      "emailRequired": "Email is required",
+      "emailInvalid": "Invalid email address",
+      "sendFailed": "Failed to send invitation"
+    },
+    "copyLink": "Copy invite link",
+    "linkCopied": "Link copied!",
+    "pending": "Pending Invitations",
+    "pendingCount": "{count} pending",
+    "loadFailed": "Failed to load invitations",
+    "tryAgain": "Try again",
+    "empty": "No pending invitations",
+    "pendingLabel": "pending",
+    "expired": "Expired",
+    "expiresTomorrow": "Expires tomorrow",
+    "expiresIn": "Expires in {diff} days",
+    "dialogs": {
+      "cancel": {
+        "title": "Cancel this invitation?",
+        "text": "The invite sent to {email} will be revoked.",
+        "confirm": "Cancel invitation",
+        "keep": "Keep it"
+      }
+    }
+  },
+  "settle": {
+    "title": "Who Owes Who",
+    "count": "{count} settlement | {count} settlements",
+    "allSettled": "All settled up!",
+    "noDebts": "No outstanding debts in this group",
+    "recording": "Recording…",
+    "markSettled": "Mark as Settled",
+    "failed": "Failed to record payment",
+    "recorded": "Payment of {amount} recorded"
+  },
+  "payments": {
+    "title": "My Payments",
+    "empty": "No payments yet",
+    "hint": "Settle debts from the Settle tab",
+    "paid": "paid",
+    "received": "received",
+    "previous": "Previous",
+    "next": "Next"
+  },
+  "chat": {
+    "loading": "Loading conversation...",
+    "loadError": "Try refreshing the page",
+    "empty": "No messages yet",
+    "emptySubtitle": "Start the conversation with your group",
+    "firstMessage": "Send the first message ↓",
+    "placeholder": "Write a message...",
+    "error": "Failed to load chat",
+    "dialogs": {
+      "delete": {
+        "title": "Delete message?",
+        "text": "This action cannot be undone.",
+        "confirm": "Delete",
+        "cancel": "Cancel"
+      }
+    }
+  },
+  "join": {
+    "loading": "Loading invitation...",
+    "errorTitle": "Invitation unavailable",
+    "goToGroups": "Go to my groups",
+    "linkSubtitle": "You've been invited via a shareable link",
+    "joinTitle": "Join Group",
+    "acceptAndJoin": "Accept & Join",
+    "cancel": "Cancel",
+    "joining": "Joining group...",
+    "cantJoin": "Can't join",
+    "accepted": {
+      "title": "You're in!",
+      "redirecting": "Redirecting to {groupName}..."
+    },
+    "declined": {
+      "title": "Invitation declined",
+      "redirecting": "Redirecting to your groups..."
+    },
+    "invited": "You've been invited to join",
+    "expires": "Expires {date}",
+    "accept": "Accept Invitation",
+    "decline": "Decline",
+    "errors": {
+      "invalid": "This invitation is invalid or has expired.",
+      "acceptFailed": "Failed to accept invitation.",
+      "declineFailed": "Failed to decline invitation."
+    }
+  },
+  "profile": {
+    "back": "Back",
+    "title": "Edit Profile",
+    "subtitle": "Update your personal information and password.",
+    "personalInfo": {
+      "title": "Personal Information",
+      "subtitle": "Manage your name, email, and profile photo.",
+      "photo": "Profile Photo",
+      "changePhoto": "Change photo",
+      "photoHint": "JPG, PNG or GIF · Max 2 MB",
+      "photoTooLarge": "Photo must be under 2 MB.",
+      "fullName": "Full Name",
+      "save": "Save Changes",
+      "saved": "Saved"
+    },
+    "password": {
+      "title": "Change Password",
+      "subtitle": "Update your password to keep your account secure.",
+      "current": "Current Password",
+      "new": "New Password",
+      "confirm": "Confirm New Password",
+      "update": "Update Password",
+      "updated": "Password updated"
+    },
+    "errors": {
+      "nameRequired": "Full name is required",
+      "nameShort": "Name is too short",
+      "currentRequired": "Current password is required",
+      "newRequired": "New password is required",
+      "newMin": "Minimum 8 characters",
+      "confirmRequired": "Please confirm your new password",
+      "confirmMismatch": "Passwords do not match"
+    }
+  },
+  "admin": {
+    "sidebar": {
+      "workspace": "Workspace",
+      "overview": "Overview",
+      "categories": "Categories",
+      "groups": "Groups",
+      "users": "Users",
+      "messages": "Messages",
+      "ledgerAdmin": "Ledger Admin",
+      "logout": "Logout"
+    },
+    "overview": {
+      "breadcrumb": "Admin · Overview",
+      "title": "Dashboard",
+      "subtitle": "Quick stats about the platform.",
+      "stats": {
+        "totalGroups": "Total Groups",
+        "active": "Active",
+        "acrossThePlatform": "across the platform",
+        "totalCategories": "Total Categories",
+        "expenseTypes": "Expense types",
+        "expenses30d": "Expenses · 30d",
+        "last30days": "Last 30 days",
+        "adminRole": "Admin Role",
+        "activeRole": "Active",
+        "privileged": "Privileged"
+      },
+      "chart": {
+        "distribution": "Distribution",
+        "expensesByCategory": "Expenses by category"
+      }
+    },
+    "categories": {
+      "breadcrumb": "Admin · Catalog",
+      "title": "Categories",
+      "subtitle": "Manage expense categories available across the platform.",
+      "add": {
+        "label": "New entry",
+        "title": "Add category",
+        "placeholder": "Category name",
+        "button": "Add"
+      },
+      "table": {
+        "label": "Directory",
+        "title": "All categories",
+        "total": "{total} total",
+        "loading": "Loading...",
+        "empty": "No categories yet.",
+        "colId": "ID",
+        "colName": "Name",
+        "colCreated": "Created",
+        "colUpdated": "Updated",
+        "colActions": "Actions",
+        "save": "Save",
+        "cancel": "Cancel",
+        "edit": "Edit",
+        "delete": "Delete",
+        "pageOf": "Page {page} of {last}"
+      },
+      "flash": {
+        "created": "Category created successfully.",
+        "updated": "Category updated successfully.",
+        "deleted": "Category deleted."
+      },
+      "dialogs": {
+        "delete": {
+          "title": "Delete category?",
+          "text": "This action cannot be undone.",
+          "confirm": "Delete",
+          "cancel": "Cancel"
+        }
+      }
+    },
+    "groups": {
+      "breadcrumb": "Admin · Ledger",
+      "title": "Groups",
+      "subtitle": "All groups active across the platform.",
+      "table": {
+        "label": "Directory",
+        "title": "All groups",
+        "searchPlaceholder": "Search groups...",
+        "total": "{total} total",
+        "loading": "Loading...",
+        "empty": "No groups found.",
+        "colId": "ID",
+        "colGroup": "Group",
+        "colDescription": "Description",
+        "colMembers": "Members",
+        "colSettle": "Settle",
+        "colInvite": "Invite",
+        "colCreated": "Created",
+        "colUpdated": "Updated",
+        "settleOn": "On",
+        "settleOff": "Off",
+        "noMembers": "No members in this group.",
+        "pageOf": "Page {page} of {last}"
+      }
+    },
+    "users": {
+      "breadcrumb": "Admin · People",
+      "title": "Users",
+      "subtitle": "All users registered on the platform.",
+      "table": {
+        "label": "Directory",
+        "title": "All users",
+        "searchPlaceholder": "Search users...",
+        "total": "{total} total",
+        "loading": "Loading...",
+        "empty": "No users found.",
+        "colId": "ID",
+        "colUser": "User",
+        "colEmail": "Email",
+        "colRole": "Role",
+        "colStatus": "Status",
+        "colJoined": "Joined",
+        "colActions": "Actions",
+        "banned": "Banned",
+        "active": "Active",
+        "ban": "Ban",
+        "unban": "Unban",
+        "pageOf": "Page {page} of {last}"
+      },
+      "flash": {
+        "banned": "User banned.",
+        "unbanned": "User unbanned."
+      },
+      "dialogs": {
+        "ban": {
+          "title": "Ban this user?",
+          "text": "They will lose access to the platform.",
+          "confirm": "Ban",
+          "cancel": "Cancel"
+        },
+        "unban": {
+          "title": "Unban this user?",
+          "text": "They will regain access to the platform.",
+          "confirm": "Unban",
+          "cancel": "Cancel"
+        }
+      }
+    },
+    "contacts": {
+      "breadcrumb": "Admin · Inbox",
+      "title": "Contact Messages",
+      "subtitle": "Messages submitted through the contact form.",
+      "filter": {
+        "all": "All",
+        "pending": "Pending",
+        "treated": "Treated"
+      },
+      "loading": "Loading…",
+      "empty": "No messages found.",
+      "table": {
+        "colName": "Name",
+        "colEmail": "Email",
+        "colSubject": "Subject",
+        "colDate": "Date",
+        "colStatus": "Status"
+      },
+      "status": {
+        "treated": "Treated",
+        "pending": "Pending",
+        "markAsTreated": "Mark as Treated",
+        "markAsPending": "Mark as Pending",
+        "markTreatedTitle": "Mark as treated",
+        "markPendingTitle": "Mark as pending"
+      },
+      "popup": {
+        "inboxMessage": "Inbox message",
+        "delete": "Delete"
+      },
+      "pageOf": "Page {current} of {last}",
+      "dialogs": {
+        "delete": {
+          "title": "Delete this message?",
+          "text": "This action cannot be undone.",
+          "confirm": "Delete",
+          "cancel": "Cancel"
+        }
+      }
+    }
+  },
+  "charts": {
+    "last30days": "Last 30 days",
+    "expenseTimeline": "Expense timeline",
+    "expensesByCategory": "Expenses by Category",
+    "uncategorized": "Uncategorized",
+    "notEnoughData": "Not enough data yet"
+  },
+  "bannedModal": {
+    "title": "Account banned",
+    "text": "Your account has been banned. Please contact support.",
+    "ok": "OK"
+  }
+}
