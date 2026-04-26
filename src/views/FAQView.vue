@@ -93,12 +93,13 @@ function toggle(index) {
           </div>
           <p class="text-white/80 text-lg">{{ $t('faq.stillHaveQuestions.subtitle') }}</p>
         </div>
+        <router-link to="contact">
         <button
           class="shrink-0 rounded-full px-10 py-4 text-base font-bold bg-white hover:scale-105 active:scale-95 transition-all cursor-pointer"
           style="color: #bc7f4a"
-        ><router-link to="contact">
+        >
           {{ $t('faq.stillHaveQuestions.button') }}
-        </router-link></button>
+       </button> </router-link>
       </div>
     </section>
 

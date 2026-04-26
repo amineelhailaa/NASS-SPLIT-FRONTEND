@@ -219,7 +219,7 @@ onUnmounted(() => {
           v-for="notif in notifications"
           :key="notif.id"
           @click="handleNotifClick(notif)"
-          class="flex items-start gap-3 px-4 py-3 text-left transition-colors w-full"
+          class="flex items-start gap-3 px-4 py-3 text-left transition-colors w-full border-b border-b-cerulean-600"
           :class="notif.read_at ? 'hover:bg-brand-surface/50' : 'bg-cerulean-50/40 hover:bg-cerulean-50'"
         >
           <!-- Icon -->
