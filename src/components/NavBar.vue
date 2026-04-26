@@ -51,7 +51,7 @@ onUnmounted(() => document.removeEventListener('click', handleClickOutside))
 async function handleLogout() {
   dropdownOpen.value = false
   await auth.logout()
-  router.push('/login')
+  await router.push('/login')
 }
 </script>
 
@@ -63,7 +63,7 @@ async function handleLogout() {
       <!-- Logo -->
       <div class="flex justify-center items-center gap-2">
         <div class="w-16 h-16 overflow-hidden shrink-0" v-html="logoRaw" />
-        <span class="text-2xl font-bold opacity-80">{{ $t('brand.name') }}</span>
+        <span class="text-2xl font-bold opacity-80 hidden md:block ">{{ $t('brand.name') }}</span>
       </div>
 
       <!-- Nav links -->
