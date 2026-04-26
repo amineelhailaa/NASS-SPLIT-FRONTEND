@@ -17,6 +17,7 @@ const hoveredSplitId = ref(null)
 const { t } = useI18n()
 
 const currentUser = JSON.parse(localStorage.getItem('user') || '{}')
+const lightboxUrl = ref(null)
 const downloading = ref(false)
 
 async function downloadExpenses() {
@@ -162,6 +163,15 @@ onMounted(() => fetchExpenses())
 
         <!-- Right side: participants + amount -->
         <div class="flex items-center gap-2 shrink-0">
+          <!-- Attachment eye -->
+          <button
+              v-if="expense.attachments?.length"
+              type="button"
+              @click="lightboxUrl = expense.attachments[0].url"
+              class="w-8 h-8 rounded-full bg-cerulean-50 flex items-center justify-center text-brand-primary hover:bg-cerulean-100 transition-colors cursor-pointer"
+          >
+            <span class="material-symbols-outlined text-[17px]">visibility</span>
+          </button>
 
           <!-- Participant count with hover tooltip (desktop only) -->
           <div
@@ -209,6 +219,8 @@ onMounted(() => fetchExpenses())
             </div>
           </div>
 
+
+
           <!-- Amount -->
           <span class="text-cerulean-700 font-extrabold text-sm sm:text-base">
             {{ formatCurrency(expense.amount) }}
@@ -240,4 +252,24 @@ onMounted(() => fetchExpenses())
       </div>
     </div>
   </div>
+
+  <!-- Lightbox -->
+  <Teleport to="body">
+    <div
+      v-if="lightboxUrl"
+      class="fixed inset-0 z-[200] flex items-center justify-center bg-cerulean-900/70 backdrop-blur-sm"
+      @click.self="lightboxUrl = null"
+    >
+      <div class="relative max-w-lg w-full mx-4">
+        <img :src="lightboxUrl" alt="Receipt" class="w-full rounded-2xl shadow-[0_8px_40px_rgba(22,100,122,0.2)] object-contain max-h-[80dvh]" />
+        <button
+          type="button"
+          @click="lightboxUrl = null"
+          class="absolute top-3 right-3 w-9 h-9 rounded-full bg-white/80 flex items-center justify-center text-cerulean-700 hover:bg-white transition cursor-pointer"
+        >
+          <span class="material-symbols-outlined text-[20px]">close</span>
+        </button>
+      </div>
+    </div>
+  </Teleport>
 </template>

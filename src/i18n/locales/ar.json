@@ -355,6 +355,8 @@
       "noCategory": "بدون فئة",
       "payer": "من دفع؟",
       "payerPlaceholder": "اختر الدافع...",
+      "attachment": "إيصال / صورة",
+      "attachmentHint": "اضغط لإضافة صورة",
       "split": "طريقة التقسيم",
       "participants": "المشاركون"
     },

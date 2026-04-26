@@ -480,6 +480,8 @@
       "addFiles": "Add files",
       "replaceFiles": "Replace files",
       "selectedFiles": "{count} file selected | {count} files selected",
+      "attachment": "Receipt / Photo",
+      "attachmentHint": "Tap to add an image",
       "split": "Split Method",
       "participants": "Participants"
     },

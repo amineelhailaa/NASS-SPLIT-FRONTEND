@@ -22,6 +22,9 @@ const splitStrategy = ref('equal')
 const submitError = ref('')
 const payerDropdownOpen = ref(false)
 const participants = ref([])
+const attachmentFile = ref(null)
+const attachmentPreview = ref(null)
+const fileInputRef = ref(null)
 
 // Validation Schema
 const schema = computed(() =>
@@ -135,21 +138,25 @@ const onSubmit = handleSubmit(async () => {
   submitError.value = ''
   isSubmitting.value = true
   try {
-    const participantsPayload = selectedParticipants.value.map((p) => {
-      const entry = { membership_id: p.membership_id }
-      if (splitStrategy.value === 'fixed') entry.amount = parseFloat(p.fixedAmount) || 0
-      if (splitStrategy.value === 'percentage') entry.percentage = parseFloat(p.percentage) || 0
-      return entry
+    const participantsPayload = []
+    selectedParticipants.value.forEach((p, i) => {
+      participantsPayload.push([`participants[${i}][membership_id]`, p.membership_id])
+      if (splitStrategy.value === 'fixed') participantsPayload.push([`participants[${i}][amount]`, parseFloat(p.fixedAmount) || 0])
+      if (splitStrategy.value === 'percentage') participantsPayload.push([`participants[${i}][percentage]`, parseFloat(p.percentage) || 0])
     })
 
-    await api.post(`/api/v1/groups/${props.groupId}/expenses`, {
-      title: title.value,
-      amount: amount.value,
-      date: date.value,
-      payer_id: payer_id.value,
-      category_id: category_id.value || null,
-      split_strategy: splitStrategy.value,
-      participants: participantsPayload,
+    const fd = new FormData()
+    fd.append('title', title.value)
+    fd.append('amount', amount.value)
+    fd.append('date', date.value)
+    fd.append('payer_id', payer_id.value)
+    if (category_id.value) fd.append('category_id', category_id.value)
+    fd.append('split_strategy', splitStrategy.value)
+    participantsPayload.forEach(([k, v]) => fd.append(k, v))
+    if (attachmentFile.value) fd.append('attachments[]', attachmentFile.value)
+
+    await api.post(`/api/v1/groups/${props.groupId}/expenses`, fd, {
+      headers: { 'Content-Type': 'multipart/form-data' },
     })
 
     Swal.fire({
@@ -182,6 +189,20 @@ const onSubmit = handleSubmit(async () => {
 })
 
 // Helpers
+function onFileChange(e) {
+  const file = e.target.files?.[0]
+  if (!file) return
+  attachmentFile.value = file
+  attachmentPreview.value = URL.createObjectURL(file)
+}
+
+function removeAttachment() {
+  attachmentFile.value = null
+  if (attachmentPreview.value) URL.revokeObjectURL(attachmentPreview.value)
+  attachmentPreview.value = null
+  if (fileInputRef.value) fileInputRef.value.value = ''
+}
+
 function toggleParticipant(idx) {
   participants.value[idx].checked = !participants.value[idx].checked
 }
@@ -351,6 +372,34 @@ function formatCurrency(val) {
             </div>
             <InputError :message="payerError" />
           </div>
+        </div>
+
+        <!-- Attachment -->
+        <div class="flex flex-col gap-2">
+          <label class="text-sm font-bold text-cerulean-800">
+            {{ t('addExpense.fields.attachment') }}
+            <span class="text-cerulean-800/40 font-normal">{{ t('addExpense.fields.categoryOptional') }}</span>
+          </label>
+
+          <div v-if="attachmentPreview" class="relative rounded-2xl overflow-hidden bg-cerulean-50 w-full h-40">
+            <img :src="attachmentPreview" :alt="attachmentFile?.name" class="w-full h-full object-cover" />
+            <button
+              type="button"
+              @click="removeAttachment"
+              class="absolute top-2 right-2 w-8 h-8 rounded-full bg-white/80 flex items-center justify-center text-cerulean-600 hover:bg-white transition cursor-pointer"
+            >
+              <span class="material-symbols-outlined text-[18px]">close</span>
+            </button>
+          </div>
+
+          <label
+            v-else
+            class="flex flex-col items-center justify-center gap-2 rounded-2xl border-2 border-dashed border-cerulean-200 bg-cerulean-50/50 hover:bg-cerulean-50 transition cursor-pointer py-6"
+          >
+            <span class="material-symbols-outlined text-3xl text-cerulean-400">add_photo_alternate</span>
+            <span class="text-sm font-semibold text-cerulean-500">{{ t('addExpense.fields.attachmentHint') }}</span>
+            <input ref="fileInputRef" type="file" accept="image/*" class="hidden" @change="onFileChange" />
+          </label>
         </div>
       </div>
 

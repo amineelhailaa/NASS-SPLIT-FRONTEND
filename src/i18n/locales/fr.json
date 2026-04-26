@@ -363,6 +363,8 @@
       "addFiles": "Ajouter des fichiers",
       "replaceFiles": "Remplacer les fichiers",
       "selectedFiles": "{count} fichier sélectionné | {count} fichiers sélectionnés",
+      "attachment": "Reçu / Photo",
+      "attachmentHint": "Appuyez pour ajouter une image",
       "split": "Mode de répartition",
       "participants": "Participants"
     },
