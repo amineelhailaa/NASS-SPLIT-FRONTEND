@@ -242,7 +242,6 @@ function onGroupCreated() {
         <div class="absolute bottom-0 left-0 -ml-16 -mb-16 size-56 bg-black/10 rounded-full blur-3xl" />
         <div class="relative z-10 py-10 text-center">
           <h2 class="text-3xl font-extrabold mb-3 text-white">{{ t('groups.banner.title') }}</h2>
-          <p class="text-white/80 text-lg max-w-sm mx-auto">{{ t('groups.banner.subtitle') }}</p>
         </div>
       </section>
     </main>
