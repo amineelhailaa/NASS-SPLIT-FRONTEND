@@ -2,6 +2,9 @@
 import AppFooter from '@/components/AppFooter.vue'
 import { Vue3Lottie } from 'vue3-lottie'
 import FinanceAnimation from '@/assets/animation/Finance guru.json'
+import {useRouter}  from "vue-router";
+const router = useRouter();
+
 </script>
 
 <template>
@@ -29,12 +32,12 @@ import FinanceAnimation from '@/assets/animation/Finance guru.json'
           {{ $t('home.hero.subtitle') }}
         </p>
         <div class="flex flex-col gap-4 sm:flex-row justify-center">
-          <button
+          <button @click="router.push('/groups')"
             class="rounded-full cursor-pointer bg-cerulean-500 px-8 py-4 text-lg font-bold text-white shadow-xl hover:scale-102 transition-transform"
           >
             {{ $t('home.hero.ctaPrimary') }}
           </button>
-          <button
+          <button v-on:click="window.location.href='https://www.youtube.com'"
             class="cursor-pointer flex items-center justify-center gap-2 rounded-full border-2 border-cerulean-500/20 hover:scale-102 bg-white px-8 py-4 text-lg font-bold text-cerulean-500 hover:bg-cerulean-500/5 transition-colors"
           >
             <span class="material-symbols-outlined">play_circle</span>
@@ -181,7 +184,7 @@ import FinanceAnimation from '@/assets/animation/Finance guru.json'
         <p class="text-lg text-cerulean-800/60">
           {{ $t('home.cta.subtitle') }}
         </p>
-        <button
+        <button @click="router.push('/groups')"
           class="rounded-full bg-cerulean-500 px-12 py-5 text-xl font-extrabold text-white shadow-xl hover:scale-105 transition-transform cursor-pointer"
         >
           {{ $t('home.cta.button') }}

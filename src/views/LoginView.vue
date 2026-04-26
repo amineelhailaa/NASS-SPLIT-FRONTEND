@@ -2,7 +2,7 @@
 import { ref, computed } from 'vue'
 import { useForm, useField } from 'vee-validate'
 import * as yup from 'yup'
-import { useRouter } from 'vue-router'
+import { useRouter, useRoute } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { useAuthStore } from '@/stores/auth.js'
 import InputError from '@/components/inputError.vue'
@@ -10,6 +10,7 @@ import logoRaw from '@/assets/logo.svg?raw'
 import api from '@/lib/axios.js'
 
 const router = useRouter()
+const route = useRoute();
 const auth = useAuthStore()
 const { t } = useI18n()
 
@@ -47,7 +48,9 @@ const copyrightYear = new Date().getFullYear()
 const handleLogin = handleSubmit(async (values) => {
   try {
     await auth.login(values)
-    await router.push('/')
+    const redirect = route.query.redirect || '/'
+    console.log(redirect)
+    await router.push(redirect)
   } catch (err) {
     if (err.response?.status === 422) {
       const laravelErrors = {}

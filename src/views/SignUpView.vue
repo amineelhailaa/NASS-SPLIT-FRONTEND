@@ -2,13 +2,14 @@
 import { ref, computed } from 'vue'
 import { useForm, useField } from 'vee-validate'
 import * as yup from 'yup'
-import { useRouter } from 'vue-router'
+import { useRouter, useRoute } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { useAuthStore } from '@/stores/auth.js'
 import InputError from '@/components/inputError.vue'
 import logoRaw from '@/assets/logo.svg?raw'
 
 const router = useRouter()
+const  route = useRoute()
 const auth = useAuthStore()
 const { t } = useI18n()
 
@@ -89,7 +90,8 @@ const handleSignUp = handleSubmit(async (values) => {
     payload.append('password_confirmation', values.password_confirmation)
     if (avatarFile.value) payload.append('avatar', avatarFile.value)
     await auth.register(payload)
-    router.push('/')
+    const redirect = route.query.redirect || "/"
+    await router.push(redirect)
   } catch (err) {
     console.log('REGISTER ERROR:', err.response?.status, JSON.stringify(err.response?.data, null, 2))
     if (err.response?.status === 422) {

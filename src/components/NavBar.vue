@@ -173,13 +173,13 @@ async function handleLogout() {
                 {{ $t('nav.editProfile') }}
               </button>
 
-              <button
-                @click="dropdownOpen = false"
-                class="w-full text-left px-4 py-2.5 text-sm font-medium text-brand-text hover:bg-brand-surface transition-colors flex items-center gap-2"
-              >
-                <span class="material-symbols-outlined text-[18px] text-brand-textSecondary">tune</span>
-                {{ $t('nav.preferences') }}
-              </button>
+<!--              <button-->
+<!--                @click="dropdownOpen = false"-->
+<!--                class="w-full text-left px-4 py-2.5 text-sm font-medium text-brand-text hover:bg-brand-surface transition-colors flex items-center gap-2"-->
+<!--              >-->
+<!--                <span class="material-symbols-outlined text-[18px] text-brand-textSecondary">tune</span>-->
+<!--                {{ $t('nav.preferences') }}-->
+<!--              </button>-->
 
               <div class="h-px bg-brand-surface mx-2 my-1" />
 
