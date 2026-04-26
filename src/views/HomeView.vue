@@ -17,7 +17,7 @@ const router = useRouter();
       class="relative flex min-h-[80vh] items-center justify-center pt-32 pb-40 px-12 overflow-hidden"
     >
       <div class="flex flex-col gap-8 text-center w-full justify-center items-center">
-        <Vue3Lottie :animationData="FinanceAnimation" :height="350" :width="350" />
+        <Vue3Lottie :animationData="FinanceAnimation" :height="350" :width="350" :speed="1.5" />
         <div
           class="inline-flex w-fit self-center rounded-full bg-cerulean-500/10 px-4 py-1.5 text-sm font-bold text-cerulean-500"
         >
