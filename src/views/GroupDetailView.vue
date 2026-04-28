@@ -90,6 +90,7 @@ async function fetchData() {
       api.get(`/api/v1/groups/${groupId}/balance`),
     ])
     group.value = groupRes.data.data
+    console.log('pivot after transfer:', group.value.pivot)
     stats.value = statsRes.data.data
     expenses.value = expensesRes.data.data.data
     balance.value = balanceRes.data.data
@@ -226,7 +227,7 @@ onMounted(fetchData)
           :balance="balance"
           :group-id="groupId"
           :is-owner="isOwner"
-          @ownership-transferred="fetchGroup"
+          @ownership-transferred="fetchData"
           @settled="fetchData"
         />
       </div>
